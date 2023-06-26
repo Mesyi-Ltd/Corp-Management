@@ -7,3 +7,7 @@ def home(request):
 
 def login_page(request):
     return render(request, 'main/login.html')
+
+
+def performance(request):
+    return render(request, 'main/performance.html')

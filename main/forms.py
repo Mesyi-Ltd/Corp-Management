@@ -6,6 +6,7 @@ class ClientForm(forms.ModelForm):
     credible = forms.BooleanField(
         required=False,
     )
+
     class Meta:
         model = Client
         fields = ('name', 'email', 'phone', 'address', 'credible')

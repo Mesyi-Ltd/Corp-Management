@@ -7,11 +7,11 @@ body{
 }
 
 #logo{
-    width: 50px;
+    width: 150px;
     object-fit: contain;
 }
 
 #content{
     position: relative;
-    top: 80px;
+    top: 70px;
 }

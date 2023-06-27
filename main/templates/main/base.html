@@ -83,7 +83,7 @@
             </a>
             <ul class="dropdown-menu dropdown-menu-dark">
               <li><a class="dropdown-item" href="{% url 'register_client' %}">登记</a></li>
-              <li><a class="dropdown-item" href="#">列表</a></li>
+              <li><a class="dropdown-item" href="{% url 'client_list' %}">列表</a></li>
               <li>
                 <hr class="dropdown-divider">
               </li>
@@ -93,7 +93,7 @@
         </ul>
       </div>
     </div>
-      <a class="navbar-brand" href="#"><img src="{% static 'image/1111.png' %}" alt="Mesyi" id="logo"/></a>
+      <a class="navbar-brand" href="{% url 'home' %}"><img src="{% static 'image/logo.png' %}" alt="Mesyi" id="logo"/></a>
   </div>
 </nav>
 

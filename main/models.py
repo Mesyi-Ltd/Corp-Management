@@ -1,3 +1,5 @@
+import uuid
+
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.urls import reverse
@@ -16,7 +18,8 @@ class Staff(models.Model):
 
 
 class Client(models.Model):
-    name = models.CharField(max_length=999, unique=True, primary_key=True)
+    id = models.UUIDField(unique=True, primary_key=True, default=uuid.uuid1())
+    name = models.CharField(max_length=999, unique=True)
     email = models.EmailField(null=True, blank=True)
     phone = models.CharField(max_length=999, null=True, blank=True)
     address = models.TextField(null=True, blank=True)

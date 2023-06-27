@@ -5,3 +5,13 @@ body{
     padding:0;
     margin:0;
 }
+
+#logo{
+    width: 150px;
+    object-fit: contain;
+}
+
+#content{
+    position: relative;
+    top: 70px;
+}

@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from .forms import *
 from django.views import View
-from django.views.generic import ListView, DetailView, CreateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from .models import Client
 from django.contrib.auth import login, logout
 
@@ -45,3 +45,8 @@ class RegisterClient(CreateView):
 class ClientList(ListView):
     model = Client
     template_name = 'main/client_list.html'
+
+
+class ClientDetail(DetailView):
+    model = Client
+    template_name = 'main/client_detail.html'

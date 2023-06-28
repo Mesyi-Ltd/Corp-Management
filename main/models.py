@@ -18,7 +18,6 @@ class Staff(models.Model):
 
 
 class Client(models.Model):
-    id = models.UUIDField(unique=True, primary_key=True, default=uuid.uuid1())
     name = models.CharField(max_length=999, unique=True)
     email = models.EmailField(null=True, blank=True)
     phone = models.CharField(max_length=999, null=True, blank=True)

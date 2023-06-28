@@ -1,13 +1,13 @@
 {% extends 'main/base.html' %}
 {% block content %}
 <div class="list-group position-absolute top-0 start-50 translate-middle-x">
-    {% for client in object_list %}
+    {% for supplier in object_list %}
 
-            <a href="{% url 'client_detail' client.pk %}"
+            <a href="{% url 'supplier_detail' supplier.pk %}"
                class="list-group-item list-group-item-action list-group-item-dark
                d-flex justify-content-between align-items-center">
-                {{ client.pk }} -- {{ client.name }}
-                <span class="badge bg-primary rounded-pill">{{ client.order_in_progress }}</span>
+                {{ supplier.pk }} -- {{ supplier.name }}
+                <span class="badge bg-primary rounded-pill">1</span>
             </a>
 
     {% endfor %}

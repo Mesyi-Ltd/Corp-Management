@@ -50,3 +50,13 @@ class ClientList(ListView):
 class ClientDetail(DetailView):
     model = Client
     template_name = 'main/client_detail.html'
+
+
+class SupplierList(ListView):
+    model = Supplier
+    template_name = 'main/supplier_list.html'
+
+
+class SupplierDetail(DetailView):
+    model = Supplier
+    template_name = 'main/supplier_detail.html'

@@ -17,19 +17,25 @@
         crossorigin="anonymous">
 </script>
 
-<p class="fw-bold text-primary" style="--bs-text-opacity: .4;" id="title">登录</p>
+<p class="fw-bold text-primary text-success" id="title">登录</p>
 
-<div class="container" id="login-box">
+<div class="container bg-light bg-opacity-75" id="login-box">
 
-<form>
+<form method="POST" action="">
+{% csrf_token %}
     <div class="mb-3">
       <label for="exampleInputEmail1" class="form-label">账号</label>
-      <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+      <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="username">
     </div>
     <div class="mb-3">
       <label for="exampleInputPassword1" class="form-label">密码</label>
-      <input type="password" class="form-control" id="exampleInputPassword1">
-      <div id="emailHelp" class="form-text">请不要将你的登录信息告诉其他人</div>
+      <input type="password" class="form-control" id="exampleInputPassword1" name="password">
+      <div id="emailHelp" class="form-text text-warning">请不要将你的登录信息告诉其他人</div>
+        {% if error %}
+            <div class="alert alert-danger" role="alert">
+            {{ error }}
+            </div>
+        {% endif %}
     </div>
 <!--  <div class="mb-3 form-check">
     <input type="checkbox" class="form-check-input" id="exampleCheck1">

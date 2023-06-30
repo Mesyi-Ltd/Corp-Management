@@ -1,17 +1,34 @@
-from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect
 from .forms import *
 from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from .models import Client
-from django.contrib.auth import login, logout
+from django.contrib.auth import login, logout, authenticate
 
 
 def home(request):
     return render(request, 'main/home.html')
 
 
+@login_required
+def logout_page(request):
+    logout(request)
+    return redirect('login')
+
+
 def login_page(request):
-    return render(request, 'main/login.html')
+    context = {}
+    if request.method == 'POST':
+        username = request.POST.get("username")
+        password = request.POST.get("password")
+        user = authenticate(request, username=username, password=password)
+        if user is None:
+            context['error'] = '账号或密码错误'
+            return render(request, 'registration/login.html', context)
+        login(request, user)
+        return redirect('home')
+    return render(request, 'registration/login.html', context)
 
 
 def performance(request):

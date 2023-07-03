@@ -1,9 +1,50 @@
+import random
+
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.urls import reverse
 
 
-# Create your models here.
+def rand_id(digit):
+    random_id = ""
+    for i in range(digit):
+        random_id.join(str(random.randint))
+    return random_id
+
+
+class Perm(models.Model):
+    order_detail = models.BooleanField(default=False)
+    order_list = models.BooleanField(default=False)
+    order_create = models.BooleanField(default=False)
+    order_edit = models.BooleanField(default=False)
+    order_delete = models.BooleanField(default=False)
+    client_list = models.BooleanField(default=False)
+    client_detail = models.BooleanField(default=False)
+    client_edit = models.BooleanField(default=False)
+    client_delete = models.BooleanField(default=False)
+    client_create = models.BooleanField(default=False)
+    supplier_list = models.BooleanField(default=False)
+    supplier_detail = models.BooleanField(default=False)
+    supplier_create = models.BooleanField(default=False)
+    supplier_delete = models.BooleanField(default=False)
+    supplier_edit = models.BooleanField(default=False)
+    company_list = models.BooleanField(default=False)
+    company_detail = models.BooleanField(default=False)
+    company_create = models.BooleanField(default=False)
+    company_delete = models.BooleanField(default=False)
+    company_edit = models.BooleanField(default=False)
+    staff_list = models.BooleanField(default=False)
+    staff_detail = models.BooleanField(default=False)
+    staff_create = models.BooleanField(default=False)
+    staff_delete = models.BooleanField(default=False)
+    staff_edit = models.BooleanField(default=False)
+    staff_performance = models.BooleanField(default=False)
+
+
+class Position(models.Model):
+    name = models.CharField(max_length=200, default="暂定")
+    perms = models.OneToOneField(Perm, on_delete=models.CASCADE)
+
 
 class Staff(models.Model):
     POSITION = [
@@ -73,6 +114,7 @@ class Order(models.Model):
     def __str__(self):
         return self.id
 
+
 #    def get_absolute_url(self):
 #        return reverse('', args=(str(self.id)))
 
@@ -83,4 +125,3 @@ class Supplier(models.Model):
     contact = models.CharField(max_length=200)
     commodity = models.CharField(max_length=200, null=True, default="待输入")
     price = models.IntegerField(null=True)
-

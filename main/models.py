@@ -18,8 +18,8 @@ class Staff(models.Model):
     phone = models.IntegerField(null=True)
     email = models.EmailField(null=True, blank=True)
     staff_id = models.CharField(unique=True, max_length=50, primary_key=True)
-    total_performance = models.IntegerField(null=True, default=0)
-    monthly_performance = models.IntegerField(null=True, default=0)
+    total_performance = models.IntegerField(default=0)
+    monthly_performance = models.IntegerField(default=0)
     position = models.CharField(max_length=200, null=True, choices=POSITION)
 
     def __str__(self):

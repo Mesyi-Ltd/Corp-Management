@@ -1,8 +1,17 @@
 import random
 
+from django.contrib.auth.models import User
 from django.core.validators import *
 from django.db import models
 from django.urls import reverse
+
+SCALES = [
+    ("0~10", "0~10"),
+    ("11~50", "11~50"),
+    ("51~100", "51~100"),
+    ("101~500", "101~500"),
+    (">500", ">500"),
+]
 
 
 def rand_id(digit):
@@ -57,6 +66,7 @@ class Position(models.Model):
 
 
 class Staff(models.Model):
+    account = models.OneToOneField(User, on_delete=models.SET_NULL)
     name = models.CharField(max_length=200)
     phone = models.IntegerField(null=True)
     email = models.EmailField(null=True, blank=True)
@@ -82,16 +92,37 @@ class MonthlyPerformance(models.Model):
 
 
 class Client(models.Model):
+    client_id = models.CharField(max_length=20)
     name = models.CharField(max_length=200, unique=True)
+    source = models.CharField(max_length=20, choices=[
+        ('assigned', '公司分配'),
+        ('custom', '海关数据'),
+        ('exhibition', '展会资源'),
+        ('other', '其他方式')
+    ])
+    level = models.CharField(max_length=20, choices=[
+        ('intended', '意向客户'),
+        ('potential', '潜在客户'),
+        ('not_intended', '无意向客户'),
+        ('ordered', '下单客户')
+    ])
+    client_type = models.CharField(max_length=20, choices=[
+        ('individual', '个人客户'),
+        ('enterprise', '品牌公司'),
+        ('foreign', '外贸公司'),
+        ('internation', '跨境商超'),
+        ('other', '其他')
+    ])
+    scale = models.CharField(max_length=20, choices=SCALES)
+    market = models.CharField(max_length=10, null=True)
+    country = models.CharField(max_length=20)
     email = models.EmailField(null=True, blank=True)
     phone = models.CharField(max_length=50, null=True, blank=True)
     address = models.TextField(null=True, blank=True)
     order_in_progress = models.IntegerField(null=True, default=0)
-    credible = models.BooleanField(
-        default=True,
-    )
-    order_placed = models.IntegerField(null=True)
     order_completed = models.IntegerField(null=True)
+    registrant = models.CharField(max_length=10)
+    related_staff = models.CharField(max_length=10)
 
     def __str__(self):
         return self.name
@@ -141,13 +172,7 @@ class Supplier(models.Model):
         ('handle', '刷柄'),
         ('production', '人工')
     ])
-    scale = models.CharField(max_length=10, choices=[
-        ("0~10", "0~10"),
-        ("11~50", "11~50"),
-        ("51~100", "51~100"),
-        ("101~500", "101~500"),
-        (">500", ">500"),
-    ])
+    scale = models.CharField(max_length=10, choices=SCALES)
     established_date = models.DateField(null=True, blank=True)
     price = models.FileField(null=True)
     invoice = models.TextField(max_length=200)

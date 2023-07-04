@@ -1,6 +1,6 @@
 import random
 
-from django.core.validators import MaxValueValidator, MinValueValidator
+from django.core.validators import *
 from django.db import models
 from django.urls import reverse
 
@@ -12,7 +12,12 @@ def rand_id(digit):
     return random_id
 
 
+class Company:
+    pass
+
+
 class Perm(models.Model):
+    position_all = models.BooleanField(default=False)
     order_detail = models.BooleanField(default=False)
     order_list = models.BooleanField(default=False)
     order_create = models.BooleanField(default=False)
@@ -39,32 +44,41 @@ class Perm(models.Model):
     staff_delete = models.BooleanField(default=False)
     staff_edit = models.BooleanField(default=False)
     staff_performance = models.BooleanField(default=False)
+    self_order = models.BooleanField(default=True)
 
 
 class Position(models.Model):
-    name = models.CharField(max_length=200, default="暂定")
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    name = models.CharField(max_length=20, default="暂定")
     perms = models.OneToOneField(Perm, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name
 
 
 class Staff(models.Model):
-    POSITION = [
-        ("manager", "经理"),
-        ("salesman", "业务员"),
-        ("order_admin", "跟单员"),
-        ("purchaser", "采购员"),
-        ("warehouse_admin", "仓管员"),
-        ("production_admin", "生产管理员")
-    ]
     name = models.CharField(max_length=200)
     phone = models.IntegerField(null=True)
     email = models.EmailField(null=True, blank=True)
     staff_id = models.CharField(unique=True, max_length=50, primary_key=True)
-    total_performance = models.IntegerField(default=0)
+    national_id = models.CharField(unique=True, max_length=18, validators=[
+        MinLengthValidator(18, message="身份证格式错误", code='invalid_length'),
+        RegexValidator('^[0-9a-zX]*$', message="身份证格式错误", code='invalid_format')
+    ])
+    annual_performance = models.IntegerField(default=0)
     monthly_performance = models.IntegerField(default=0)
-    position = models.CharField(max_length=200, null=True, choices=POSITION)
+    position = models.ForeignKey(Position, on_delete=models.SET_NULL, null=True)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    status = models.CharField(max_length=2, choices=[("on_post", "在职"), ("left", "离职")])
+    employed_date = models.DateField()
+    leaving_date = models.DateField()
 
     def __str__(self):
         return self.name
+
+
+class MonthlyPerformance(models.Model):
+    owner = models.ForeignKey(Staff, on_delete=models.CASCADE)
 
 
 class Client(models.Model):
@@ -101,8 +115,8 @@ class Order(models.Model):
         null=True
     )
     staff = models.ManyToManyField(Staff)
-    id = models.IntegerField(unique=True, primary_key=True,
-                             validators=[MaxValueValidator(999999999), MinValueValidator(100000000)])
+    order_num = models.IntegerField(unique=True, primary_key=True,
+                                    validators=[MaxValueValidator(999999999), MinValueValidator(100000000)])
     amount = models.IntegerField(null=True)
     description = models.CharField(max_length=999)
     sample = models.ImageField(null=True, blank=True)
@@ -112,7 +126,7 @@ class Order(models.Model):
     status = models.CharField(max_length=200, null=True, choices=STATUS)
 
     def __str__(self):
-        return self.id
+        return self.order_num
 
 
 #    def get_absolute_url(self):
@@ -121,7 +135,30 @@ class Order(models.Model):
 
 class Supplier(models.Model):
     name = models.CharField(max_length=200, null=True)
-    address = models.TextField(null=True, blank=True)
-    contact = models.CharField(max_length=200)
-    commodity = models.CharField(max_length=200, null=True, default="待输入")
-    price = models.IntegerField(null=True)
+    commodity = models.CharField(max_length=5, null=True, choices=[
+        ('brush_hair', '刷毛'),
+        ('pipe', '口管'),
+        ('handle', '刷柄'),
+        ('production', '人工')
+    ])
+    scale = models.CharField(max_length=10, choices=[
+        ("0~10", "0~10"),
+        ("11~50", "11~50"),
+        ("51~100", "51~100"),
+        ("101~500", "101~500"),
+        (">500", ">500"),
+    ])
+    established_date = models.DateField(null=True, blank=True)
+    price = models.FileField(null=True)
+    invoice = models.TextField(max_length=200)
+    remark = models.TextField(max_length=200)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+
+
+class SupplierContact(models.Model):
+    supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE)
+    name = models.CharField(max_length=10)
+    position = models.CharField(max_length=20)
+    phonenum = models.CharField(max_length=20)
+    email = models.EmailField()
+    remark = models.TextField(null=True, blank=True, max_length=200)

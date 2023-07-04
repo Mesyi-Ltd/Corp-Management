@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from .forms import *
 from django.views import View
@@ -46,15 +47,16 @@ class RegisterClient(CreateView):
     template_name = 'main/register_client.html'
     form_class = ClientForm
 
-    # def post(self, request, *args, **kwargs):
-    #     form = ClientForm(request.POST)
-    #     context = {}
-    #     if form.is_valid():
-    #         client = form.save()
-    #         context["info"] = "注册成功"
-    #         return render(request, 'main/register_client.html', context)
-    #     else:
-    #         return render(request)
+    def post(self, request, *args, **kwargs):
+        form = ClientForm(request.POST)
+        context = {}
+        if form.is_valid():
+            client = form.save()
+            context["info"] = "注册成功"
+            return render(request, 'main/register_client.html', context)
+        else:
+            context["info"] = "表单无效"
+            return render(request, 'main/register_client.html', context)
 
 
 #    fields = '__all__'

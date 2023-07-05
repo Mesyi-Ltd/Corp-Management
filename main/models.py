@@ -131,6 +131,21 @@ class Client(models.Model):
         return reverse('client_detail', args=(str(self.id)))
 
 
+class ClientContact(models.Model):
+    corp = models.ForeignKey(Company, on_delete=models.CASCADE)
+    name = models.CharField(max_length=10)
+    gender = models.CharField(max_length=10, choices=[('male', '男'), ('female', '女'), ('other', '其他')])
+    position = models.CharField(max_length=50)
+    dob = models.DateField()
+    phonenum = models.CharField(max_length=20)
+    email = models.EmailField()
+    remark = models.TextField()
+
+
+class ClientCommunication(models.Model):
+    client = models.ForeignKey(Client, on_delete=models.SET_NULL, null=True)
+
+
 class Order(models.Model):
     STATUS = [
         ("placed", "已下单"),

@@ -162,6 +162,31 @@ class ClientCommunication(models.Model):
     next_plan = models.TextField()
 
 
+class Supplier(models.Model):
+    name = models.CharField(max_length=200, null=True)
+    commodity = models.CharField(max_length=5, null=True, choices=[
+        ('brush_hair', '刷毛'),
+        ('pipe', '口管'),
+        ('handle', '刷柄'),
+        ('production', '人工')
+    ])
+    scale = models.CharField(max_length=10, choices=SCALES)
+    established_date = models.DateField(null=True, blank=True)
+    price = models.FileField(null=True)
+    invoice = models.TextField(max_length=200)
+    remark = models.TextField(max_length=200)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+
+
+class SupplierContact(models.Model):
+    supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE)
+    name = models.CharField(max_length=10)
+    position = models.CharField(max_length=20)
+    phonenum = models.CharField(max_length=20)
+    email = models.EmailField()
+    remark = models.TextField(null=True, blank=True, max_length=200)
+
+
 class Order(models.Model):
     STATUS = [
         ("placed", "已下单"),
@@ -190,31 +215,28 @@ class Order(models.Model):
     def __str__(self):
         return self.order_num
 
-
 #    def get_absolute_url(self):
 #        return reverse('', args=(str(self.id)))
 
 
-class Supplier(models.Model):
-    name = models.CharField(max_length=200, null=True)
-    commodity = models.CharField(max_length=5, null=True, choices=[
-        ('brush_hair', '刷毛'),
-        ('pipe', '口管'),
-        ('handle', '刷柄'),
-        ('production', '人工')
+class OrderStatus(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    sample_status = models.CharField(max_length=20, null=True, blank=True, choices=[
+        ('paid', '已付款'),
+        ('purchasing', '原料采购'),
+        ('producing', '打样中'),
+        ('shipped', '已出货'),
+        ('adjusting', '修样中'),
+        ('accepted', '样品确认')
     ])
-    scale = models.CharField(max_length=10, choices=SCALES)
-    established_date = models.DateField(null=True, blank=True)
-    price = models.FileField(null=True)
-    invoice = models.TextField(max_length=200)
-    remark = models.TextField(max_length=200)
-    company = models.ForeignKey(Company, on_delete=models.CASCADE)
-
-
-class SupplierContact(models.Model):
-    supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE)
-    name = models.CharField(max_length=10)
-    position = models.CharField(max_length=20)
-    phonenum = models.CharField(max_length=20)
-    email = models.EmailField()
-    remark = models.TextField(null=True, blank=True, max_length=200)
+    status = models.CharField(max_length=20, null=True, blank=True, choices=[
+        ('paid', '定金已交'),
+        ('purchasing', '原料采购'),
+        ('purchased', '原料入库'),
+        ('producing', '生产中'),
+        ('checking', '质检中'),
+        ('inspecting', '验货中'),
+        ('shipped', '已出货'),
+        ('accepted', '已确认')
+    ])
+    time = models.DateTimeField(auto_now_add=True)

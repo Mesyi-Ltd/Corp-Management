@@ -143,7 +143,23 @@ class ClientContact(models.Model):
 
 
 class ClientCommunication(models.Model):
+    METHODS = [
+        ('email', '邮件来往'),
+        ('call', '电话交流'),
+        ('f2f', '客户面访'),
+        ('qq', 'QQ交流'),
+        ('wechat', '微信交流'),
+        ('other', '其他方式')
+    ]
     client = models.ForeignKey(Client, on_delete=models.SET_NULL, null=True)
+    client_name = models.CharField(max_length=30)
+    creator = models.CharField(max_length=20)
+    method = models.CharField(max_length=10, choices=METHODS)
+    content = models.FileField()
+    date = models.DateField()
+    next_date = models.DateField()
+    next_method = models.CharField(max_length=10, choices=METHODS)
+    next_plan = models.TextField()
 
 
 class Order(models.Model):

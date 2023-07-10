@@ -188,29 +188,23 @@ class SupplierContact(models.Model):
 
 
 class Order(models.Model):
-    STATUS = [
-        ("placed", "已下单"),
-        ("producing", "生产中"),
-        ("produced", "生产完毕"),
-        ("shipping", "已发货"),
-        ("delivered", "已到货"),
-        ("completed", "已完成"),
-    ]
     client = models.ForeignKey(
         Client,
         on_delete=models.SET_NULL,
         null=True
     )
-    staff = models.ManyToManyField(Staff)
-    order_num = models.IntegerField(unique=True, primary_key=True,
-                                    validators=[MaxValueValidator(999999999), MinValueValidator(100000000)])
+    client_name = models.CharField(max_length=50, default=client.name)
+    staff = models.ManyToManyField(Staff, related_name='order')
+    order_num = models.CharField(unique=True, primary_key=True,validators=[
+        RegexValidator('^[0-9]*$', message='订单号格式错误',code='invalid_order')
+    ])
     amount = models.IntegerField(null=True)
     description = models.CharField(max_length=999)
     sample = models.ImageField(null=True, blank=True)
     price = models.IntegerField(null=True)
+    address = models.TextField()
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
-    status = models.CharField(max_length=200, null=True, choices=STATUS)
 
     def __str__(self):
         return self.order_num
@@ -240,3 +234,15 @@ class OrderStatus(models.Model):
         ('accepted', '已确认')
     ])
     time = models.DateTimeField(auto_now_add=True)
+
+
+# class Image(models.Model):
+#     image = models.ImageField()
+#     correspondence = models.ForeignKey(on_delete=models.CASCADE, related_name='image',null=)
+
+class OrderAttachment(models.Model):
+    order = models.ForeignKey(
+        Order, on_delete=models.CASCADE, null=True
+    )
+    document = models.FileField(null=False, blank=False, upload_to='file/')
+

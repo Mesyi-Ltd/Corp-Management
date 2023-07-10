@@ -21,8 +21,8 @@ def rand_id(digit):
     return random_id
 
 
-class Company:
-    pass
+class Company(models.Model):
+    name = models.CharField(max_length=20)
 
 
 class Perm(models.Model):
@@ -66,20 +66,20 @@ class Position(models.Model):
 
 
 class Staff(models.Model):
-    account = models.OneToOneField(User, on_delete=models.SET_NULL)
+    account = models.OneToOneField(User, on_delete=models.SET_NULL, null=True)
     name = models.CharField(max_length=200)
     phone = models.IntegerField(null=True)
     email = models.EmailField(null=True, blank=True)
     staff_id = models.CharField(unique=True, max_length=50, primary_key=True)
     national_id = models.CharField(unique=True, max_length=18, validators=[
-        MinLengthValidator(18, message="身份证格式错误", code='invalid_length'),
-        RegexValidator('^[0-9a-zX]*$', message="身份证格式错误", code='invalid_format')
+        MinLengthValidator(18, message="身份证格式错误"),
+        RegexValidator('^[0-9a-zX]*$', message="身份证格式错误")
     ])
     annual_performance = models.IntegerField(default=0)
     monthly_performance = models.IntegerField(default=0)
     position = models.ForeignKey(Position, on_delete=models.SET_NULL, null=True)
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
-    status = models.CharField(max_length=2, choices=[("on_post", "在职"), ("left", "离职")])
+    status = models.CharField(max_length=10, choices=[("on_post", "在职"), ("left", "离职")])
     employed_date = models.DateField()
     leaving_date = models.DateField()
 
@@ -164,7 +164,7 @@ class ClientCommunication(models.Model):
 
 class Supplier(models.Model):
     name = models.CharField(max_length=200, null=True)
-    commodity = models.CharField(max_length=5, null=True, choices=[
+    commodity = models.CharField(max_length=20, null=True, choices=[
         ('brush_hair', '刷毛'),
         ('pipe', '口管'),
         ('handle', '刷柄'),
@@ -195,8 +195,8 @@ class Order(models.Model):
     )
     client_name = models.CharField(max_length=50, default=client.name)
     staff = models.ManyToManyField(Staff, related_name='order')
-    order_num = models.CharField(unique=True, primary_key=True,validators=[
-        RegexValidator('^[0-9]*$', message='订单号格式错误',code='invalid_order')
+    order_num = models.CharField(unique=True, primary_key=True, max_length=20, validators=[
+        RegexValidator('^[0-9]*$', message='订单号格式错误')
     ])
     amount = models.IntegerField(null=True)
     description = models.CharField(max_length=999)
@@ -208,6 +208,7 @@ class Order(models.Model):
 
     def __str__(self):
         return self.order_num
+
 
 #    def get_absolute_url(self):
 #        return reverse('', args=(str(self.id)))
@@ -245,4 +246,3 @@ class OrderAttachment(models.Model):
         Order, on_delete=models.CASCADE, null=True
     )
     document = models.FileField(null=False, blank=False, upload_to='file/')
-

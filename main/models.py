@@ -194,17 +194,28 @@ class Order(models.Model):
         null=True
     )
     client_name = models.CharField(max_length=50, default=client.name)
-    staff = models.ManyToManyField(Staff, related_name='order')
+    staff = models.ManyToManyField(Staff, related_name='orders')
+    staff1 = models.CharField(max_length=20)
+    staff2 = models.CharField(max_length=20)
     order_num = models.CharField(unique=True, primary_key=True, max_length=20, validators=[
         RegexValidator('^[0-9]*$', message='订单号格式错误')
     ])
-    amount = models.IntegerField(null=True)
-    description = models.CharField(max_length=999)
     sample = models.ImageField(null=True, blank=True)
+    type = models.CharField(max_length=10, choices=[('stoke', '库存'), ('produce', '生产')])
+    item = models.CharField(max_length=20)
+    specs = models.CharField(max_length=200)
+    amount = models.IntegerField(null=True)
+    ppu = models.IntegerField()
     price = models.IntegerField(null=True)
+    deposit = models.IntegerField()
+    deposit_paid = models.DateField()
+    remaining = models.IntegerField()
+    remaining_paid = models.DateField()
     address = models.TextField()
+    description = models.CharField(max_length=999)
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
+    handed = models.DateField()
 
     def __str__(self):
         return self.order_num
@@ -215,7 +226,7 @@ class Order(models.Model):
 
 
 class OrderStatus(models.Model):
-    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='status')
     sample_status = models.CharField(max_length=20, null=True, blank=True, choices=[
         ('paid', '已付款'),
         ('purchasing', '原料采购'),

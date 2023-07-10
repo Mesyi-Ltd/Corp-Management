@@ -18,3 +18,19 @@ class ClientForm(forms.ModelForm):
             'address': forms.Textarea(attrs={'class': 'form-control'}),
             'credible': forms.CheckboxInput(attrs={'class': 'form-control', 'value': 'checked'}),
         }
+
+
+class OrderForm(forms.ModelForm):
+    class Meta:
+        model = Order
+        fields = '__all__'
+
+        widgets = {
+            'order_id': forms.TextInput(attrs={'class': 'form-control', }),
+            'handed': forms.DateInput(attrs={'type': 'date', 'placeholder': 'yyyy-mm-dd', 'class': 'form-control'})
+        }
+
+        labels = {
+            'order_id': '订单号'
+        }
+

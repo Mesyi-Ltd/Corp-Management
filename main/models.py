@@ -188,6 +188,7 @@ class SupplierContact(models.Model):
 
 
 class Order(models.Model):
+    order_id = models.CharField(max_length=20)
     client = models.ForeignKey(
         Client,
         on_delete=models.SET_NULL,

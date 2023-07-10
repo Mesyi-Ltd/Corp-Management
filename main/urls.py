@@ -11,4 +11,6 @@ urlpatterns = [
     path('client/<str:pk>', views.ClientDetail.as_view(), name='client_detail'),
     path('suppliers', views.SupplierList.as_view(), name='supplier_list'),
     path('supplier/<str:pk>', views.SupplierDetail.as_view(), name='supplier_detail'),
+    path('order/create', views.create_order, name='create_order'),
+
 ]

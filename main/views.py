@@ -79,3 +79,14 @@ class SupplierList(ListView):
 class SupplierDetail(DetailView):
     model = Supplier
     template_name = 'main/supplier_detail.html'
+
+
+def create_order(request):
+    if request.method == "POST":
+        form = OrderForm(request.POST)
+        if form.is_valid():
+            form.save(commit=False)
+            return redirect(reverse(home))
+    else:
+        form = OrderForm
+    return render(request, 'order/create.html', {'form': form})

@@ -268,3 +268,10 @@ class OrderAttachment(models.Model):
         Order, on_delete=models.CASCADE, null=True
     )
     document = models.FileField(null=False, blank=False, upload_to='file/')
+
+
+class CommunicationAttachment(models.Model):
+    communication = models.ForeignKey(
+        ClientCommunication, on_delete=models.CASCADE
+    )
+    document = models.FileField(null=False, blank=False, upload_to='file/')

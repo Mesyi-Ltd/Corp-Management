@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'main.apps.MainConfig',
-
+    'django_crontab',
 
 ]
 
@@ -103,6 +103,11 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
+]
+
+CRONJOBS = [
+    ('0 0 1 * *', 'main.cron.reset_monthly_performance'),
+    ('0 0 1 1 *', 'main.cron.reset_annual_performance'),
 ]
 
 

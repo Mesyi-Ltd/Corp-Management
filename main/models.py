@@ -102,6 +102,7 @@ class AnnualPerformance(models.Model):
 
 
 class Client(models.Model):
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='order')
     client_id = models.CharField(max_length=20)
     name = models.CharField(max_length=200, unique=True)
     source = models.CharField(max_length=20, choices=[
@@ -142,7 +143,7 @@ class Client(models.Model):
 
 
 class ClientContact(models.Model):
-    corp = models.ForeignKey(Company, on_delete=models.CASCADE)
+    corp = models.ForeignKey(Client, on_delete=models.CASCADE)
     name = models.CharField(max_length=10)
     gender = models.CharField(max_length=10, choices=[('male', '男'), ('female', '女'), ('other', '其他')])
     position = models.CharField(max_length=50)
@@ -161,7 +162,7 @@ class ClientCommunication(models.Model):
         ('wechat', '微信交流'),
         ('other', '其他方式')
     ]
-    client = models.ForeignKey(Client, on_delete=models.SET_NULL, null=True)
+    client = models.ForeignKey(Client, on_delete=models.CASCADE)
     client_name = models.CharField(max_length=30)
     creator = models.CharField(max_length=20)
     method = models.CharField(max_length=10, choices=METHODS)
@@ -173,6 +174,7 @@ class ClientCommunication(models.Model):
 
 
 class Supplier(models.Model):
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
     name = models.CharField(max_length=200, null=True)
     commodity = models.CharField(max_length=20, null=True, choices=[
         ('brush_hair', '刷毛'),
@@ -185,7 +187,6 @@ class Supplier(models.Model):
     price = models.FileField(null=True)
     invoice = models.TextField(max_length=200)
     remark = models.TextField(max_length=200)
-    company = models.ForeignKey(Company, on_delete=models.CASCADE)
 
 
 class SupplierContact(models.Model):
@@ -198,6 +199,7 @@ class SupplierContact(models.Model):
 
 
 class Order(models.Model):
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
     order_id = models.CharField(max_length=20)
     client = models.ForeignKey(
         Client,

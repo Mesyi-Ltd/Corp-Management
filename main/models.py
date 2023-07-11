@@ -4,6 +4,8 @@ from django.contrib.auth.models import User
 from django.core.validators import *
 from django.db import models
 from django.urls import reverse
+from datetime import datetime
+
 
 SCALES = [
     ("0~10", "0~10"),
@@ -76,7 +78,6 @@ class Staff(models.Model):
         RegexValidator('^[0-9a-zX]*$', message="身份证格式错误")
     ])
     annual_performance = models.IntegerField(default=0)
-    monthly_performance = models.IntegerField(default=0)
     position = models.ForeignKey(Position, on_delete=models.SET_NULL, null=True)
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
     status = models.CharField(max_length=10, choices=[("on_post", "在职"), ("left", "离职")])
@@ -89,6 +90,15 @@ class Staff(models.Model):
 
 class MonthlyPerformance(models.Model):
     owner = models.ForeignKey(Staff, on_delete=models.CASCADE)
+    performance = models.IntegerField()
+    year = models.IntegerField(default=datetime.now().year)
+
+
+class AnnualPerformance(models.Model):
+    owner = models.ForeignKey(Staff, on_delete=models.CASCADE)
+    performance = models.IntegerField()
+    year = models.IntegerField(default=datetime.now().year)
+    month = models.IntegerField(default=datetime.now().month)
 
 
 class Client(models.Model):

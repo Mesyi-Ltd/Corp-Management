@@ -9,14 +9,14 @@ class ClientForm(forms.ModelForm):
 
     class Meta:
         model = Client
-        fields = ('name', 'email', 'phone', 'address', 'credible')
+        fields = ('name', 'email', 'phone', 'address',)
 
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control'}),
             'email': forms.EmailInput(attrs={'class': 'form-control'}),
             'phone': forms.TextInput(attrs={'class': 'form-control'}),
             'address': forms.Textarea(attrs={'class': 'form-control'}),
-            'credible': forms.CheckboxInput(attrs={'class': 'form-control', 'value': 'checked'}),
+
         }
 
 

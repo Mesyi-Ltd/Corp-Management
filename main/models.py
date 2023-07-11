@@ -91,14 +91,14 @@ class Staff(models.Model):
 class MonthlyPerformance(models.Model):
     owner = models.ForeignKey(Staff, on_delete=models.CASCADE)
     performance = models.IntegerField()
-    year = models.IntegerField(default=datetime.now().year)
+    year = models.IntegerField(default=datetime.now().year, blank=True)
 
 
 class AnnualPerformance(models.Model):
     owner = models.ForeignKey(Staff, on_delete=models.CASCADE)
     performance = models.IntegerField()
-    year = models.IntegerField(default=datetime.now().year)
-    month = models.IntegerField(default=datetime.now().month)
+    year = models.IntegerField(default=datetime.now().year, blank=True)
+    month = models.IntegerField(default=datetime.now().month, blank=True)
 
 
 class Client(models.Model):

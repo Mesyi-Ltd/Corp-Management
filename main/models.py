@@ -280,14 +280,35 @@ class CommunicationAttachment(models.Model):
 
 class Item(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
-    item_id = models.CharField(max_length=20, unique=True)
-    name = models.CharField(max_length=20, unique=True)
+    item_id = models.CharField(max_length=20)
+    name = models.CharField(max_length=20)
     type = models.CharField(max_length=10, choices=[
         ('product', '产品'),
         ('material', '原料'),
     ])
-    amount = models.IntegerField()
+    amount = models.IntegerField(default=0, validators=[MinValueValidator(0)])
     spec = models.CharField(max_length=200)
 
 
+class StorageChange(models.Model):
+    change_id = models.CharField(max_length=20)
+    source_whereabouts = models.CharField(max_length=20)
+    invoice = models.CharField(max_length=20)
+    staff = models.CharField(max_length=20)
+    remark = models.TextField()
 
+
+class ItemChange(models.Model):
+    storage = models.ForeignKey(StorageChange, related_name='item', on_delete=models.CASCADE)
+    item_name = models.CharField(max_length=20)
+    item_id = models.CharField(max_length=20)
+    quantity = models.IntegerField()
+    type = models.CharField(max_length=10, choices=[
+        ('increase', '入库'),
+        ('decrease', '出库')
+    ])
+
+
+class StorageChangeAttachment(models.Model):
+    change = models.ForeignKey(StorageChange, on_delete=models.CASCADE)
+    file = models.FileField(upload_to='file/')

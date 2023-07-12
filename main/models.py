@@ -312,3 +312,8 @@ class ItemChange(models.Model):
 class StorageChangeAttachment(models.Model):
     change = models.ForeignKey(StorageChange, on_delete=models.CASCADE)
     file = models.FileField(upload_to='file/')
+
+
+class Purchase(models.Model):
+    purchase_id = models.CharField(max_length=20)
+    related_order = models.OneToOneField(Order, on_delete=models.CASCADE)

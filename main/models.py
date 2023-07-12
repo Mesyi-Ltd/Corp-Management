@@ -6,7 +6,6 @@ from django.db import models
 from django.urls import reverse
 from datetime import datetime
 
-
 SCALES = [
     ("0~10", "0~10"),
     ("11~50", "11~50"),
@@ -277,3 +276,18 @@ class CommunicationAttachment(models.Model):
         ClientCommunication, on_delete=models.CASCADE
     )
     document = models.FileField(null=False, blank=False, upload_to='file/')
+
+
+class Item(models.Model):
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    item_id = models.CharField(max_length=20, unique=True)
+    name = models.CharField(max_length=20, unique=True)
+    type = models.CharField(max_length=10, choices=[
+        ('product', '产品'),
+        ('material', '原料'),
+    ])
+    amount = models.IntegerField()
+    spec = models.CharField(max_length=200)
+
+
+

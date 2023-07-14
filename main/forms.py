@@ -74,3 +74,11 @@ class PermsForm(forms.ModelForm):
             field.widget.attrs['type'] = 'checkbox'
             field.widget.attrs['role'] = 'switch'
             field.widget.attrs['id'] = 'flexSwitchCheckDefault'
+
+
+class PositionForm(forms.ModelForm):
+    class Meta:
+        model = Position
+        fields = ['name']
+
+        widgets = {'name': forms.TextInput(attrs={'class': 'form-control'})}

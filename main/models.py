@@ -101,7 +101,7 @@ class AnnualPerformance(models.Model):
 
 
 class Client(models.Model):
-    company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='order')
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='client')
     client_id = models.CharField(max_length=20)
     name = models.CharField(max_length=200, unique=True)
     source = models.CharField(max_length=20, choices=[

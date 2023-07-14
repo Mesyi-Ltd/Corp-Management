@@ -38,7 +38,7 @@ class OrderForm(forms.ModelForm):
 class StaffForm(forms.ModelForm):
     class Meta:
         model = Staff
-        fields = '__all__'
+        fields = ['staff_id', 'name', 'phone', 'email', 'national_id', 'position', 'employed_date']
 
         widgets = {
             'staff_id': forms.TextInput(attrs={'class': 'form-control'}),
@@ -60,3 +60,17 @@ class StaffForm(forms.ModelForm):
             'position': '职位',
             'employed_date': '入职日期'
         }
+
+
+class PermsForm(forms.ModelForm):
+    class Meta:
+        model = Perm
+        fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super(PermsForm, self).__init__(*args, **kwargs)
+        for field in self.fields:
+            field.widget.attrs['class'] = 'form-check-input'
+            field.widget.attrs['type'] = 'checkbox'
+            field.widget.attrs['role'] = 'switch'
+            field.widget.attrs['id'] = 'flexSwitchCheckDefault'

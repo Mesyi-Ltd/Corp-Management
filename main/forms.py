@@ -34,3 +34,29 @@ class OrderForm(forms.ModelForm):
             'order_id': '订单号'
         }
 
+
+class StaffForm(forms.ModelForm):
+    class Meta:
+        model = Staff
+        fields = '__all__'
+
+        widgets = {
+            'staff_id': forms.TextInput(attrs={'class': 'form-control'}),
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'phone': forms.TextInput(attrs={'class': 'form-control'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control'}),
+            'national_id': forms.TextInput(attrs={'class': 'form-control'}),
+            'position': forms.ModelChoiceField(queryset=Position.objects.all(), attrs={'class': 'form-control'}),
+            'employed_date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+
+        }
+
+        labels = {
+            'staff_id': '工号',
+            'name': '姓名',
+            'phone': '手机号',
+            'email': '邮箱',
+            'national_id': '身份证号',
+            'position': '职位',
+            'employed_date': '入职日期'
+        }

@@ -69,19 +69,18 @@ class Position(models.Model):
 class Staff(models.Model):
     account = models.OneToOneField(User, on_delete=models.SET_NULL, null=True)
     name = models.CharField(max_length=200)
-    phone = models.IntegerField(null=True)
+    phone = models.CharField(max_length=20, validators=[RegexValidator('^[0-9 +]*$', message="手机号错误")])
     email = models.EmailField(null=True, blank=True)
     staff_id = models.CharField(unique=True, max_length=50, primary_key=True)
     national_id = models.CharField(unique=True, max_length=18, validators=[
         MinLengthValidator(18, message="身份证格式错误"),
         RegexValidator('^[0-9a-zX]*$', message="身份证格式错误")
     ])
-    annual_performance = models.IntegerField(default=0)
     position = models.ForeignKey(Position, on_delete=models.SET_NULL, null=True)
-    company = models.ForeignKey(Company, on_delete=models.CASCADE)
-    status = models.CharField(max_length=10, choices=[("on_post", "在职"), ("left", "离职")])
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, null=True, blank=True)
+    status = models.CharField(max_length=10, choices=[("on_post", "在职"), ("left", "离职")], default="on_post")
     employed_date = models.DateField()
-    leaving_date = models.DateField()
+    leaving_date = models.DateField(blank=True, null=True)
 
     def __str__(self):
         return self.name

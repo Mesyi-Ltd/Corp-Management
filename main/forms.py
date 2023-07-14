@@ -33,19 +33,30 @@ class OrderForm(forms.ModelForm):
             'staff': forms.ModelMultipleChoiceField(queryset=Staff.objects.all(),
                                                     attrs={'class': 'form-control', 'size': 2}),
             'type': forms.TextInput(attrs={'class': 'form-control', }),
-            'item': forms.TextInput(attrs={'class': 'form-control', }),
+            'item': forms.Select(attrs={'class': 'form-control', }),
             'specs': forms.TextInput(attrs={'class': 'form-control', }),
-            'address': forms.TextInput(attrs={'class': 'form-control', }),
             'amount': forms.NumberInput(attrs={'class': 'form-control', }),
             'ppu': forms.NumberInput(attrs={'class': 'form-control', }),
             'price': forms.NumberInput(attrs={'class': 'form-control', }),
             'deposit': forms.NumberInput(attrs={'class': 'form-control', }),
-            'description': forms.TextInput(attrs={'class': 'form-control'},)
+            'description': forms.TextInput(attrs={'class': 'form-control'},),
+            'address': forms.TextInput(attrs={'class': 'form-control', }),
             # 'handed': forms.DateInput(attrs={'type': 'date', 'placeholder': 'yyyy-mm-dd', 'class': 'form-control'})
         }
 
         labels = {
-            'order_id': '订单号'
+            'order_num': '订单号',
+            'client': '客户',
+            'staff': '相关员工',
+            'type': '货物类型',
+            'item': '商品名称',
+            'specs': '规格型号',
+            'amount': '订购数量',
+            'ppu': '商品单价',
+            'price': '商品总价',
+            'deposit': '定金',
+            'description': '备注',
+            'address': '收货地址',
         }
 
 

@@ -12,5 +12,5 @@ urlpatterns = [
     path('suppliers', views.SupplierList.as_view(), name='supplier_list'),
     path('supplier/<str:pk>', views.SupplierDetail.as_view(), name='supplier_detail'),
     path('order/create', views.create_order, name='create_order'),
-
+    path('staff/position/create', views.create_position, name='create_position'),
 ]

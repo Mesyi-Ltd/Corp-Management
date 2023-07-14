@@ -22,6 +22,11 @@ class ClientForm(forms.ModelForm):
 
 
 class OrderForm(forms.ModelForm):
+    client = forms.ModelChoiceField(queryset=Client.objects.all(),
+                                    widget=forms.Select(attrs={'class': 'form-select', }))
+    staff = forms.ModelMultipleChoiceField(queryset=Staff.objects.all(),
+                                           widget=forms.Select(attrs={'class': 'form-select', }), )
+
     class Meta:
         model = Order
         fields = ['order_num', 'client', 'staff', 'type', 'item', 'specs',
@@ -29,9 +34,6 @@ class OrderForm(forms.ModelForm):
 
         widgets = {
             'order_num': forms.TextInput(attrs={'class': 'form-control', }),
-            'client': forms.ModelChoiceField(queryset=Client.objects.all(), attrs={'class': 'form-control', }),
-            'staff': forms.ModelMultipleChoiceField(queryset=Staff.objects.all(),
-                                                    attrs={'class': 'form-control', 'size': 2}),
             'type': forms.TextInput(attrs={'class': 'form-control', }),
             'item': forms.Select(attrs={'class': 'form-control', }),
             'specs': forms.TextInput(attrs={'class': 'form-control', }),
@@ -39,7 +41,7 @@ class OrderForm(forms.ModelForm):
             'ppu': forms.NumberInput(attrs={'class': 'form-control', }),
             'price': forms.NumberInput(attrs={'class': 'form-control', }),
             'deposit': forms.NumberInput(attrs={'class': 'form-control', }),
-            'description': forms.TextInput(attrs={'class': 'form-control'},),
+            'description': forms.TextInput(attrs={'class': 'form-control'}, ),
             'address': forms.TextInput(attrs={'class': 'form-control', }),
             # 'handed': forms.DateInput(attrs={'type': 'date', 'placeholder': 'yyyy-mm-dd', 'class': 'form-control'})
         }
@@ -61,6 +63,9 @@ class OrderForm(forms.ModelForm):
 
 
 class StaffForm(forms.ModelForm):
+    position = forms.ModelChoiceField(queryset=Position.objects.all(),
+                                      widget=forms.Select(attrs={'class': 'form-select', }))
+
     class Meta:
         model = Staff
         fields = ['staff_id', 'name', 'phone', 'email', 'national_id', 'position', 'employed_date']
@@ -71,7 +76,6 @@ class StaffForm(forms.ModelForm):
             'phone': forms.TextInput(attrs={'class': 'form-control'}),
             'email': forms.EmailInput(attrs={'class': 'form-control'}),
             'national_id': forms.TextInput(attrs={'class': 'form-control'}),
-            'position': forms.ModelChoiceField(queryset=Position.objects.all(), attrs={'class': 'form-control'}),
             'employed_date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
 
         }
@@ -94,7 +98,7 @@ class PermsForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(PermsForm, self).__init__(*args, **kwargs)
-        for field in self.fields:
+        for field in self.fields.values():
             field.widget.attrs['class'] = 'form-check-input'
             field.widget.attrs['type'] = 'checkbox'
             field.widget.attrs['role'] = 'switch'

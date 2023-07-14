@@ -83,10 +83,22 @@ class SupplierDetail(DetailView):
 
 def create_order(request):
     if request.method == "POST":
-        form = OrderForm(request.POST)
+        form = OrderForm(request.POST or None)
         if form.is_valid():
             form.save(commit=False)
             return redirect(reverse(home))
     else:
-        form = OrderForm
+        form = OrderForm()
     return render(request, 'order/create.html', {'form': form})
+
+
+def create_position(request):
+    if request.method == "POST":
+        form = PermsForm(request.POST or None)
+        if form.is_valid():
+            perms = form.save()
+            name = request.POST['name']
+            Position.objects.create(perms=perms, name=name)
+    else:
+        form = PermsForm()
+    return render(request, 'staff/position.html', {'form': form})

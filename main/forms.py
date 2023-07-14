@@ -3,13 +3,14 @@ from .models import *
 
 
 class ClientForm(forms.ModelForm):
-    credible = forms.BooleanField(
-        required=False,
-    )
+    # credible = forms.BooleanField(
+    #     required=False,
+    # )
 
     class Meta:
         model = Client
-        fields = ('name', 'email', 'phone', 'address',)
+        fields = ('client_id', 'name', 'email', 'phone', 'address',
+                  'country', 'source', 'level', 'scale', 'client_type', 'market')
 
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control'}),
@@ -23,11 +24,24 @@ class ClientForm(forms.ModelForm):
 class OrderForm(forms.ModelForm):
     class Meta:
         model = Order
-        fields = '__all__'
+        fields = ['order_num', 'client', 'staff', 'type', 'item', 'specs',
+                  'address', 'amount', 'ppu', 'price', 'deposit', 'description']
 
         widgets = {
-            'order_id': forms.TextInput(attrs={'class': 'form-control', }),
-            'handed': forms.DateInput(attrs={'type': 'date', 'placeholder': 'yyyy-mm-dd', 'class': 'form-control'})
+            'order_num': forms.TextInput(attrs={'class': 'form-control', }),
+            'client': forms.ModelChoiceField(queryset=Client.objects.all(), attrs={'class': 'form-control', }),
+            'staff': forms.ModelMultipleChoiceField(queryset=Staff.objects.all(),
+                                                    attrs={'class': 'form-control', 'size': 2}),
+            'type': forms.TextInput(attrs={'class': 'form-control', }),
+            'item': forms.TextInput(attrs={'class': 'form-control', }),
+            'specs': forms.TextInput(attrs={'class': 'form-control', }),
+            'address': forms.TextInput(attrs={'class': 'form-control', }),
+            'amount': forms.NumberInput(attrs={'class': 'form-control', }),
+            'ppu': forms.NumberInput(attrs={'class': 'form-control', }),
+            'price': forms.NumberInput(attrs={'class': 'form-control', }),
+            'deposit': forms.NumberInput(attrs={'class': 'form-control', }),
+            'description': forms.TextInput(attrs={'class': 'form-control'},)
+            # 'handed': forms.DateInput(attrs={'type': 'date', 'placeholder': 'yyyy-mm-dd', 'class': 'form-control'})
         }
 
         labels = {

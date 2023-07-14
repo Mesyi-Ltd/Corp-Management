@@ -100,7 +100,7 @@ class AnnualPerformance(models.Model):
 
 
 class Client(models.Model):
-    company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='client')
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='client', null=True, blank=True)
     client_id = models.CharField(max_length=20)
     name = models.CharField(max_length=200, unique=True)
     source = models.CharField(max_length=20, choices=[
@@ -129,7 +129,7 @@ class Client(models.Model):
     phone = models.CharField(max_length=50, null=True, blank=True)
     address = models.TextField(null=True, blank=True)
     order_in_progress = models.IntegerField(null=True, default=0)
-    order_completed = models.IntegerField(null=True)
+    order_completed = models.IntegerField(null=True, default=0)
     registrant = models.CharField(max_length=10)
     related_staff = models.CharField(max_length=10)
 
@@ -141,7 +141,7 @@ class Client(models.Model):
 
 
 class ClientContact(models.Model):
-    corp = models.ForeignKey(Client, on_delete=models.CASCADE)
+    corp = models.ForeignKey(Client, on_delete=models.CASCADE, blank=True)
     name = models.CharField(max_length=10)
     gender = models.CharField(max_length=10, choices=[('male', '男'), ('female', '女'), ('other', '其他')])
     position = models.CharField(max_length=50)
@@ -197,8 +197,7 @@ class SupplierContact(models.Model):
 
 
 class Order(models.Model):
-    company = models.ForeignKey(Company, on_delete=models.CASCADE)
-    order_id = models.CharField(max_length=20)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, null=True, blank=True)
     client = models.ForeignKey(
         Client,
         on_delete=models.SET_NULL,
@@ -219,9 +218,9 @@ class Order(models.Model):
     ppu = models.IntegerField()
     price = models.IntegerField(null=True)
     deposit = models.IntegerField()
-    deposit_paid = models.DateField()
-    remaining = models.IntegerField()
-    remaining_paid = models.DateField()
+    deposit_paid = models.DateField(null=True, blank=True)
+    remaining = models.IntegerField(null=True, blank=True)
+    remaining_paid = models.DateField(null=True, blank=True)
     address = models.TextField()
     description = models.CharField(max_length=999)
     updated = models.DateTimeField(auto_now=True)

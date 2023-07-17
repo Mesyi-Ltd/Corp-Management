@@ -14,5 +14,6 @@ urlpatterns = [
     path('order/create', views.create_order, name='create_order'),
     path('staff/position/create', views.create_position, name='create_position'),
     path('staff/register', views.staff_register, name='register'),
-
+    path('staff/list', views.StaffList.as_view(), name='staff_list'),
+    path('staff/<str:pk>', views.StaffDetail.as_view(), name='staff_detail'),
 ]

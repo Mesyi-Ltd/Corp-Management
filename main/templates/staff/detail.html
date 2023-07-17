@@ -1,0 +1,7 @@
+{% extends 'main/base.html' %}
+{% block content %}
+{{ staff.staff_id }}<br/>
+    {{ staff.name }}<br/>
+    {{ staff.position }}<br />
+    {{ staff.get_status_display }}
+{% endblock %}

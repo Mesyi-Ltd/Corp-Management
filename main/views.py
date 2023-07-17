@@ -115,3 +115,13 @@ def staff_register(request):
     else:
         form = StaffForm()
     return render(request, 'registration/register.html', {'form': form})
+
+
+class StaffDetail(DetailView):
+    model = Staff
+    template_name = 'staff/detail.html'
+
+
+class StaffList(ListView):
+    model = Staff
+    template_name = 'staff/list.html'

@@ -64,7 +64,8 @@ class OrderForm(forms.ModelForm):
 
 class StaffForm(forms.ModelForm):
     position = forms.ModelChoiceField(queryset=Position.objects.all(),
-                                      widget=forms.Select(attrs={'class': 'form-select', }))
+                                      widget=forms.Select(attrs={'class': 'form-select', }),
+                                      label='职位')
 
     class Meta:
         model = Staff
@@ -77,7 +78,6 @@ class StaffForm(forms.ModelForm):
             'email': forms.EmailInput(attrs={'class': 'form-control'}),
             'national_id': forms.TextInput(attrs={'class': 'form-control'}),
             'employed_date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
-
         }
 
         labels = {
@@ -86,7 +86,6 @@ class StaffForm(forms.ModelForm):
             'phone': '手机号',
             'email': '邮箱',
             'national_id': '身份证号',
-            'position': '职位',
             'employed_date': '入职日期'
         }
 

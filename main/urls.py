@@ -13,4 +13,6 @@ urlpatterns = [
     path('supplier/<str:pk>', views.SupplierDetail.as_view(), name='supplier_detail'),
     path('order/create', views.create_order, name='create_order'),
     path('staff/position/create', views.create_position, name='create_position'),
+    path('staff/register', views.staff_register, name='register'),
+
 ]

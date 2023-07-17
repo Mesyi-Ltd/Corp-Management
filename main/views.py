@@ -102,3 +102,16 @@ def create_position(request):
     else:
         form = PermsForm()
     return render(request, 'staff/position.html', {'form': form})
+
+
+def staff_register(request):
+    if request.method == "POST":
+        form = StaffForm(request.POST or None)
+        if form.is_valid():
+            staff = form.save(commit=False)
+            user = User.objects.create_user(username=staff.staff_id, password=request.POST.get('password'))
+            staff.account = user
+            staff.save()
+    else:
+        form = StaffForm()
+    return render(request, 'registration/register.html', {'form': form})

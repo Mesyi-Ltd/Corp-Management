@@ -1,0 +1,24 @@
+{% extends 'main/base.html' %}
+{% block content %}
+    <form method="post" action="">
+        {% csrf_token %}
+        {% for field in form %}
+        <div class="fieldWrapper">
+            {{ field.label_tag }} {{ field }}
+            {% if field.help_text %}
+                <p class="help">{{ field.help_text|safe }}</p>
+            {% endif %}
+            {% if  field.errors %}
+                <div class="alert alert-danger">{{ field.errors }}</div>
+            {% endif %}
+
+        </div>
+{% endfor %}
+        <label>
+            密码
+            <input type="password" class="form-control" name="password" required/>
+        </label>
+    <br />
+        <button type="submit">提交</button>
+    </form>
+{% endblock %}

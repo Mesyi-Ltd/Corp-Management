@@ -1,11 +1,14 @@
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
+from django.urls import reverse_lazy
+
 from .forms import *
 from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from .models import Client
 from django.contrib.auth import login, logout, authenticate
+from  django.contrib import messages
 
 
 def home(request):
@@ -112,6 +115,8 @@ def staff_register(request):
             user = User.objects.create_user(username=staff.staff_id, password=request.POST.get('password'))
             staff.account = user
             staff.save()
+            messages.success(request, f'成功创建员工 {staff}')
+            return redirect('staff_detail', pk=staff.staff_id)
     else:
         form = StaffForm()
     return render(request, 'registration/register.html', {'form': form})
@@ -125,3 +130,10 @@ class StaffDetail(DetailView):
 class StaffList(ListView):
     model = Staff
     template_name = 'staff/list.html'
+
+
+class StaffEdit(UpdateView):
+    model = Staff
+    template_name = 'staff/edit.html'
+    fields = ['name', 'phone', 'email', 'national_id', 'position', 'status', 'leaving_date']
+    success_url = reverse_lazy(StaffDetail)

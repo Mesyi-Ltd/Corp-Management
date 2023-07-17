@@ -110,3 +110,34 @@ class PositionForm(forms.ModelForm):
         fields = ['name']
 
         widgets = {'name': forms.TextInput(attrs={'class': 'form-control'})}
+
+
+class StaffUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Staff
+        fields = ['staff_id', 'name', 'phone', 'email', 'national_id',
+                  'position', 'status', 'employed_date', 'leaving_date']
+
+        widgets = {
+            'staff_id': forms.TextInput(attrs={'disabled': 'True', 'class': 'form-control', 'id': 'disabledTextInput'}),
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'phone': forms.TextInput(attrs={'class': 'form-control'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control'}),
+            'national_id': forms.TextInput(attrs={'class': 'form-control'}),
+            'position': forms.Select(attrs={'class': 'form-select'}),
+            'status': forms.Select(attrs={'class': 'form-select'}),
+            'employed_date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'leaving_date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+        }
+
+        labels = {
+            'staff_id': '工号',
+            'name': '姓名',
+            'phone': '手机号',
+            'email': '电子邮箱',
+            'national_id': '身份证号',
+            'position': '职位',
+            'status': '员工状态',
+            'employed_date': '入职日期',
+            'leaving_date': '离职日期',
+        }

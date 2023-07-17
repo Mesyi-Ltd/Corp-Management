@@ -112,7 +112,11 @@ def staff_register(request):
         form = StaffForm(request.POST or None)
         if form.is_valid():
             staff = form.save(commit=False)
-            user = User.objects.create_user(username=staff.staff_id, password=request.POST.get('password'))
+            user = User.objects.create_user(
+                username=staff.staff_id,
+                password=request.POST.get('password'),
+                email=request.POST.get('email')
+            )
             staff.account = user
             staff.save()
             messages.success(request, f'成功创建员工 {staff}')
@@ -135,5 +139,5 @@ class StaffList(ListView):
 class StaffEdit(UpdateView):
     model = Staff
     template_name = 'staff/edit.html'
-    fields = ['name', 'phone', 'email', 'national_id', 'position', 'status', 'leaving_date']
+    form_class = StaffUpdateForm
     success_url = reverse_lazy(StaffDetail)

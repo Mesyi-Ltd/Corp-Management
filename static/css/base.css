@@ -7,6 +7,12 @@ body{
     background-attachment: fixed;
 }
 
+.box-container{
+    background-color: white;
+    padding: 20px;
+    border-radius: 30px;
+}
+
 #logo{
     width: 150px;
     object-fit: contain;

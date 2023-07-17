@@ -4,7 +4,7 @@
 {{ staff.staff_id }}<br/>
     {{ staff.name }}<br/>
     {{ staff.phone }}<br />
-    {{ staff.email }}
+    {{ staff.email }}<br />
     {{ staff.position }}<br />
     {{ staff.get_status_display }}<br/>
     {{ staff.employed_date }}
@@ -13,7 +13,7 @@
     {% endif %}
     {% if staff.orders.all %}
     {% for order in staff.orders.all %}
-        order
+        order <br/>
     {% endfor %}
     {% endif %}
     <a href="{% url 'staff_edit' staff.pk %}">编辑信息</a>

@@ -1,9 +1,12 @@
 {% extends 'main/base.html' %}
 {% block content %}
-    <div class="form-group">
-        <form method="post" action="">
-            {% csrf_token %}
-            {{ form.as_p }}
+    <div class="container form-group">
+        <div class="col-6 position-absolute top-0 start-50 translate-middle-x">
+            <form method="post" action="" style="background-color: white; padding: 20px; border-radius: 30px;">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-success" style="left: 46%; position: relative">保存修改</button>
         </form>
+        </div>
     </div>
 {% endblock %}

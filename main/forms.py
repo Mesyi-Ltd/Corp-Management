@@ -25,7 +25,10 @@ class OrderForm(forms.ModelForm):
     client = forms.ModelChoiceField(queryset=Client.objects.all(),
                                     widget=forms.Select(attrs={'class': 'form-select', }))
     staff = forms.ModelMultipleChoiceField(queryset=Staff.objects.all(),
-                                           widget=forms.Select(attrs={'class': 'form-select', }), )
+                                           widget=forms.SelectMultiple(attrs={'class': 'form-select', }), )
+    item = forms.ModelChoiceField(queryset=Item.objects.all(),
+                                  widget=forms.Select(attrs={'class': 'form-select', }),
+                                  label='产品名称')
 
     class Meta:
         model = Order
@@ -34,15 +37,15 @@ class OrderForm(forms.ModelForm):
 
         widgets = {
             'order_num': forms.TextInput(attrs={'class': 'form-control', }),
-            'type': forms.TextInput(attrs={'class': 'form-control', }),
+            'type': forms.Select(attrs={'class': 'form-control', }),
             'item': forms.Select(attrs={'class': 'form-control', }),
             'specs': forms.TextInput(attrs={'class': 'form-control', }),
             'amount': forms.NumberInput(attrs={'class': 'form-control', }),
             'ppu': forms.NumberInput(attrs={'class': 'form-control', }),
             'price': forms.NumberInput(attrs={'class': 'form-control', }),
             'deposit': forms.NumberInput(attrs={'class': 'form-control', }),
-            'description': forms.TextInput(attrs={'class': 'form-control'}, ),
-            'address': forms.TextInput(attrs={'class': 'form-control', }),
+            'description': forms.Textarea(attrs={'class': 'form-control'}, ),
+            'address': forms.Textarea(attrs={'class': 'form-control', }),
             # 'handed': forms.DateInput(attrs={'type': 'date', 'placeholder': 'yyyy-mm-dd', 'class': 'form-control'})
         }
 
@@ -101,7 +104,6 @@ class PermsForm(forms.ModelForm):
             field.widget.attrs['class'] = 'form-check-input'
             field.widget.attrs['type'] = 'checkbox'
             field.widget.attrs['role'] = 'switch'
-            field.widget.attrs['id'] = 'flexSwitchCheckDefault'
 
 
 class PositionForm(forms.ModelForm):

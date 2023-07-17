@@ -3,8 +3,8 @@
 
     <form action="" method="post">
     {% csrf_token %}
-    {{ form.as_div }}
-    <input type="submit">
+    {{ form.as_p }}
+        <input type="submit" value="提交订单" class="btn btn-outline-secondary">
     </form>
 
 {% endblock %}

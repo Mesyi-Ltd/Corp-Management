@@ -1,22 +1,25 @@
 {% extends 'main/base.html' %}
 {% block content %}
   <div class="position-absolute top-0 start-50 translate-middle-x" style="margin-top: 50px;background-color: white; padding: 30px; border-radius: 30px">
-    {{ staff.staff_id }}<br/>
-    {{ staff.name }}<br/>
-    {{ staff.phone }}<br />
-    {{ staff.email }}<br />
-    {{ staff.position }}<br />
-    {{ staff.get_status_display }}<br/>
-    {{ staff.employed_date }}<br />
+    工号: {{ staff.staff_id }}<br/><br/>
+    姓名: {{ staff.name }}<br/><br/>
+    电话号码: {{ staff.phone }}<br /><br/>
+    电子邮箱: {{ staff.email }}<br /><br/>
+    职位: {{ staff.position }}<br /><br/>
+    员工状态: {{ staff.get_status_display }}<br/><br/>
+    入职日期: {{ staff.employed_date }}<br /><br/>
     {% if staff.leaving_date %}
-    {{ staff.leaving_date }}<br />
+        离职日期: {{ staff.leaving_date }}<br /><br/>
     {% endif %}
     {% if staff.orders.all %}
+        订单:
     {% for order in staff.orders.all %}
         order <br/>
     {% endfor %}
     {% endif %}
-    <a href="{% url 'staff_edit' staff.pk %}">编辑信息</a>
+    <div style="text-align: center">
+        <a href="{% url 'staff_edit' staff.pk %}"><button class="btn btn-outline-secondary">编辑信息</button></a>
+    </div>
     </div>
 
 {% endblock %}

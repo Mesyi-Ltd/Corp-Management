@@ -115,11 +115,10 @@ class PositionForm(forms.ModelForm):
 class StaffUpdateForm(forms.ModelForm):
     class Meta:
         model = Staff
-        fields = ['staff_id', 'name', 'phone', 'email', 'national_id',
+        fields = ['name', 'phone', 'email', 'national_id',
                   'position', 'status', 'employed_date', 'leaving_date']
 
         widgets = {
-            'staff_id': forms.TextInput(attrs={'disabled': 'True', 'class': 'form-control', 'id': 'disabledTextInput'}),
             'name': forms.TextInput(attrs={'class': 'form-control'}),
             'phone': forms.TextInput(attrs={'class': 'form-control'}),
             'email': forms.EmailInput(attrs={'class': 'form-control'}),
@@ -131,7 +130,6 @@ class StaffUpdateForm(forms.ModelForm):
         }
 
         labels = {
-            'staff_id': '工号',
             'name': '姓名',
             'phone': '手机号',
             'email': '电子邮箱',

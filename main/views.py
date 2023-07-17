@@ -8,7 +8,7 @@ from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from .models import Client
 from django.contrib.auth import login, logout, authenticate
-from  django.contrib import messages
+from django.contrib import messages
 
 
 def home(request):
@@ -136,8 +136,13 @@ class StaffList(ListView):
     template_name = 'staff/list.html'
 
 
-class StaffEdit(UpdateView):
-    model = Staff
-    template_name = 'staff/edit.html'
-    form_class = StaffUpdateForm
-    success_url = reverse_lazy(StaffDetail)
+def staff_edit(request, pk):
+    staff = Staff.objects.get(staff_id=pk)
+    form = StaffUpdateForm(request.POST or None, instance=staff)
+    if form.is_valid() and request.method == 'POST':
+        form.save()
+        if staff.status == 'left':
+            staff.account.is_active = False
+            staff.account.save()
+        return redirect('staff_detail', pk)
+    return render(request, 'staff/edit.html', {'form': form, 'id': staff.staff_id})

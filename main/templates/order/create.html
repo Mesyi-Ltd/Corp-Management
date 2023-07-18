@@ -1,10 +1,9 @@
-{% extends 'main/base.html' %}
-{% block content %}
-
-    <form action="" method="post">
-    {% csrf_token %}
+{% extends 'main/form.html' %}
+{% block form %}
     {{ form.as_p }}
-        <input type="submit" value="提交订单" class="btn btn-outline-secondary">
-    </form>
-
+    <div class="mb-3">
+  <label for="formFileMultiple" class="form-label">上传附件</label>
+  <input class="form-control" type="file" id="formFileMultiple" name="files" multiple>
+</div>
+    <input type="submit" value="提交订单" class="btn btn-outline-secondary">
 {% endblock %}

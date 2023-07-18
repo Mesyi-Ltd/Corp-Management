@@ -201,7 +201,7 @@ class Order(models.Model):
     staff1 = models.CharField(max_length=20)
     staff2 = models.CharField(max_length=20)
     order_num = models.CharField(max_length=20, blank=True, null=True, validators=[
-        RegexValidator('^[0-9]*$', message='订单号格式错误',),
+        RegexValidator('^[0-9]*$', message='订单号格式错误', ),
     ])
     sample = models.ImageField(null=True, blank=True)
     type = models.CharField(max_length=10, choices=[('stoke', '库存'), ('produce', '生产')])
@@ -270,7 +270,7 @@ class CommunicationAttachment(models.Model):
 
 
 class Item(models.Model):
-    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, blank=True, null=True)
     item_id = models.CharField(max_length=20)
     name = models.CharField(max_length=20)
     type = models.CharField(max_length=10, choices=[
@@ -301,6 +301,9 @@ class ItemChange(models.Model):
         ('increase', '入库'),
         ('decrease', '出库')
     ])
+
+    def get_absolute_url(self):
+        return reverse('', args=(str(self.id)))
 
 
 class StorageChangeAttachment(models.Model):

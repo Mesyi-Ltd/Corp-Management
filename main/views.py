@@ -101,6 +101,8 @@ def create_order(request):
                 random_id = rand_id(10)
             order.order_num = random_id
             order.save()
+            for file in request.FILES.getlist('files'):
+                OrderAttachment.objects.create(order=order, file=file)
             return redirect('home')
     else:
         form = OrderForm()
@@ -164,3 +166,8 @@ class AddItem(CreateView):
     form_class = AddItem
     model = Item
     template_name = 'item/add.html'
+
+
+class OrderList(ListView):
+    model = Order
+    template_name = 'order/list.html'

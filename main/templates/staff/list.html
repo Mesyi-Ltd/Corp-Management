@@ -3,11 +3,10 @@
 <div class="list-group position-absolute top-0 start-50 translate-middle-x">
     {% for staff in object_list %}
 
-            <a href="{% url 'staff_detail' staff.pk %}"
+            <a href="{% url 'staff_detail' staff.staff_id %}"
                class="list-group-item list-group-item-action list-group-item-dark
                d-flex justify-content-between align-items-center">
-                {{ staff.pk }} -- {{ staff.name }}
-                <span class="badge bg-primary rounded-pill">{{ staff.order_in_progress }}</span>
+                {{ staff.staff_id }} -- {{ staff.name }}  {{ staff.position }}
             </a>
 
     {% endfor %}

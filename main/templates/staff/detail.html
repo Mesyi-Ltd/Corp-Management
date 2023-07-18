@@ -14,7 +14,7 @@
     {% if staff.orders.all %}
         订单:
     {% for order in staff.orders.all %}
-        order <br/>
+      {{ order }} <br/>
     {% endfor %}
     {% endif %}
     <div style="text-align: center">

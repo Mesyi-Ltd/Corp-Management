@@ -57,19 +57,23 @@
       </div>
       <div class="offcanvas-body">
         <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">订单</a>
+            <a class="nav-link" href="#">订单</a>
           </li>
+
           <li class="nav-item">
             <a class="nav-link" href="{% url 'supplier_list' %}">供应商</a>
           </li>
+
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               员工
             </a>
             <ul class="dropdown-menu dropdown-menu-dark">
               <li><a class="dropdown-item" href="#">业绩</a></li>
-              <li><a class="dropdown-item" href="{% url 'staff_list' %}">列表</a></li>
+                {% url 'staff_list' as staff_list%}
+              <li><a class="dropdown-item {% if request.path == staff_list%}active{% endif %} }" href="{% url 'staff_list' %}">列表</a></li>
               <li>
                 <hr class="dropdown-divider">
               </li>
@@ -84,6 +88,21 @@
             <ul class="dropdown-menu dropdown-menu-dark">
               <li><a class="dropdown-item" href="{% url 'register_client' %}">登记</a></li>
               <li><a class="dropdown-item" href="{% url 'client_list' %}">列表</a></li>
+              <li>
+                <hr class="dropdown-divider">
+              </li>
+            </ul>
+          </li>
+
+            <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              产品
+            </a>
+            <ul class="dropdown-menu dropdown-menu-dark">
+              <li><a class="dropdown-item" href="#">添加</a></li>
+              <li><a class="dropdown-item" href="#">列表</a></li>
+{#                <li><a class="dropdown-item" href="#">入库</a></li>#}
+{#                <li><a class="dropdown-item" href="#">出库</a></li>#}
               <li>
                 <hr class="dropdown-divider">
               </li>

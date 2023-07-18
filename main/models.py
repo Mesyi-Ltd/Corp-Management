@@ -280,6 +280,9 @@ class Item(models.Model):
     amount = models.IntegerField(default=0, validators=[MinValueValidator(0)])
     spec = models.CharField(max_length=200)
 
+    def __str__(self):
+        return self.name
+
 
 class StorageChange(models.Model):
     change_id = models.CharField(max_length=20)

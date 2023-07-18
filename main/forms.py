@@ -143,3 +143,25 @@ class StaffUpdateForm(forms.ModelForm):
             'employed_date': '入职日期',
             'leaving_date': '离职日期',
         }
+
+
+class AddItem(forms.ModelForm):
+    class Meta:
+        model = Item
+        fields = ['item_id', 'name', 'type', 'amount', 'spec']
+
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'item_id': forms.TextInput(attrs={'class': 'form-control'}),
+            'type': forms.Select(attrs={'class': 'form-control'}),
+            'amount': forms.NumberInput(attrs={'class': 'form-control'}),
+            'spec': forms.Textarea(attrs={'class': 'form-control'}),
+        }
+
+        labels = {
+            'name': '名称',
+            'item_id': '编号',
+            'type': '类型',
+            'amount': '库存',
+            'spec': '规格'
+        }

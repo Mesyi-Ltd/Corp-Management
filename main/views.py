@@ -158,3 +158,9 @@ def staff_edit(request, pk):
             staff.account.save()
         return redirect('staff_detail', pk)
     return render(request, 'staff/edit.html', {'form': form, 'id': staff.staff_id})
+
+
+class AddItem(CreateView):
+    form_class = AddItem
+    model = Item
+    template_name = 'item/add.html'

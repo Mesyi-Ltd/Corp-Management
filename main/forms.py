@@ -23,10 +23,12 @@ class ClientForm(forms.ModelForm):
 
 class OrderForm(forms.ModelForm):
     client = forms.ModelChoiceField(queryset=Client.objects.all(),
-                                    widget=forms.Select(attrs={'class': 'form-select', }))
+                                    widget=forms.Select(attrs={'class': 'form-select', }),
+                                    label='客户')
     staff = forms.ModelMultipleChoiceField(queryset=Staff.objects.all(),
-                                           widget=forms.SelectMultiple(attrs={'class': 'form-select', }), )
-    item = forms.ModelChoiceField(queryset=Item.objects.all(),
+                                           widget=forms.SelectMultiple(attrs={'class': 'form-select', }),
+                                           label='相关员工')
+    item = forms.ModelChoiceField(queryset=Item.objects.filter(type='product'),
                                   widget=forms.Select(attrs={'class': 'form-select', }),
                                   label='产品名称')
 

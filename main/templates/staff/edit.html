@@ -6,7 +6,7 @@
             <form method="post" action="" style="background-color: white; padding: 20px; border-radius: 30px;">
                 {% csrf_token %}
                 <p><label>员工号:</label>
-                <input type="text" class="form-control" value="{{ id }}" disabled>
+                <input type="text" class="form-control" value="{{ id }}" disabled />
                 </p>
                 {{ form.as_p }}
                 <button type="submit" class="btn btn-success" style="left: 46%; position: relative">保存更改</button>

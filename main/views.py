@@ -11,6 +11,13 @@ from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 
 
+def rand_id(digit):
+    random_id = ""
+    for i in range(digit):
+        random_id += random.randint(0, 9)
+    return random_id
+
+
 def home(request):
     return render(request, 'main/home.html')
 
@@ -88,8 +95,14 @@ def create_order(request):
     if request.method == "POST":
         form = OrderForm(request.POST or None)
         if form.is_valid():
-            form.save(commit=False)
-            return redirect(reverse(home))
+            order = form.save(commit=False)
+            random_id = rand_id(10)
+            id_list = Order.objects.values_list('order_num', flat=True)
+            while random_id in id_list:
+                random_id = rand_id(10)
+            order.order_num = random_id
+            order.save()
+            return redirect('home')
     else:
         form = OrderForm()
     return render(request, 'order/create.html', {'form': form})

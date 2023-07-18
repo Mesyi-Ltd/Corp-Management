@@ -15,13 +15,6 @@ SCALES = [
 ]
 
 
-def rand_id(digit):
-    random_id = ""
-    for i in range(digit):
-        random_id.join(str(random.randint))
-    return random_id
-
-
 class Company(models.Model):
     name = models.CharField(max_length=20)
 
@@ -207,8 +200,8 @@ class Order(models.Model):
     staff = models.ManyToManyField(Staff, related_name='orders')
     staff1 = models.CharField(max_length=20)
     staff2 = models.CharField(max_length=20)
-    order_num = models.CharField(unique=True, primary_key=True, max_length=20, validators=[
-        RegexValidator('^[0-9]*$', message='订单号格式错误')
+    order_num = models.CharField(max_length=20, blank=True, null=True, validators=[
+        RegexValidator('^[0-9]*$', message='订单号格式错误',),
     ])
     sample = models.ImageField(null=True, blank=True)
     type = models.CharField(max_length=10, choices=[('stoke', '库存'), ('produce', '生产')])

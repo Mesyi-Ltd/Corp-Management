@@ -43,18 +43,18 @@ def login_page(request):
 
 
 def performance(request):
-    return render(request, 'main/performance.html')
+    return render(request, 'staff/performance.html')
 
 
 def register_company(request):
     form = ClientForm
     context = {'form': form}
-    return render(request, 'main/register_client.html', context)
+    return render(request, 'client/register_client.html', context)
 
 
 class RegisterClient(CreateView):
     model = Client
-    template_name = 'main/register_client.html'
+    template_name = 'client/register_client.html'
     form_class = ClientForm
 
     def post(self, request, *args, **kwargs):
@@ -63,22 +63,22 @@ class RegisterClient(CreateView):
         if form.is_valid():
             client = form.save()
             context["info"] = "注册成功"
-            return render(request, 'main/register_client.html', context)
+            return render(request, 'client/register_client.html', context)
         else:
             context["info"] = "表单无效"
-            return render(request, 'main/register_client.html', context)
+            return render(request, 'client/register_client.html', context)
 
 
 #    fields = '__all__'
 
 class ClientList(ListView):
     model = Client
-    template_name = 'main/client_list.html'
+    template_name = 'client/client_list.html'
 
 
 class ClientDetail(DetailView):
     model = Client
-    template_name = 'main/client_detail.html'
+    template_name = 'client/client_detail.html'
 
 
 class SupplierList(ListView):
@@ -97,8 +97,7 @@ def create_order(request):
         if form.is_valid():
             order = form.save(commit=False)
             random_id = rand_id(10)
-            id_list = Order.objects.values_list('order_num', flat=True)
-            while random_id in id_list:
+            while Order.objects.filter(order_num=random_id).exists():
                 random_id = rand_id(10)
             order.order_num = random_id
             order.save()

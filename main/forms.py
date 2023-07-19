@@ -26,7 +26,7 @@ class OrderForm(forms.ModelForm):
                                     widget=forms.Select(attrs={'class': 'form-select', }),
                                     label='客户')
     staff = forms.ModelMultipleChoiceField(queryset=Staff.objects.all(),
-                                           widget=forms.SelectMultiple(attrs={'class': 'form-select', }),
+                                           # widget=forms.SelectMultiple(attrs={'class': 'form-select', }),
                                            label='相关员工')
     item = forms.ModelChoiceField(queryset=Item.objects.filter(type='product'),
                                   widget=forms.Select(attrs={'class': 'form-select', }),
@@ -34,13 +34,14 @@ class OrderForm(forms.ModelForm):
 
     class Meta:
         model = Order
-        fields = ['order_num', 'client', 'staff', 'type', 'item', 'specs',
+        fields = ['client', 'staff', 'order_type', 'item', 'specs', 'production_type',
                   'address', 'amount', 'ppu', 'price', 'deposit', 'description']
 
         widgets = {
-            'order_num': forms.TextInput(attrs={'class': 'form-control', }),
-            'type': forms.Select(attrs={'class': 'form-control', }),
+            # 'order_num': forms.TextInput(attrs={'class': 'form-control', }),
+            'order_type': forms.Select(attrs={'class': 'form-control', }),
             'item': forms.Select(attrs={'class': 'form-control', }),
+            'production_type': forms.Select(attrs={'class': 'form-control'}),
             'specs': forms.TextInput(attrs={'class': 'form-control', }),
             'amount': forms.NumberInput(attrs={'class': 'form-control', }),
             'ppu': forms.NumberInput(attrs={'class': 'form-control', }),
@@ -52,10 +53,11 @@ class OrderForm(forms.ModelForm):
         }
 
         labels = {
-            'order_num': '订单号',
+            # 'order_num': '订单号',
             'client': '客户',
             'staff': '相关员工',
-            'type': '货物类型',
+            'order_type': '订单类型',
+            'production_type': '货物类型',
             'item': '商品名称',
             'specs': '规格型号',
             'amount': '订购数量',
@@ -165,3 +167,21 @@ class AddItem(forms.ModelForm):
             'amount': '库存',
             'spec': '规格'
         }
+
+
+class NormalStatus(forms.ModelForm):
+    class Meta:
+        model = OrderStatus
+        fields = ['status']
+
+        labels = {
+            'status': '更新状态'
+        }
+
+
+class SampleStatus(forms.ModelForm):
+    class Meta:
+        model = OrderStatus
+        fields = ['sample_status']
+
+        labels = {'sample_status': '更新状态'}

@@ -9,7 +9,9 @@
 
         {% csrf_token %}
 
-        <div class="form-floating mb-3 form-group">
+        {{ form.as_p }}
+
+{% comment %}        <div class="form-floating mb-3 form-group">
             <input name="name" type="text" class="form-control" id="floatingInput" placeholder="公司名称" />
             <label for="floatingInput">公司名称</label>
         </div>
@@ -27,7 +29,7 @@
         <div class="form-floating">
             <input name="address" class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px" />
             <label for="floatingTextarea2">地址</label>
-        </div>
+        </div>{% endcomment %}
 
 <!--        <div class="form-check">
              form.credible name="credible" class="form-control form-check-input" type="checkbox" value="" id="flexCheckChecked" %}

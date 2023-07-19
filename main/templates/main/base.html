@@ -62,6 +62,10 @@
             <a class="nav-link" href="{% url 'order_list' %}">订单</a>
           </li>
 
+            <li class="nav-item">
+            <a class="nav-link" href="{% url 'create_order' %}">创建订单</a>
+          </li>
+
           <li class="nav-item">
             <a class="nav-link" href="{% url 'supplier_list' %}">供应商</a>
           </li>
@@ -100,7 +104,7 @@
               产品
             </a>
             <ul class="dropdown-menu dropdown-menu-dark">
-              <li><a class="dropdown-item" href="#">添加</a></li>
+              <li><a class="dropdown-item" href="{% url 'item_add' %}">添加</a></li>
               <li><a class="dropdown-item" href="#">列表</a></li>
 {#                <li><a class="dropdown-item" href="#">入库</a></li>#}
 {#                <li><a class="dropdown-item" href="#">出库</a></li>#}

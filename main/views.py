@@ -1,4 +1,7 @@
+import random
+
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
@@ -14,7 +17,7 @@ from django.contrib import messages
 def rand_id(digit):
     random_id = ""
     for i in range(digit):
-        random_id += random.randint(0, 9)
+        random_id += str(random.randint(0, 9))
     return random_id
 
 
@@ -57,16 +60,16 @@ class RegisterClient(CreateView):
     template_name = 'client/register_client.html'
     form_class = ClientForm
 
-    def post(self, request, *args, **kwargs):
-        form = ClientForm(request.POST)
-        context = {}
-        if form.is_valid():
-            client = form.save()
-            context["info"] = "注册成功"
-            return render(request, 'client/register_client.html', context)
-        else:
-            context["info"] = "表单无效"
-            return render(request, 'client/register_client.html', context)
+    # def post(self, request, *args, **kwargs):
+    #     form = ClientForm(request.POST)
+    #     context = {}
+    #     if form.is_valid():
+    #         client = form.save()
+    #         context["info"] = "注册成功"
+    #         return render(request, 'client/register_client.html', context)
+    #     else:
+    #         context["info"] = "表单无效"
+    #         return render(request, 'client/register_client.html', context)
 
 
 #    fields = '__all__'
@@ -74,6 +77,10 @@ class RegisterClient(CreateView):
 class ClientList(ListView):
     model = Client
     template_name = 'client/client_list.html'
+    # for client in Client.objects.all():
+    #     orders = client.order_set.all()
+    #     for order in orders:
+    #         order.status.all().
 
 
 class ClientDetail(DetailView):
@@ -96,14 +103,19 @@ def create_order(request):
         form = OrderForm(request.POST or None)
         if form.is_valid():
             order = form.save(commit=False)
+            order.client_name = order.client.name
             random_id = rand_id(10)
             while Order.objects.filter(order_num=random_id).exists():
                 random_id = rand_id(10)
             order.order_num = random_id
             order.save()
+            form.save_m2m()
+            order.client.order_in_progress += 1
+            order.client.save()
+            print(request.FILES)
             for file in request.FILES.getlist('files'):
-                OrderAttachment.objects.create(order=order, file=file)
-            return redirect('home')
+                OrderAttachment.objects.create(order=order, document=file)
+            return redirect('order_detail', order.pk)
     else:
         form = OrderForm()
     return render(request, 'order/create.html', {'form': form})
@@ -167,7 +179,55 @@ class AddItem(CreateView):
     model = Item
     template_name = 'item/add.html'
 
+    def get_success_url(self):
+        return reverse('item_detail', kwargs={'pk': self.object.pk})
+
+
+class ItemDetail(DetailView):
+    model = Item
+    template_name = 'item/detail.html'
+
 
 class OrderList(ListView):
     model = Order
     template_name = 'order/list.html'
+
+    # def get_context_data(self, *, object_list=None, **kwargs):
+    #     if OrderStatus.objects.filter(order=order, current=True).exists():
+    #         context['current'] = order.status.get(current=True, order=order)
+
+
+class OrderDetail(DetailView):
+    model = Order
+    template_name = 'order/detail.html'
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(OrderDetail, self).get_context_data(**kwargs)
+        order = self.get_object()
+        context['staff'] = order.staff.all()
+        if order.order_type == 'normal':
+            context['type'] = 'normal'
+            form = NormalStatus()
+        else:
+            form = SampleStatus()
+            context['type'] = 'sample'
+        context['form'] = form
+        context['status_history'] = order.status.all()
+        return context
+
+    def post(self, *args, **kwargs):
+        order = self.get_object()
+        if order.order_type == 'normal':
+            form = NormalStatus(self.request.POST or None)
+        else:
+            form = SampleStatus(self.request.POST or None)
+
+        if form.is_valid():
+            OrderStatus.objects.filter(order=order).update(current=False)
+            status = form.save(commit=False)
+            status.order = order
+            status.save()
+            return redirect('order_detail', order.pk)
+
+    def get_success_url(self):
+        return reverse('order_detail', kwargs={'pk': self.object.pk})

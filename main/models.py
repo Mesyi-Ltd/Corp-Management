@@ -1,5 +1,3 @@
-import random
-
 from django.contrib.auth.models import User
 from django.core.validators import *
 from django.db import models
@@ -198,13 +196,14 @@ class Order(models.Model):
     )
     client_name = models.CharField(max_length=50, default=client.name)
     staff = models.ManyToManyField(Staff, related_name='orders')
-    staff1 = models.CharField(max_length=20)
-    staff2 = models.CharField(max_length=20)
+    # staff1 = models.CharField(max_length=20)
+    # staff2 = models.CharField(max_length=20)
     order_num = models.CharField(max_length=20, blank=True, null=True, validators=[
         RegexValidator('^[0-9]*$', message='订单号格式错误', ),
     ])
     sample = models.ImageField(null=True, blank=True)
-    type = models.CharField(max_length=10, choices=[('stoke', '库存'), ('produce', '生产')])
+    order_type = models.CharField(max_length=10, choices=[('normal', '大货订单'), ('sample', '样品订单')])
+    production_type = models.CharField(max_length=10, choices=[('stoke', '库存'), ('produce', '生产')])
     item = models.CharField(max_length=20)
     specs = models.CharField(max_length=200)
     amount = models.IntegerField(null=True)
@@ -218,7 +217,7 @@ class Order(models.Model):
     description = models.CharField(max_length=999, blank=True, null=True)
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
-    handed = models.DateField()
+    handed = models.DateField(null=True, blank=True)
 
     def __str__(self):
         return self.order_num
@@ -249,6 +248,7 @@ class OrderStatus(models.Model):
         ('accepted', '已确认')
     ])
     time = models.DateTimeField(auto_now_add=True)
+    current = models.BooleanField(default=True, blank=True, null=True)
 
 
 # class Image(models.Model):
@@ -291,6 +291,9 @@ class StorageChange(models.Model):
     staff = models.CharField(max_length=20)
     remark = models.TextField()
 
+    def get_absolute_url(self):
+        return reverse('item_detail', str(self.pk))
+
 
 class ItemChange(models.Model):
     storage = models.ForeignKey(StorageChange, related_name='item', on_delete=models.CASCADE)
@@ -301,9 +304,6 @@ class ItemChange(models.Model):
         ('increase', '入库'),
         ('decrease', '出库')
     ])
-
-    def get_absolute_url(self):
-        return reverse('', args=(str(self.id)))
 
 
 class StorageChangeAttachment(models.Model):

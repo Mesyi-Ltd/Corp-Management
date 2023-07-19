@@ -3,7 +3,7 @@
     <div class="container form-group">
         <div class="col-6 position-absolute top-0 start-50 translate-middle-x">
 
-            <form method="post" action="" style="background-color: white; padding: 20px; border-radius: 30px;">
+            <form method="post" action="" style="background-color: white; padding: 20px; border-radius: 30px;" enctype="multipart/form-data">
                 {% csrf_token %}
                 {% block form %}
                 {% endblock %}

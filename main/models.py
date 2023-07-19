@@ -218,6 +218,7 @@ class Order(models.Model):
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
     handed = models.DateField(null=True, blank=True)
+    completed = models.BooleanField(null=True, blank=True, default=False)
 
     def __str__(self):
         return self.order_num
@@ -260,6 +261,9 @@ class OrderAttachment(models.Model):
         Order, on_delete=models.CASCADE, null=True
     )
     document = models.FileField(null=False, blank=False, upload_to='file/')
+
+    def __str__(self):
+        return self.document.name.split('/')[1]
 
 
 class CommunicationAttachment(models.Model):

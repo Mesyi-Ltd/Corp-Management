@@ -26,7 +26,7 @@ class OrderForm(forms.ModelForm):
                                     widget=forms.Select(attrs={'class': 'form-select', }),
                                     label='客户')
     staff = forms.ModelMultipleChoiceField(queryset=Staff.objects.all(),
-                                           # widget=forms.SelectMultiple(attrs={'class': 'form-select', }),
+                                           widget=forms.SelectMultiple(attrs={'class': 'form-select', }),
                                            label='相关员工')
     item = forms.ModelChoiceField(queryset=Item.objects.filter(type='product'),
                                   widget=forms.Select(attrs={'class': 'form-select', }),

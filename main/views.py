@@ -2,10 +2,11 @@ import random
 
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
-from django.http import JsonResponse
+from django.http import JsonResponse, FileResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 
+from Corp_Management.settings import MEDIA_ROOT
 from .forms import *
 from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
@@ -110,9 +111,8 @@ def create_order(request):
             order.order_num = random_id
             order.save()
             form.save_m2m()
-            order.client.order_in_progress += 1
+            order.client.order_in_progress = Order.objects.filter(client=order.client, completed=False).count()
             order.client.save()
-            print(request.FILES)
             for file in request.FILES.getlist('files'):
                 OrderAttachment.objects.create(order=order, document=file)
             return redirect('order_detail', order.pk)
@@ -211,8 +211,12 @@ class OrderDetail(DetailView):
         else:
             form = SampleStatus()
             context['type'] = 'sample'
+
+        if order.completed:
+            context['completed'] = 'True'
         context['form'] = form
         context['status_history'] = order.status.all()
+        context['attachments'] = OrderAttachment.objects.filter(order=order)
         return context
 
     def post(self, *args, **kwargs):
@@ -227,7 +231,17 @@ class OrderDetail(DetailView):
             status = form.save(commit=False)
             status.order = order
             status.save()
+            if status.status == 'accepted' or status.sample_status == 'accepted':
+                order.completed = True
+                order.save()
+                order.client.order_in_progress = Order.objects.filter(client=order.client, completed=False).count()
+                order.client.save()
             return redirect('order_detail', order.pk)
 
     def get_success_url(self):
         return reverse('order_detail', kwargs={'pk': self.object.pk})
+
+
+def order_download(request, pk):
+    file = OrderAttachment.objects.get(id=pk)
+    return FileResponse(open(MEDIA_ROOT+'/'+file.document.name, 'rb'), as_attachment=True)

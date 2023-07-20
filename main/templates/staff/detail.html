@@ -12,10 +12,12 @@
         离职日期: {{ staff.leaving_date }}<br /><br/>
     {% endif %}
     {% if staff.orders.all %}
-        订单:
+        订单:<br/>
+        <ul>
     {% for order in staff.orders.all %}
-      {{ order }} <br/>
+        <li><a href="{% url 'order_detail' order.pk %}"> {{ order }}</a></li>
     {% endfor %}
+        </ul>
     {% endif %}
     <div style="text-align: center">
         <a href="{% url 'staff_edit' staff.pk %}"><button class="btn btn-outline-secondary">编辑信息</button></a>

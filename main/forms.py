@@ -174,6 +174,8 @@ class NormalStatus(forms.ModelForm):
         model = OrderStatus
         fields = ['status']
 
+        widgets = {'status': forms.Select(attrs={'required': 'True'})}
+
         labels = {
             'status': '更新状态'
         }
@@ -183,5 +185,7 @@ class SampleStatus(forms.ModelForm):
     class Meta:
         model = OrderStatus
         fields = ['sample_status']
+
+        widgets = {'sample_status': forms.Select(attrs={'required': 'True'})}
 
         labels = {'sample_status': '更新状态'}

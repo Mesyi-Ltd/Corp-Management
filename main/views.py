@@ -109,6 +109,7 @@ def create_order(request):
             while Order.objects.filter(order_num=random_id).exists():
                 random_id = rand_id(10)
             order.order_num = random_id
+            order.remaining = order.price - order.deposit
             order.save()
             form.save_m2m()
             order.client.order_in_progress = Order.objects.filter(client=order.client, completed=False).count()
@@ -215,6 +216,10 @@ class OrderDetail(DetailView):
         if order.completed:
             context['completed'] = 'True'
         context['form'] = form
+
+        if order.status.all().filter(current=True).exists():
+            context['current'] = order.status.get(current=True)
+
         context['status_history'] = order.status.all()
         context['attachments'] = OrderAttachment.objects.filter(order=order)
         return context
@@ -230,6 +235,7 @@ class OrderDetail(DetailView):
             OrderStatus.objects.filter(order=order).update(current=False)
             status = form.save(commit=False)
             status.order = order
+            status.creator = self.request.user.staff.name
             status.save()
             if status.status == 'accepted' or status.sample_status == 'accepted':
                 order.completed = True

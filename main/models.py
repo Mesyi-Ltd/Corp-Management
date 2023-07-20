@@ -187,6 +187,21 @@ class SupplierContact(models.Model):
     remark = models.TextField(null=True, blank=True, max_length=200)
 
 
+class Item(models.Model):
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, blank=True, null=True)
+    item_id = models.CharField(max_length=20)
+    name = models.CharField(max_length=20)
+    type = models.CharField(max_length=10, choices=[
+        ('product', '产品'),
+        ('material', '原料'),
+    ])
+    amount = models.IntegerField(default=0, validators=[MinValueValidator(0)])
+    spec = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.name
+
+
 class Order(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE, null=True, blank=True)
     client = models.ForeignKey(
@@ -201,24 +216,21 @@ class Order(models.Model):
     order_num = models.CharField(max_length=20, blank=True, null=True, validators=[
         RegexValidator('^[0-9]*$', message='订单号格式错误', ),
     ])
-    sample = models.ImageField(null=True, blank=True)
     order_type = models.CharField(max_length=10, choices=[('normal', '大货订单'), ('sample', '样品订单')])
     production_type = models.CharField(max_length=10, choices=[('stoke', '库存'), ('produce', '生产')])
-    item = models.CharField(max_length=20)
     specs = models.CharField(max_length=200)
     amount = models.IntegerField(null=True)
     ppu = models.IntegerField()
     price = models.IntegerField(null=True)
     deposit = models.IntegerField(blank=True, null=True)
-    deposit_paid = models.DateField(null=True, blank=True)
     remaining = models.IntegerField(null=True, blank=True)
-    remaining_paid = models.DateField(null=True, blank=True)
     address = models.TextField()
     description = models.CharField(max_length=999, blank=True, null=True)
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
     handed = models.DateField(null=True, blank=True)
     completed = models.BooleanField(null=True, blank=True, default=False)
+    item = models.ForeignKey(Item, on_delete=models.SET_NULL, null=True )
 
     def __str__(self):
         return self.order_num
@@ -243,6 +255,7 @@ class OrderStatus(models.Model):
         ('purchasing', '原料采购'),
         ('purchased', '原料入库'),
         ('producing', '生产中'),
+        ('remaining_paid', '尾款已付'),
         ('checking', '质检中'),
         ('inspecting', '验货中'),
         ('shipped', '已出货'),
@@ -250,6 +263,7 @@ class OrderStatus(models.Model):
     ])
     time = models.DateTimeField(auto_now_add=True)
     current = models.BooleanField(default=True, blank=True, null=True)
+    creator = models.CharField(max_length=20, blank=True, null=True)
 
 
 # class Image(models.Model):
@@ -271,21 +285,6 @@ class CommunicationAttachment(models.Model):
         ClientCommunication, on_delete=models.CASCADE
     )
     document = models.FileField(null=False, blank=False, upload_to='file/')
-
-
-class Item(models.Model):
-    company = models.ForeignKey(Company, on_delete=models.CASCADE, blank=True, null=True)
-    item_id = models.CharField(max_length=20)
-    name = models.CharField(max_length=20)
-    type = models.CharField(max_length=10, choices=[
-        ('product', '产品'),
-        ('material', '原料'),
-    ])
-    amount = models.IntegerField(default=0, validators=[MinValueValidator(0)])
-    spec = models.CharField(max_length=200)
-
-    def __str__(self):
-        return self.name
 
 
 class StorageChange(models.Model):

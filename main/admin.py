@@ -14,5 +14,6 @@ admin.site.register(Supplier)
 admin.site.register(SupplierContact)
 admin.site.register(OrderStatus)
 admin.site.register(OrderAttachment)
+admin.site.register(Item)
 
 # Register your models here.

@@ -2,7 +2,7 @@
 {% block content %}
 
     <style>
-    td{
+    td, th{
         border: 2px slateblue;
         padding: 0 20px;
     }
@@ -10,57 +10,102 @@
 
 
 
-    <div class="position-absolute top-0 start-50 translate-middle-x" style="margin-top: 50px;background-color: white; padding: 30px; border-radius: 30px; width: 800px">
+    <div class="position-absolute top-0 start-50 translate-middle-x" style="margin-top: 50px;background: rgba(204, 255, 255, 0.8); padding: 30px; border-radius: 30px; width: 800px">
     <div style="text-align: center;"><h1>{{ order.order_num }}</h1></div>
-        客户: <a href="{% url 'client_detail' order.client.pk %}"> {{ order.client }}</a><br />
+        客户: <a href="{% url 'client_detail' order.client.pk %}" style="margin-left: 10px"> {{ order.client }}</a><br /><br/>
         相关员工:
             <table>
         {% for i in staff %}
             <tr><td><a href="{% url 'staff_detail' i.pk %}"> {{ i.name }}</a></td> <td>{{ i.position.name }}</td></tr>
         {% endfor %}
-        </table>
+        </table><br/>
+
+        订单类型: {{ order.get_order_type_display }}<br/>
+
+        创建时间: {{ order.created }}<br/>
+
+        商品: <a href="{% url 'item_detail' order.item.pk %}" style="margin-left: 10px"> {{ order.item }} </a><br/>
+
+        规格: {{ order.specs }}<br/>
+
+        商品单价: {{ order.ppu }}<br/>
+
+        订购数量: {{ order.amount }}<br />
+
+        商品总价: {{ order.price }}<br />
+
+        送货地址: {{ order.address }}<br/>
+
+        订金: {{ order.deposit }}<br/>
+
+        尾款: {{ order.remaining }}<br />
+
+        备注: {{ order.description }}
+
 
 
 {% if not order.completed %}
+    <br/>
     <form method="post" action="">
         {% csrf_token %}
-        <p>{{ form }} <button type="submit">更新</button></p>
+        {{ form }} <button type="submit" class="btn btn-outline-light btn-sm">更新</button><br/>
     </form>
         {% endif %}
-
+    <div>
     {% if current %}
-        当前状态:
+        <br />
+        当前状态: <strong style="color: red; margin-left: 10px">
         {% if type == 'normal' %}
         {{ current.get_status_display }}
             {% else %}
             {{ current.get_sample_status_display }}
             {% endif %}
+        </strong>
+        <br/>
     {% endif %}
-<br />
+    <br />
+    </div>
     {% if status_history %}
         <div>
-        历史状态:
+            历史状态:
         <div>
-        <div style="text-align: left">
+        <div style="margin-left: 130px">
+        <table style="text-align: center">
+        <tr><th>更新后状态</th><th>更新时间</th><th>执行人</th></tr>
         {% if type == 'normal' %}
             {% for status in status_history %}
-                {{ status.get_status_display }} {{ status.time }}<br />
+                <tr><td>{{ status.get_status_display }}</td> <td>{{ status.time }}</td> <td>{{ status.creator }}</td></tr>
             {% endfor %}
 
         {% else %}
 
             {% for status in status_history %}
-                {{ status.get_sample_status_display }} {{ status.time }}<br/>
-            {% endfor %}
-
+                <tr><td>{{ status.get_sample_status_display }}</td> <td>{{ status.time }}</td> <td>{{ status.creator }}</td></tr>
+            {% endfor %}<br/>
         {% endif %}
+        </table>
         </div>
     {% endif %}
 
-    附件:
+{% if attachments %}
+    <br/>
+    附件: <br/>
     {% for attachment in attachments %}
-        <a href="{% url 'order_download' attachment.pk %}">{{ attachment }}</a><br/>
+        <a href="{% url 'order_download' attachment.pk %}" class="icon-link icon-link-hover" style="--bs-icon-link-transform: translate3d(0, -.125rem, 0);">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box2-fill" viewBox="0 0 16 16">
+  <path d="M3.75 0a1 1 0 0 0-.8.4L.1 4.2a.5.5 0 0 0-.1.3V15a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V4.5a.5.5 0 0 0-.1-.3L13.05.4a1 1 0 0 0-.8-.4h-8.5ZM15 4.667V5H1v-.333L1.5 4h6V1h1v3h6l.5.667Z"></path>
+</svg>
+            {{ attachment }}
+        </a><br/>
     {% endfor %}
+{% endif %}
+
+
 
     </div>
+
+
+
 {% endblock %}
+
+

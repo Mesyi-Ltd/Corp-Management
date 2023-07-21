@@ -108,7 +108,10 @@ def create_order(request):
             random_id = rand_id(10)
             while Order.objects.filter(order_num=random_id).exists():
                 random_id = rand_id(10)
-            order.order_num = random_id
+            if order.order_type == 'normal':
+                order.order_num = '10' + random_id
+            else:
+                order.order_num = '12' + random_id
             order.remaining = order.price - order.deposit
             order.save()
             form.save_m2m()

@@ -1,17 +1,53 @@
 {% extends 'main/base.html' %}
+
 {% block content %}
-<form method="post" action="">
+
+    <div style="text-align: center; background-color: rgb(194,159,250); width: 400px; height: 1300px" class="list-group position-absolute top-0 start-50 translate-middle-x">
+<form method="post" action="" >
 {% csrf_token %}
+
+
+
     <label>
-        岗位名称：
+        <strong>岗位名称</strong>
         <input type="text" class="form-control" name="name">
     </label>
 <br/>
+<br/>
+        <input type="button" onclick='selects()' value="勾选全部" class="btn btn-warning"/>
+        <input type="button" onclick='deSelect()' value="取消全部" class="btn btn-success"/>
+            <script type="text/javascript">
+            function selects(){
+                const ele = document.getElementsByClassName('checkboxes');
+                for(let i=0; i<ele.length; i++){
+                    if(ele[i].type==='checkbox')
+                        ele[i].checked=true;
+                }
+            }
+
+            function deSelect(){
+                const ele = document.getElementsByClassName('checkboxes');
+                for(let i=0; i<ele.length; i++){
+                    if(ele[i].type==='checkbox')
+                        ele[i].checked=false;
+
+                }
+            }
+        </script>
+<div class="position-relative" >
+<ul class="list-group position-absolute top-0 start-50 translate-middle-x" >
+
     {% for field in form %}
-    {{ field }}
-    <label class="form-check-label" for="flexSwitchCheckDefault">Default switch checkbox input</label>
-        <br/>
+
+    <li class="list-group-item" style="width: 300px">
+        {{ field.label_tag }}
+        {{ field }}
+    </li>
     {% endfor %}
+
+</ul>
     <button type="submit">提交</button>
+</div>
 </form>
+    </div>
 {% endblock %}

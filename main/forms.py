@@ -102,10 +102,16 @@ class PermsForm(forms.ModelForm):
         model = Perm
         fields = '__all__'
 
+        labels = {
+            'position_all': '职位全部 ',
+            'order_detail': '订单详情 ',
+            'order_list': '订单列表 ',
+        }
+
     def __init__(self, *args, **kwargs):
         super(PermsForm, self).__init__(*args, **kwargs)
         for field in self.fields.values():
-            field.widget.attrs['class'] = 'form-check-input'
+            field.widget.attrs['class'] = 'form-check-input checkboxes'
             field.widget.attrs['type'] = 'checkbox'
             field.widget.attrs['role'] = 'switch'
 

@@ -1,8 +1,16 @@
 {% extends 'main/base.html' %}
 
 {% block content %}
+    <style>
+    #content-container{
+        text-align: center;
+        background-color: rgba(194,159,250,0.8);
+        width: 500px;
+        height: 1370px;
+    }
+    </style>
 
-    <div style="text-align: center; background-color: rgb(194,159,250); width: 400px; height: 1300px" class="list-group position-absolute top-0 start-50 translate-middle-x">
+    <div id="content-container" class="list-group position-absolute top-0 start-50 translate-middle-x">
 <form method="post" action="" >
 {% csrf_token %}
 
@@ -13,9 +21,11 @@
         <input type="text" class="form-control" name="name">
     </label>
 <br/>
+
 <br/>
         <input type="button" onclick='selects()' value="勾选全部" class="btn btn-warning"/>
         <input type="button" onclick='deSelect()' value="取消全部" class="btn btn-success"/>
+
             <script type="text/javascript">
             function selects(){
                 const ele = document.getElementsByClassName('checkboxes');
@@ -34,7 +44,9 @@
                 }
             }
         </script>
-<div class="position-relative" >
+
+
+<div class="position-relative" style="margin-top: 20px">
 <ul class="list-group position-absolute top-0 start-50 translate-middle-x" >
 
     {% for field in form %}
@@ -46,7 +58,10 @@
     {% endfor %}
 
 </ul>
-    <button type="submit">提交</button>
+<br/>
+    <button type="submit" style="position: relative; top: 1150px">提交</button>
+<br/><br/>
+
 </div>
 </form>
     </div>

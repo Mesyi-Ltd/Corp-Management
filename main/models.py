@@ -122,7 +122,7 @@ class Client(models.Model):
     order_in_progress = models.IntegerField(null=True, default=0)
     order_completed = models.IntegerField(null=True, default=0)
     registrant = models.CharField(max_length=10)
-    related_staff = models.CharField(max_length=10)
+    related_staff = models.CharField(max_length=10, choices=Staff.objects.values_list('staff_id', 'name'))
 
     def __str__(self):
         return self.name

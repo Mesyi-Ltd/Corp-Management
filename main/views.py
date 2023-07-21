@@ -88,6 +88,14 @@ class ClientDetail(DetailView):
     model = Client
     template_name = 'client/client_detail.html'
 
+    def get_context_data(self, *args, **kwargs):
+        context = {}
+        client = self.get_object()
+        context['client'] = client
+        context['orders'] = Order.objects.filter(client=client)
+        context['current_orders'] = Order.objects.filter(client=client, completed=False)
+        return context
+
 
 class SupplierList(ListView):
     model = Supplier

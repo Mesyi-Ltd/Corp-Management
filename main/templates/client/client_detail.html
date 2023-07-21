@@ -1,9 +1,33 @@
 {% extends 'main/base.html' %}
 {% block content %}
-<h1>
-{{ client.name }}<br />
-{{ client.phone }}<br/>
-{{ client.email }}<br/>
-{{ client.address }}<br/>
-</h1>
+      <div class="position-absolute top-0 start-50 translate-middle-x" style="width:600px; margin-top: 50px;background-color: white; padding: 30px; border-radius: 30px">
+            <h1 style="text-align: center">
+                客户信息
+            </h1><br/><br/>
+          客户名称: {{ client.name }}<br />
+          联系电话: {{ client.phone }}<br/>
+          邮箱地址: {{ client.email }}<br/>
+          国家: {{ client.country }}<br/>
+          公司地址: {{ client.address }}<br/>
+      客户来源: {{ client.get_source_display }}<br/>
+      客户等级: {{ client.get_level_display }}<br/>
+          客户类型: {{ client.get_client_type_display }}<br/>
+      规模: {{ client.get_scale_display }}<br/>
+      市场: {{ client.market }}<br/>
+          {% if current_orders %}
+              当前订单:<br/>
+                {% for order in current_orders %}
+                    <a href="{% url 'order_detail' order.pk %}"> {{ order.order_num }}</a><br/>
+                {% endfor %}
+      {% endif %}
+
+                {% if orders %}
+              所有订单:<br/>
+                {% for order in orders %}
+                    <a href="{% url 'order_detail' order.pk %}"> {{ order.order_num }}</a><br/>
+                {% endfor %}
+      {% endif %}
+        <s>客户联系人</s><br/>
+          <s>客户往来</s>
+      </div>
 {% endblock %}

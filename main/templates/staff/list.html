@@ -1,14 +1,24 @@
-{% extends 'main/base.html' %}
-{% block content %}
-<div class="list-group position-absolute top-0 start-50 translate-middle-x">
+{% extends 'main/list.html' %}
+{% block table %}
+
+    {% block placeholder %}工号/名称/手机号{% endblock %}
+
+    <table style="background: gainsboro">
+    <tr><th>工号</th><th>名称</th><th>岗位</th><th>状态</th></tr>
+</table>
     {% for staff in object_list %}
 
-            <a href="{% url 'staff_detail' staff.staff_id %}"
+            <a href="{% url 'staff_detail' staff.pk %}"
                class="list-group-item list-group-item-action list-group-item-dark
-               d-flex justify-content-between align-items-center">
-                {{ staff.staff_id }} -- {{ staff.name }}  {{ staff.position }}
+               d-flex justify-content-between align-items-center" style="padding: 0">
+                <ul class="list-group list-group-horizontal" style="margin: 0">
+                    <li class="list-group-item">{{ staff.staff_id}}</li>
+                    <li class="list-group-item">{{ staff.name }}</li>
+                <li class="list-group-item">{{ staff.position }}</li>
+                    <li class="list-group-item">{{ staff.get_status_display }}</li>
+                </ul>
             </a>
 
     {% endfor %}
-</div>
+
 {% endblock %}

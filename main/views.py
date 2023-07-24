@@ -99,12 +99,26 @@ def register_client(request):
 
 
 class ClientList(ListView):
+    paginate_by = 15
     model = Client
     template_name = 'client/client_list.html'
-    # for client in Client.objects.all():
-    #     orders = client.order_set.all()
-    #     for order in orders:
-    #         order.status.all().
+
+    def get_queryset(self):
+        qs = self.model.objects.all()
+        search = self.request.GET.get('search')
+        if search:
+            qs = qs.filter(
+                Q(client_id__contains=search) | Q(name__contains=search)).distinct()
+        qs = qs.order_by('-order_in_progress')
+        return qs
+
+    def get_context_data(self, **kwargs):
+        context = super(ClientList, self).get_context_data(**kwargs)
+        query = self.request.GET.get('search')
+        if query:
+            context['query'] = query
+        return context
+
 
 
 class ClientDetail(DetailView):
@@ -193,8 +207,25 @@ class StaffDetail(DetailView):
 
 
 class StaffList(ListView):
+    paginate_by = 15
     model = Staff
     template_name = 'staff/list.html'
+
+    def get_queryset(self):
+        qs = self.model.objects.all()
+        search = self.request.GET.get('search')
+        if search:
+            qs = qs.filter(
+                Q(staff_id__contains=search) | Q(name__contains=search) | Q(phone__contains=search)).distinct()
+        qs = qs.order_by('-status')
+        return qs
+
+    def get_context_data(self, **kwargs):
+        context = super(StaffList, self).get_context_data(**kwargs)
+        query = self.request.GET.get('search')
+        if query:
+            context['query'] = query
+        return context
 
 
 def staff_edit(request, pk):

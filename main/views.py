@@ -215,8 +215,25 @@ class ItemDetail(DetailView):
 
 
 class OrderList(ListView):
+    paginate_by = 15
     model = Order
     template_name = 'order/list.html'
+
+    def get_queryset(self):
+        qs = self.model.objects.all()
+        search = self.request.GET.get('search')
+        if search:
+            qs = qs.filter(
+                Q(order_num__contains=search) | Q(client__name__contains=search) | Q(item__name__contains=search) | Q(
+                    staff__name__contains=search)).distinct()
+        return qs
+
+    def get_context_data(self, **kwargs):
+        context = super(OrderList, self).get_context_data(**kwargs)
+        query = self.request.GET.get('search')
+        if query:
+            context['query'] = query
+        return context
 
     # def get_context_data(self, *, object_list=None, **kwargs):
     #     if OrderStatus.objects.filter(order=order, current=True).exists():
@@ -275,7 +292,7 @@ class OrderDetail(DetailView):
 
 def order_download(request, pk):
     file = OrderAttachment.objects.get(id=pk)
-    return FileResponse(open(MEDIA_ROOT+'/'+file.document.name, 'rb'), as_attachment=True)
+    return FileResponse(open(MEDIA_ROOT + '/' + file.document.name, 'rb'), as_attachment=True)
 
 
 class ItemList(ListView):

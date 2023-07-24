@@ -17,6 +17,26 @@ class ClientForm(forms.ModelForm):
             'email': forms.EmailInput(attrs={'class': 'form-control'}),
             'phone': forms.TextInput(attrs={'class': 'form-control'}),
             'address': forms.Textarea(attrs={'class': 'form-control'}),
+            'country': forms.TextInput(attrs={'class': 'form-control'}),
+            'source': forms.Select(attrs={'class': 'form-select'}),
+            'scale': forms.Select(attrs={'class': 'form-select'}),
+            'level': forms.Select(attrs={'class': 'form-select'}),
+            'client_type': forms.Select(attrs={'class': 'form-select'}),
+            'market': forms.TextInput(attrs={'class': 'form-control'}),
+
+        }
+
+        labels = {
+            'name': '名称',
+            'email': '电子邮箱',
+            'phone': '联系电话',
+            'address': '地址',
+            'country': '所在国家/地区',
+            'source': '客户来源',
+            'scale': '规模',
+            'level': '客户等级',
+            'client_type': '客户类型',
+            'market': '所属市场'
 
         }
 

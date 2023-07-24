@@ -1,47 +1,10 @@
-{% extends 'main/base.html' %}
-{% block content %}
+{% extends 'main/form.html' %}
+{% block form %}
 
-    <div>
-
-
-
-    <form method="POST" action="" enctype="multipart/form-data">
-
-        {% csrf_token %}
 
         {{ form.as_p }}
-
-{% comment %}        <div class="form-floating mb-3 form-group">
-            <input name="name" type="text" class="form-control" id="floatingInput" placeholder="公司名称" />
-            <label for="floatingInput">公司名称</label>
+        <div style="text-align: center">
+        <button type="submit" class="btn btn-primary btn-lg" >提交</button>
         </div>
-
-        <div class="form-floating mb-3 form-group">
-            <input name="email" type="email" class="form-control" id="floatingInput" placeholder="电子邮箱" />
-            <label for="floatingInput">电子邮箱</label>
-        </div>
-
-         <div class="form-floating mb-3 form-group">
-            <input name="phone" type="text" class="form-control" id="floatingInput" placeholder="联系电话" />
-            <label for="floatingInput">联系电话</label>
-         </div>
-
-        <div class="form-floating">
-            <input name="address" class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px" />
-            <label for="floatingTextarea2">地址</label>
-        </div>{% endcomment %}
-
-<!--        <div class="form-check">
-             form.credible name="credible" class="form-control form-check-input" type="checkbox" value="" id="flexCheckChecked" %}
-            <label class="form-check-label" for="flexCheckChecked">
-                无拖单记录
-            </label>
-        </div>
--->
-
-        <button type="submit" class="btn btn-primary btn-lg">提交</button>
-    </form>
-
-    </div>
 
 {% endblock %}

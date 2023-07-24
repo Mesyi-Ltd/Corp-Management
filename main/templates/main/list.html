@@ -1,0 +1,53 @@
+{% extends 'main/base.html' %}
+{% block content %}
+
+    <style>
+    li, th{
+        width: 300px;
+        text-align: center;
+    }
+    </style>
+
+<div class="list-group position-absolute top-0 start-50 translate-middle-x" style="background-color: white">
+<nav class="navbar navbar-light bg-light" style="justify-content: right; border-radius: 25px">
+  <form class="form-inline form-floating" method="get" action="">
+    <input class="mr-sm-2" type="search" placeholder="订单号/客户名/商品名/员工名" aria-label="Search" name="search">
+    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">搜索</button>
+  </form>
+</nav>
+
+{% block table %}
+
+
+
+{% endblock %}
+
+
+<div class="pagination" style="justify-content: space-evenly">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?{% if query %}search={{ query }}&{% endif %}page=1">&laquo; 第一页</a>
+            <a href="?{% if query %}search={{ query }}&{% endif %}page={{ page_obj.previous_page_number }}" class="btn btn-primary" role="button">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left-circle" viewBox="0 0 16 16">
+  <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-4.5-.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z"></path>
+</svg>
+                上一页</a>
+        {% endif %}
+
+        <span class="current"><strong>
+            第 {{ page_obj.number }} 页/ 共{{ page_obj.paginator.num_pages }}页
+        </strong></span>
+
+        {% if page_obj.has_next %}
+            <a href="?{% if query %}search={{ query }}&{% endif %}page={{ page_obj.next_page_number }}" class="btn btn-primary" role="button">下一页
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-circle" viewBox="0 0 16 16">
+  <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"></path>
+</svg></a>
+            <a href="?{% if query %}search={{ query }}&{% endif %}page={{ page_obj.paginator.num_pages }}">最后一页 &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+
+</div>
+
+{% endblock %}

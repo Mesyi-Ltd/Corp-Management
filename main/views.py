@@ -1,3 +1,4 @@
+import datetime
 import random
 
 from django.contrib.auth.decorators import login_required
@@ -74,6 +75,28 @@ class RegisterClient(CreateView):
 
 
 #    fields = '__all__'
+
+def register_client(request):
+    if request.method == "POST":
+        form = ClientForm(request.POST or None)
+        if form.is_valid():
+            client = form.save(commit=False)
+            now = datetime.now()
+            day, month = str(now.day), str(now.month)
+            if now.month < 10:
+                month = '0' + str(now.month)
+            if now.day < 10:
+                day = '0' + str(now.day)
+            c_id = str(now.year) + month + day + rand_id(6)
+            while c_id in Client.objects.values_list('client_id', flat=True):
+                c_id = str(now.year) + month + day + rand_id(6)
+            client.client_id = c_id
+            client.save()
+            return redirect('client_detail', client.pk)
+    else:
+        form = ClientForm()
+    return render(request, 'client/register_client.html', {'form': form})
+
 
 class ClientList(ListView):
     model = Client
@@ -226,6 +249,7 @@ class OrderList(ListView):
             qs = qs.filter(
                 Q(order_num__contains=search) | Q(client__name__contains=search) | Q(item__name__contains=search) | Q(
                     staff__name__contains=search)).distinct()
+        qs = qs.order_by('-created')
         return qs
 
     def get_context_data(self, **kwargs):

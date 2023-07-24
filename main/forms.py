@@ -9,7 +9,7 @@ class ClientForm(forms.ModelForm):
 
     class Meta:
         model = Client
-        fields = ('client_id', 'name', 'email', 'phone', 'address',
+        fields = ('name', 'email', 'phone', 'address',
                   'country', 'source', 'level', 'scale', 'client_type', 'market')
 
         widgets = {

@@ -187,9 +187,17 @@ def staff_edit(request, pk):
 
 
 class AddItem(CreateView):
-    form_class = AddItem
+    form_class = AddItemForm
     model = Item
     template_name = 'item/add.html'
+
+    def post(self, request, *args, **kwargs):
+        form = AddItemForm(request.POST or None)
+        if form.is_valid():
+            item = form.save()
+            for image in request.FILES.getlist('images'):
+                ItemImage.objects.create(item=item, image=image)
+            return redirect('item_detail', item.pk)
 
     def get_success_url(self):
         return reverse('item_detail', kwargs={'pk': self.object.pk})
@@ -198,6 +206,12 @@ class AddItem(CreateView):
 class ItemDetail(DetailView):
     model = Item
     template_name = 'item/detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = {}
+        context['images'] = ItemImage.objects.filter(item=self.get_object())
+        context['item'] = self.get_object()
+        return context
 
 
 class OrderList(ListView):
@@ -262,3 +276,8 @@ class OrderDetail(DetailView):
 def order_download(request, pk):
     file = OrderAttachment.objects.get(id=pk)
     return FileResponse(open(MEDIA_ROOT+'/'+file.document.name, 'rb'), as_attachment=True)
+
+
+class ItemList(ListView):
+    model = Item
+    template_name = 'item/list.html'

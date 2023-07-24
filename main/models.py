@@ -230,7 +230,7 @@ class Order(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     handed = models.DateField(null=True, blank=True)
     completed = models.BooleanField(null=True, blank=True, default=False)
-    item = models.ForeignKey(Item, on_delete=models.SET_NULL, null=True )
+    item = models.ForeignKey(Item, on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
         return self.order_num
@@ -317,3 +317,8 @@ class StorageChangeAttachment(models.Model):
 class Purchase(models.Model):
     purchase_id = models.CharField(max_length=20)
     related_order = models.OneToOneField(Order, on_delete=models.CASCADE)
+
+
+class ItemImage(models.Model):
+    item = models.ForeignKey(Item, on_delete=models.CASCADE, related_name='images')
+    image = models.ImageField(upload_to='image/', blank=True, null=True)

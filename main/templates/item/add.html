@@ -1,6 +1,10 @@
 {% extends 'main/form.html' %}
 {% block form %}
     {{ form.as_p }}
-    <button type="submit">添加</button>
+        <div class="mb-3">
+  <label for="formFileMultiple" class="form-label">上传样本图</label>
+  <input class="form-control" type="file" id="formFileMultiple" name="images" multiple>
+</div>
+    <input type="submit" value="提交订单" class="btn btn-outline-secondary">
 
 {% endblock %}

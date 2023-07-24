@@ -178,7 +178,7 @@ class StaffUpdateForm(forms.ModelForm):
         }
 
 
-class AddItem(forms.ModelForm):
+class AddItemForm(forms.ModelForm):
     class Meta:
         model = Item
         fields = ['item_id', 'name', 'type', 'amount', 'spec']

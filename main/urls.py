@@ -21,5 +21,6 @@ urlpatterns = [
     path('staff/<str:pk>', views.StaffDetail.as_view(), name='staff_detail'),
     path('staff/edit/<str:pk>', views.staff_edit, name='staff_edit'),
     path('item/add', views.AddItem.as_view(), name='item_add'),
-    path('item/<str:pk>', views.ItemDetail.as_view(), name='item_detail')
+    path('item/list', views.ItemList.as_view(), name='item_list'),
+    path('item/<str:pk>', views.ItemDetail.as_view(), name='item_detail'),
 ]

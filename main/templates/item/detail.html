@@ -4,9 +4,17 @@
 <div class="position-absolute top-0 start-50 translate-middle-x" style="margin-top: 50px;background-color: white; padding: 30px; border-radius: 30px">
 
 <p>名称: {{ item.name }}</p>
-<p>编号: {{ item.id }}</p>
+<p>编号: {{ item.item_id }}</p>
 <p>库存: {{ item.amount }}</p>
 <p>规格: {{ item.spec }}</p>
+
+{% if images %}
+    {% for image in images %}
+
+        <img src="{{ image.image.url }}" alt="样品图"><br/>
+
+    {% endfor %}
+{% endif %}
 
 </div>
 

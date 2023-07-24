@@ -11,7 +11,7 @@
 <div class="list-group position-absolute top-0 start-50 translate-middle-x" style="background-color: white">
 <nav class="navbar navbar-light bg-light" style="justify-content: right; border-radius: 25px">
   <form class="form-inline form-floating" method="get" action="">
-    <input class="mr-sm-2" type="search" placeholder="订单号/客户名/商品名/员工名" aria-label="Search" name="search">
+    <input class="mr-sm-2" type="search" placeholder="{% block placeholder %}{% endblock %}" aria-label="Search" name="search">
     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">搜索</button>
   </form>
 </nav>

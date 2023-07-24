@@ -120,7 +120,6 @@ class ClientList(ListView):
         return context
 
 
-
 class ClientDetail(DetailView):
     model = Client
     template_name = 'client/client_detail.html'
@@ -351,5 +350,21 @@ def order_download(request, pk):
 
 
 class ItemList(ListView):
+    paginate_by = 15
     model = Item
     template_name = 'item/list.html'
+
+    def get_queryset(self):
+        qs = self.model.objects.all()
+        search = self.request.GET.get('search')
+        if search:
+            qs = qs.filter(
+                Q(item_id__contains=search) | Q(name__contains=search)).distinct()
+        return qs
+
+    def get_context_data(self, **kwargs):
+        context = super(ItemList, self).get_context_data(**kwargs)
+        query = self.request.GET.get('search')
+        if query:
+            context['query'] = query
+        return context

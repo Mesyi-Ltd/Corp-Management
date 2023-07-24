@@ -1,15 +1,20 @@
-{% extends 'main/base.html' %}
-{% block content %}
-<div class="list-group position-absolute top-0 start-50 translate-middle-x">
+{% extends 'main/list.html' %}
+        {% block placeholder %}编号/名称{% endblock %}
+{% block table %}
+
+    <table style="background: gainsboro">
+    <tr><th>编号</th><th>名称</th></tr>
+</table>
     {% for item in object_list %}
 
             <a href="{% url 'item_detail' item.pk %}"
                class="list-group-item list-group-item-action list-group-item-dark
-               d-flex justify-content-between align-items-center">
-                {{ item.item_id }} -- {{ item.name }}
-                <span class="badge bg-primary rounded-pill">{{ item.order_in_progress }}</span>
+               d-flex justify-content-between align-items-center" style="padding: 0">
+                <ul class="list-group list-group-horizontal" style="margin: 0">
+                    <li class="list-group-item">{{ item.item_id }}</li>
+                    <li class="list-group-item">{{ item.name }}</li>
+                </ul>
             </a>
-
     {% endfor %}
-</div>
+
 {% endblock %}

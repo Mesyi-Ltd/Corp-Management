@@ -1,3 +1,61 @@
 {% extends 'main/base.html' %}
+{% block script %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.3.1/chart.min.js" integrity="sha512-dSQ0+Nf7kea2xLsbaig6H1m1RpNmWqfzz8/OzFvk5XHcBQbae+TVtA3dVIJoyLre8pqhOef4tRv6Ftx1S7yK1g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+
+        const endpoint = '{% url 'annual_data' %}';
+        let performance = [];
+        let names = [];
+
+        $.ajax({
+            method: "GET",
+            url: endpoint,
+            success: function (data){
+                names = data.names
+                performance = data.performances
+                const ctx = document.getElementById('myChart');
+                const ctx2 = document.getElementById('myChart2')
+
+
+                new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                      labels: names,
+                      datasets: [{
+                        label: '年度业绩',
+                        data: performance,
+                      }]
+                    }
+                  })
+
+                new Chart(ctx2, {
+                    type: 'bar',
+                    data: {
+                      labels: names,
+                      datasets: [{
+                        label: '年度业绩',
+                        data: performance,
+                      }]
+                    }
+                  })
+
+            }
+        })
+
+
+    </script>
+
+{% endblock %}
 {% block content %}
+<div style="text-align: center; width: 300px; height: 300px; background-color: white">
+  <canvas id="myChart"></canvas>
+</div>
+
+    <div style="text-align: center; width: 300px; height: 300px; background-color: white">
+  <canvas id="myChart2"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
 {% endblock %}

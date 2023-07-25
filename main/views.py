@@ -358,9 +358,9 @@ class OrderDetail(DetailView):
                 order.client.order_in_progress = Order.objects.filter(client=order.client, completed=False).count()
                 order.client.save()
                 yearly, monthly = AnnualPerformance.objects.get(owner=order.creator, current=True), \
-                    AnnualPerformance.objects.get(owner=order.creator, current=True)
-                yearly += order.price
-                monthly += order.price
+                    MonthlyPerformance.objects.get(owner=order.creator, current=True)
+                yearly.performance += order.price
+                monthly.performance += order.price
                 yearly.save()
                 monthly.save()
             return redirect('order_detail', order.pk)
@@ -393,3 +393,14 @@ class ItemList(ListView):
         if query:
             context['query'] = query
         return context
+
+
+def get_annual_data(request, *args, **kwargs):
+    data = {'names': [], 'performances': []}
+    for staff in Staff.objects.all():
+        data['names'].append(staff.name)
+        data['performances'].append(staff.yearly.get(current=True).performance)
+    # data = {}
+    # for staff in Staff.objects.all():
+    #     data[staff.name] = staff.yearly.get(current=True).performance
+    return JsonResponse(data)

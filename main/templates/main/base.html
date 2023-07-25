@@ -49,7 +49,7 @@
               员工
             </a>
             <ul class="dropdown-menu dropdown-menu-dark">
-              <li><a class="dropdown-item" href="#">业绩</a></li>
+              <li><a class="dropdown-item" href="{% url 'performance' %}">业绩</a></li>
                 {% url 'staff_list' as staff_list%}
               <li><a class="dropdown-item {% if request.path == staff_list%}active{% endif %} }" href="{% url 'staff_list' %}">列表</a></li>
               <li>
@@ -127,10 +127,10 @@
 </div>
 {% endfor %}
 <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
-<script type="text/javascript">
+
     {% block script %}
     {% endblock %}
-</script>
+
 {% block content %}
 {% endblock %}
 </div>

@@ -157,6 +157,7 @@ def create_order(request):
             else:
                 order.order_num = '12' + random_id
             order.remaining = order.price - order.deposit
+            order.creator = request.user.staff
             order.save()
             form.save_m2m()
             order.client.order_in_progress = Order.objects.filter(client=order.client, completed=False).count()
@@ -193,6 +194,10 @@ def staff_register(request):
             )
             staff.account = user
             staff.save()
+            monthly = MonthlyPerformance.objects.create(owner=staff)
+            yearly = AnnualPerformance.objects.create(owner=staff)
+            monthly.save()
+            yearly.save()
             messages.success(request, f'成功创建员工 {staff}')
             return redirect('staff_detail', pk=staff.staff_id)
     else:
@@ -203,6 +208,20 @@ def staff_register(request):
 class StaffDetail(DetailView):
     model = Staff
     template_name = 'staff/detail.html'
+
+    def post(self, request, *args, **kwargs):
+        password1 = self.request.POST.get('password1', '')
+        password2 = self.request.POST.get('password2', '')
+        if password2 == password1:
+            user = self.get_object().account
+            user.set_password(password1)
+            user.save()
+            messages.success(request, '密码已更改')
+            if request.user == user:
+                logout(request)
+        else:
+            messages.warning(request, '两次密码不一致')
+        return redirect('staff_detail', self.get_object().pk)
 
 
 class StaffList(ListView):
@@ -338,6 +357,12 @@ class OrderDetail(DetailView):
                 order.save()
                 order.client.order_in_progress = Order.objects.filter(client=order.client, completed=False).count()
                 order.client.save()
+                yearly, monthly = AnnualPerformance.objects.get(owner=order.creator, current=True), \
+                    AnnualPerformance.objects.get(owner=order.creator, current=True)
+                yearly += order.price
+                monthly += order.price
+                yearly.save()
+                monthly.save()
             return redirect('order_detail', order.pk)
 
     def get_success_url(self):

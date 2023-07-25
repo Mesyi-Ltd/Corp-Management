@@ -1,6 +1,6 @@
 {% extends 'main/base.html' %}
 {% block content %}
-  <div class="position-absolute top-0 start-50 translate-middle-x" style="margin-top: 50px;background-color: white; padding: 30px; border-radius: 30px">
+  <div class="position-absolute top-0 start-50 translate-middle-x" style="margin-top: 80px; width: 800px;background-color: white; padding: 30px; border-radius: 30px">
     工号: {{ staff.staff_id }}<br/><br/>
     姓名: {{ staff.name }}<br/><br/>
     电话号码: {{ staff.phone }}<br /><br/>
@@ -25,6 +25,8 @@
             修改密码
         </button>
     </div>
+
+
     </div>
 
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -34,6 +36,8 @@
         <h1 class="modal-title fs-5" id="exampleModalLabel">修改密码</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
+        <form method="post" action="">
+            {% csrf_token %}
       <div class="modal-body">
           <div class="form-floating mb-3">
               <input name="password1" type="password" class="form-control" id="floatingInput" placeholder="密码">
@@ -46,8 +50,9 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭窗口</button>
-        <button type="button" class="btn btn-primary">提交</button>
+        <button type="submit" class="btn btn-primary">提交</button>
       </div>
+        </form>
     </div>
   </div>
 </div>

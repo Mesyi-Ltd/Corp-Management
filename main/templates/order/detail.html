@@ -12,7 +12,8 @@
 
     <div class="position-absolute top-0 start-50 translate-middle-x" style="margin-top: 50px;background: rgba(204, 255, 255, 0.8); padding: 30px; border-radius: 30px; width: 800px">
     <div style="text-align: center;"><h1>{{ order.order_num }}</h1></div>
-        客户: <a href="{% url 'client_detail' order.client.pk %}" style="margin-left: 10px"> {{ order.client }}</a><br /><br/>
+        客户: <a href="{% url 'client_detail' order.client.pk %}" style="margin-left: 27px"> {{ order.client }}</a><br />
+        创建者: <a href="{% url 'staff_detail' order.creator.pk %}" style="margin-left: 10px">{{ order.creator }}</a><br/><br/>
         相关员工:
             <table>
         {% for i in staff %}

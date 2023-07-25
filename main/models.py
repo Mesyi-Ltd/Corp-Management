@@ -63,7 +63,7 @@ class Staff(models.Model):
     phone = models.CharField(max_length=20, validators=[RegexValidator('^[0-9 +]*$', message="手机号错误")])
     email = models.EmailField(null=True, blank=True)
     staff_id = models.CharField(unique=True, max_length=50, primary_key=True, error_messages={'required': '请输入工号'})
-    national_id = models.CharField(unique=True, max_length=18, validators=[
+    national_id = models.CharField(max_length=18, validators=[
         MinLengthValidator(18, message="身份证格式错误"),
         RegexValidator('^[0-9a-zX]*$', message="身份证格式错误")
     ])
@@ -78,16 +78,18 @@ class Staff(models.Model):
 
 
 class MonthlyPerformance(models.Model):
-    owner = models.ForeignKey(Staff, on_delete=models.CASCADE)
-    performance = models.IntegerField()
+    owner = models.ForeignKey(Staff, on_delete=models.CASCADE, related_name='monthly')
+    performance = models.FloatField(default=0)
     year = models.IntegerField(default=datetime.now().year, blank=True)
+    current = models.BooleanField(default=True)
 
 
 class AnnualPerformance(models.Model):
-    owner = models.ForeignKey(Staff, on_delete=models.CASCADE)
-    performance = models.IntegerField()
+    owner = models.ForeignKey(Staff, on_delete=models.CASCADE, related_name='yearly')
+    performance = models.FloatField(default=0)
     year = models.IntegerField(default=datetime.now().year, blank=True)
     month = models.IntegerField(default=datetime.now().month, blank=True)
+    current = models.BooleanField(default=True)
 
 
 class Client(models.Model):
@@ -153,7 +155,7 @@ class ClientCommunication(models.Model):
     ]
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
     client_name = models.CharField(max_length=30)
-    creator = models.CharField(max_length=20)
+    creator = models.ForeignKey(Staff, on_delete=models.RESTRICT)
     method = models.CharField(max_length=10, choices=METHODS)
     content = models.FileField()
     date = models.DateField()
@@ -209,7 +211,7 @@ class Order(models.Model):
         on_delete=models.SET_NULL,
         null=True
     )
-    client_name = models.CharField(max_length=50, default=client.name)
+    creator = models.ForeignKey(Staff, related_name='created_order', on_delete=models.RESTRICT, null=True)
     staff = models.ManyToManyField(Staff, related_name='orders')
     # staff1 = models.CharField(max_length=20)
     # staff2 = models.CharField(max_length=20)

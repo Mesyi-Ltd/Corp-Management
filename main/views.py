@@ -5,12 +5,10 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.http import JsonResponse, FileResponse
 from django.shortcuts import render, redirect
-from django.urls import reverse_lazy
 
 from Corp_Management.settings import MEDIA_ROOT
 from .forms import *
-from django.views import View
-from django.views.generic import ListView, DetailView, CreateView, UpdateView
+from django.views.generic import ListView, DetailView, CreateView
 from .models import Client
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
@@ -48,7 +46,15 @@ def login_page(request):
 
 
 def performance(request):
-    return render(request, 'staff/performance.html')
+    context = {}
+    context['years'] = AnnualPerformance.objects.values_list('year', flat=True).distinct()
+    context['performances'] = AnnualPerformance.objects.filter(year=datetime.now().year)
+    if request.method == 'POST':
+        selected_year = int(request.POST.get('year'))
+        context['selected_year'] = selected_year
+        context['performances'] = AnnualPerformance.objects.filter(year=selected_year)
+
+    return render(request, 'staff/performance.html', context=context)
 
 
 def register_company(request):
@@ -396,11 +402,19 @@ class ItemList(ListView):
 
 
 def get_annual_data(request, *args, **kwargs):
-    data = {'names': [], 'performances': []}
-    for staff in Staff.objects.all():
-        data['names'].append(staff.name)
-        data['performances'].append(staff.yearly.get(current=True).performance)
-    # data = {}
-    # for staff in Staff.objects.all():
-    #     data[staff.name] = staff.yearly.get(current=True).performance
+
+    data = {}
+
+    for year in AnnualPerformance.objects.values_list('year', flat=True).distinct():
+        selected = AnnualPerformance.objects.filter(year=year)
+        data[year] = {'name': [], 'performance': []}
+        for i in selected:
+            data[year]['name'].append(i.owner.name)
+            data[year]['performance'].append(i.performance)
     return JsonResponse(data)
+
+    # data = {'names': [], 'performances': []}
+    # for staff in Staff.objects.all():
+    #     data['names'].append(staff.name)
+    #     data['performances'].append(staff.yearly.get(current=True).performance)
+

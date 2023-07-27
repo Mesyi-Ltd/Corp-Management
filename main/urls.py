@@ -24,4 +24,5 @@ urlpatterns = [
     path('item/list', views.ItemList.as_view(), name='item_list'),
     path('item/<str:pk>', views.ItemDetail.as_view(), name='item_detail'),
     path('data/annual', views.get_annual_data, name='annual_data'),
+    path('data/month', views.get_month_data, name='month_data')
 ]

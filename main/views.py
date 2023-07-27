@@ -45,7 +45,7 @@ def login_page(request):
     return render(request, 'registration/login.html', context)
 
 
-def performance(request):
+def annual_performance(request):
     context = {}
     context['years'] = AnnualPerformance.objects.values_list('year', flat=True).distinct()
     context['performances'] = AnnualPerformance.objects.filter(year=datetime.now().year)
@@ -54,7 +54,7 @@ def performance(request):
         context['selected_year'] = selected_year
         context['performances'] = AnnualPerformance.objects.filter(year=selected_year)
 
-    return render(request, 'staff/performance.html', context=context)
+    return render(request, 'performance/annual_performance.html', context=context)
 
 
 def register_company(request):

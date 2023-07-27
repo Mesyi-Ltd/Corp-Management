@@ -1,0 +1,78 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% block link %}
+    <link href="{% static 'css/input.css' %}" rel="stylesheet" type="text/css">
+{% endblock %}
+{% block script %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.3.1/chart.min.js"
+            integrity="sha512-dSQ0+Nf7kea2xLsbaig6H1m1RpNmWqfzz8/OzFvk5XHcBQbae+TVtA3dVIJoyLre8pqhOef4tRv6Ftx1S7yK1g=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+
+
+        $.ajax({
+            method: "GET",
+            success: function () {
+                const ctx = document.getElementById('myChart');
+                const ctx2 = document.getElementById('myChart2');
+
+
+                new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: [{% for performance in performances %}"{{ performance.owner.name }}", {% endfor %}],
+                        datasets: [{
+                            label: '年度业绩',
+                            data: [{% for performance in performances %}{{ performance.performance }}, {% endfor %}],
+                        }]
+                    }
+                })
+
+                new Chart(ctx2, {
+                    type: 'bar',
+                    data: {
+                        labels: [{% for performance in performances %}"{{ performance.owner.name }}", {% endfor %}],
+                        datasets: [{
+                            label: '年度业绩',
+                            data: [{% for performance in performances %}{{ performance.performance }}, {% endfor %}],
+                        }]
+                    }
+                })
+            }
+        })
+
+
+    </script>
+
+{% endblock %}
+{% block content %}
+    <div class="position-relative">
+        <div class="position-absolute top-0 start-50 translate-middle-x"
+             style="width: 800px; height: 1200px; background-color: white; border-radius: 20px">
+            <div style="display: flex">
+                <form method="post" action=""
+                      style=" position: relative; top: 200px; left: 5px;" id="year">
+                    {% csrf_token %}
+                    <div class="select">
+                        <select name="year" aria-label="Default select example" style="width: 100px; flex: 1" id="year"
+                                onchange="this.form.submit();">
+                            <option selected disabled>选择年份</option>
+                            {% for year in years %}
+                                <option {% if selected_year == year %} selected {% endif %}>{{ year }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </form>
+                <div style="width: 300px; flex: 2">
+                    <canvas id="myChart"></canvas>
+                </div>
+            </div>
+            <div style="width: 800px">
+                <canvas id="myChart2" width="500"></canvas>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+{% endblock %}

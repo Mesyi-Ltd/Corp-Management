@@ -7,59 +7,10 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.3.1/chart.min.js" integrity="sha512-dSQ0+Nf7kea2xLsbaig6H1m1RpNmWqfzz8/OzFvk5XHcBQbae+TVtA3dVIJoyLre8pqhOef4tRv6Ftx1S7yK1g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
 
-        const endpoint = '{% url 'annual_data' %}';
-        let performance = [];
-        let names = [];
-
-        function drawYear(){
-                            const ctx = document.getElementById('myChart');
-                const ctx2 = document.getElementById('myChart2');
-
-
-                new Chart(ctx, {
-                    type: 'pie',
-                    data: {
-                      labels: [{% for performance in performances %}"{{ performance.owner.name }}", {% endfor %}],
-                      datasets: [{
-                        label: '年度业绩',
-                        data: [{% for performance in performances %}{{ performance.performance }}, {% endfor %}],
-                      }]
-                    }
-                  })
-
-                new Chart(ctx2, {
-                    type: 'bar',
-                    data: {
-                      labels: [{% for performance in performances %}"{{ performance.owner.name }}", {% endfor %}],
-                      datasets: [{
-                        label: '年度业绩',
-                        data: [{% for performance in performances %}{{ performance.performance }}, {% endfor %}],
-                      }]
-                    }
-                  })
-        }
-
-
-        $(document).on('submit', '#year', function (e){
-            e.preventDefault();
-
-            $.ajax({
-                type: 'POST',
-                url: '{% url 'performance' %}',
-                data: {
-                    year:$('#year').val(),
-                    csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
-                },
-                success: drawYear()
-            });
-        });
 
         $.ajax({
             method: "GET",
-            url: endpoint,
-            success: function (data){
-                names = data.names;
-                performance = data.performances;
+            success: function (){
                 const ctx = document.getElementById('myChart');
                 const ctx2 = document.getElementById('myChart2');
 
@@ -85,17 +36,8 @@
                       }]
                     }
                   })
-
             }
         })
-
-    function save_option(){
-        let year = document.getElementById('year').value;
-        window.localStorage.setItem("year", year);
-    console.log(localStorage.getItem("year"));
-}
-
-console.log(localStorage.getItem("year"));
 
 
     </script>
@@ -109,7 +51,7 @@ console.log(localStorage.getItem("year"));
         style=" position: relative; top: 200px; left: 5px;" id="year">
         {% csrf_token %}
         <div class="select" >
-            <select name="year"  aria-label="Default select example" style="width: 100px; flex: 1" id="year" onchange="this.form.submit(); save_option();">
+            <select name="year"  aria-label="Default select example" style="width: 100px; flex: 1" id="year" onchange="this.form.submit();">
             <option selected disabled>选择年份</option>
                 {% for year in years %}
                     <option {% if selected_year == year %} selected {% endif %}>{{ year }}</option>

@@ -418,3 +418,12 @@ def get_annual_data(request, *args, **kwargs):
     #     data['names'].append(staff.name)
     #     data['performances'].append(staff.yearly.get(current=True).performance)
 
+
+def get_month_data(request):
+    year = request.GET.get('year')
+    performance = MonthlyPerformance.objects.filter(year=year)
+    month = list(performance.values('month'))
+    data = {
+        "month": month
+    }
+    return JsonResponse(data)

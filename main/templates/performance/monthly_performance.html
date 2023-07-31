@@ -22,7 +22,7 @@
                     data: {
                         labels: [{% for performance in performances %}"{{ performance.owner.name }}", {% endfor %}],
                         datasets: [{
-                            label: '年度业绩',
+                            label: '月度业绩',
                             data: [{% for performance in performances %}{{ performance.performance }}, {% endfor %}],
                         }]
                     }
@@ -33,14 +33,13 @@
                     data: {
                         labels: [{% for performance in performances %}"{{ performance.owner.name }}", {% endfor %}],
                         datasets: [{
-                            label: '年度业绩',
+                            label: '月度业绩',
                             data: [{% for performance in performances %}{{ performance.performance }}, {% endfor %}],
                         }]
                     }
                 })
             }
-        })
-
+        });
 
     </script>
 
@@ -49,35 +48,42 @@
     <div class="position-relative">
         <div class="position-absolute top-0 start-50 translate-middle-x"
              style="width: 1000px; height: 1700px; background-color: white; border-radius: 20px">
-
-
-            <div style="display: flex; justify-content: space-around">
-                                            <form method="post" action=""
-                      style="" id="year">
+        <div style="display: flex; justify-content: space-around">
+            <form method="post" action="" id="date" style="width: 160px; justify-content: start">
                     {% csrf_token %}
-                    <div class="select" style="flex: 1">
-                        <select name="year" aria-label="Default select example" style="width: 100px; flex: 1" id="year"
-                                onchange="this.form.submit();">
+                    <div class="select" >
+                        <select name="year" aria-label="Default select example" style="width: 100px; flex: 1" id="year" onchange="this.form.submit()">
                             <option selected disabled>选择年份</option>
                             {% for year in years %}
-                                <option {% if selected_year == year %} selected {% endif %}>{{ year }}</option>
+                                <option value="{{ year }}"{% if selected_year == year %} selected {% endif %}>{{ year }}</option>
                             {% endfor %}
                         </select>
                     </div>
-                </form>
-            <a href="{% url 'monthly_performance' %}"><button class="but">月度业绩</button></a>
-                <button class="but" style="--c:#E95A49; background-color: #E95A49 ;color: #fff">年度业绩</button>
-        </div>
 
-            <div>
+                    <div class="select" >
+                        <select name="month" aria-label="Default select example" style="width: 40px; flex: 1" id="month"
+                                onchange="this.form.submit();">
+                            <option selected disabled>月份</option>
+                            {% for month in month %}
+                                <option {% if selected_month == month %} selected {% endif %}>{{ month }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                </form>
+
+            <button class="but" style="height: 54.4px; background-color: var(--c); color: #fff;">月度业绩</button>
+            <a href="{% url 'yearly_performance' %}"> <button class="but" style="--c:#E95A49">年度业绩</button> </a>
+        </div>
+        <div>
             <header class="performance-header">
-                {{ selected_year }}年
+                {{ selected_year }}年 {{ selected_month }}月
             </header>
 
         </div>
+            <div style="display: flex">
 
-            <div style="display: flex;">
-                <div style="width: 300px; flex: 2">
+                <div style="width: 200px; flex: 2">
                     <canvas id="myChart"></canvas>
                 </div>
             </div>
@@ -87,6 +93,5 @@
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
 
 {% endblock %}

@@ -45,18 +45,6 @@ def login_page(request):
     return render(request, 'registration/login.html', context)
 
 
-def annual_performance(request):
-    context = {}
-    context['years'] = AnnualPerformance.objects.values_list('year', flat=True).distinct()
-    context['performances'] = AnnualPerformance.objects.filter(year=datetime.now().year)
-    if request.method == 'POST':
-        selected_year = int(request.POST.get('year'))
-        context['selected_year'] = selected_year
-        context['performances'] = AnnualPerformance.objects.filter(year=selected_year)
-
-    return render(request, 'performance/annual_performance.html', context=context)
-
-
 def register_company(request):
     form = ClientForm
     context = {'form': form}
@@ -402,7 +390,6 @@ class ItemList(ListView):
 
 
 def get_annual_data(request, *args, **kwargs):
-
     data = {}
 
     for year in AnnualPerformance.objects.values_list('year', flat=True).distinct():
@@ -422,8 +409,40 @@ def get_annual_data(request, *args, **kwargs):
 def get_month_data(request):
     year = request.GET.get('year')
     performance = MonthlyPerformance.objects.filter(year=year)
-    month = list(performance.values('month'))
+    month = list(performance.values('month').distinct())
     data = {
         "month": month
     }
     return JsonResponse(data)
+
+
+def annual_performance(request):
+    context = {}
+    context['selected_year'] = datetime.now().year
+    context['years'] = AnnualPerformance.objects.values_list('year', flat=True).distinct()
+    context['performances'] = AnnualPerformance.objects.filter(year=datetime.now().year)
+    if request.method == 'POST':
+        selected_year = int(request.POST.get('year'))
+        context['selected_year'] = selected_year
+        context['performances'] = AnnualPerformance.objects.filter(year=selected_year)
+
+    return render(request, 'performance/annual_performance.html', context=context)
+
+
+def monthly_performance(request):
+    context = {}
+    context['selected_year'], context['selected_month'] = datetime.now().year, datetime.now().month
+    context['years'] = MonthlyPerformance.objects.values_list('year', flat=True).distinct()
+    context['month'] = MonthlyPerformance.objects.filter(year=datetime.now().year).values_list('month',
+                                                                                               flat=True).distinct()
+    context['performances'] = MonthlyPerformance.objects.filter(year=datetime.now().year, month=datetime.now().month)
+    if request.method == 'POST':
+        selected_year = int(request.POST.get('year'))
+        context['selected_year'] = selected_year
+        context['month'] = MonthlyPerformance.objects.filter(year=selected_year).values_list('month',
+                                                                                             flat=True).distinct()
+        if request.POST.get('month'):
+            selected_month = int(request.POST.get('month'))
+            context['performances'] = MonthlyPerformance.objects.filter(year=selected_year, month=selected_month)
+            context['selected_month'] = selected_month
+    return render(request, 'performance/monthly_performance.html', context=context)

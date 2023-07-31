@@ -50,7 +50,7 @@
               员工
             </a>
             <ul class="dropdown-menu dropdown-menu-dark">
-              <li><a class="dropdown-item" href="{% url 'performance' %}">业绩</a></li>
+              <li><a class="dropdown-item" href="{% url 'monthly_performance' %}">业绩</a></li>
                 {% url 'staff_list' as staff_list%}
               <li><a class="dropdown-item {% if request.path == staff_list%}active{% endif %} }" href="{% url 'staff_list' %}">列表</a></li>
               <li>

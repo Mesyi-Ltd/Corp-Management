@@ -23,6 +23,7 @@ urlpatterns = [
     path('staff/edit/<str:pk>', views.staff_edit, name='staff_edit'),
     path('item/add', views.AddItem.as_view(), name='item_add'),
     path('item/list', views.ItemList.as_view(), name='item_list'),
+    path('item/store', views.store_item, name='store_item'),
     path('item/<str:pk>', views.ItemDetail.as_view(), name='item_detail'),
     path('data/annual', views.get_annual_data, name='annual_data'),
     path('data/month', views.get_month_data, name='month_data')

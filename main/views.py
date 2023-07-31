@@ -389,6 +389,10 @@ class ItemList(ListView):
         return context
 
 
+def store_item(request):
+    return render(request, 'item/store.html')
+
+
 def get_annual_data(request, *args, **kwargs):
     data = {}
 

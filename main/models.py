@@ -93,7 +93,7 @@ class AnnualPerformance(models.Model):
 
 
 class Client(models.Model):
-    company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='client', null=True, blank=True)
+    company = models.ForeignKey(Company, on_delete=models.PROTECT, related_name='client', null=True, blank=True)
     client_id = models.CharField(max_length=20, blank=True)
     name = models.CharField(max_length=200)
     source = models.CharField(max_length=20, choices=[
@@ -155,7 +155,7 @@ class ClientCommunication(models.Model):
     ]
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
     client_name = models.CharField(max_length=30)
-    creator = models.ForeignKey(Staff, on_delete=models.RESTRICT)
+    creator = models.ForeignKey(Staff, on_delete=models.PROTECT)
     method = models.CharField(max_length=10, choices=METHODS)
     content = models.FileField()
     date = models.DateField()
@@ -208,10 +208,10 @@ class Order(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE, null=True, blank=True)
     client = models.ForeignKey(
         Client,
-        on_delete=models.SET_NULL,
+        on_delete=models.PROTECT,
         null=True
     )
-    creator = models.ForeignKey(Staff, related_name='created_order', on_delete=models.RESTRICT, null=True)
+    creator = models.ForeignKey(Staff, related_name='created_order', on_delete=models.PROTECT, null=True)
     staff = models.ManyToManyField(Staff, related_name='orders')
     # staff1 = models.CharField(max_length=20)
     # staff2 = models.CharField(max_length=20)
@@ -290,11 +290,13 @@ class CommunicationAttachment(models.Model):
 
 
 class StorageChange(models.Model):
-    change_id = models.CharField(max_length=20)
-    source_whereabouts = models.CharField(max_length=20)
-    invoice = models.CharField(max_length=20)
-    staff = models.CharField(max_length=20)
-    remark = models.TextField()
+    change_id = models.CharField(max_length=20, null=True, blank=True)
+    source_whereabouts = models.CharField(max_length=20, null=True, blank=True)
+    invoice = models.CharField(max_length=20, null=True, blank=True)
+    staff = models.ForeignKey(Staff, null=True, blank=True, on_delete=models.PROTECT)
+    remark = models.TextField(null=True, blank=True)
+    date = models.DateField(null=True, blank=True)
+    completed = models.BooleanField(default=False)
 
     def get_absolute_url(self):
         return reverse('item_detail', str(self.pk))

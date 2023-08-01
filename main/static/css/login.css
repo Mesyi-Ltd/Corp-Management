@@ -1,0 +1,37 @@
+#login-box{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 500px;
+    height: 330px;
+    background-color: white;
+    padding: 20px;
+    border: 2px solid blueviolet;
+    box-shadow: 10px 10px 5px #888888;
+    border-radius: 25px;
+}
+
+#login-button{
+    position: relative;
+    left: 45%;
+}
+
+#title{
+    position: absolute;
+    top: 15%;
+    left: 47%;
+    font-size: xxx-large;
+}
+
+body{
+    background-image:url("../image/login_background.jpg");
+    background-size: cover;
+    background-repeat:no-repeat;
+    padding:0;
+    margin:0;
+}
+
+.list-frame{
+    width: 600px;
+}

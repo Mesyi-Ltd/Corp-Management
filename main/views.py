@@ -389,8 +389,17 @@ class ItemList(ListView):
         return context
 
 
-def store_item(request):
-    return render(request, 'item/store.html')
+def storage_change(request):
+    change = StorageChange.objects.create()
+    change.save()
+    return redirect('storage_change', change.pk)
+
+
+def update_storage_change(request, pk):
+    change = StorageChange.objects.get(pk=pk)
+    form1 = UpdateStorage()
+    context = {'form1': form1}
+    return render(request, 'item/create_storage_change.html', context=context)
 
 
 def get_annual_data(request, *args, **kwargs):

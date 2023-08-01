@@ -47,7 +47,7 @@ class OrderForm(forms.ModelForm):
                                     label='客户')
     staff = forms.ModelMultipleChoiceField(queryset=Staff.objects.all(),
                                            widget=forms.SelectMultiple(attrs={'class': 'form-select', }),
-                                           label='相关员工',)
+                                           label='相关员工', )
     item = forms.ModelChoiceField(queryset=Item.objects.filter(type='product'),
                                   widget=forms.Select(attrs={'class': 'form-select', }),
                                   label='产品名称')
@@ -240,3 +240,22 @@ class SampleStatus(forms.ModelForm):
         widgets = {'sample_status': forms.Select(attrs={'required': 'True'})}
 
         labels = {'sample_status': '更新状态'}
+
+
+class UpdateStorage(forms.ModelForm):
+    staff = forms.ModelChoiceField(queryset=Staff.objects.all(),
+                                   widget=forms.Select(attrs={'class': 'form-select', }),
+                                   label='相关员工', )
+
+    class Meta:
+        model = StorageChange
+
+        fields = ['change_id', 'source_whereabouts', 'invoice', 'staff', 'remark', 'date']
+
+        widgets = {
+            'change_id': forms.TextInput(attrs={'class': 'text-input'}),
+            'source_whereabouts': forms.TextInput(attrs={'class': 'text-input'}),
+            'invoice': forms.TextInput(attrs={'class': 'text-input'}),
+            'remark': forms.Textarea(attrs={'class': 'form-control'}),
+            'date': forms.DateInput(attrs={'class': 'date', 'type': 'date'})
+        }

@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.http import JsonResponse, FileResponse
 from django.shortcuts import render, redirect
+from django.utils.decorators import method_decorator
 
 from Corp_Management.settings import MEDIA_ROOT
 from .forms import *
@@ -25,7 +26,7 @@ def home(request):
     return render(request, 'main/home.html')
 
 
-@login_required
+@login_required(login_url='login')
 def logout_page(request):
     logout(request)
     return redirect('login')
@@ -45,12 +46,14 @@ def login_page(request):
     return render(request, 'registration/login.html', context)
 
 
+@login_required(login_url='login')
 def register_company(request):
     form = ClientForm
     context = {'form': form}
     return render(request, 'client/register_client.html', context)
 
 
+@method_decorator(login_required(login_url='login'), name="dispatch")
 class RegisterClient(CreateView):
     model = Client
     template_name = 'client/register_client.html'
@@ -70,6 +73,7 @@ class RegisterClient(CreateView):
 
 #    fields = '__all__'
 
+@login_required(login_url='login')
 def register_client(request):
     if request.method == "POST":
         form = ClientForm(request.POST or None)
@@ -92,6 +96,7 @@ def register_client(request):
     return render(request, 'client/register_client.html', {'form': form})
 
 
+@method_decorator(login_required(login_url='login'), name="dispatch")
 class ClientList(ListView):
     paginate_by = 15
     model = Client
@@ -114,6 +119,7 @@ class ClientList(ListView):
         return context
 
 
+@method_decorator(login_required(login_url='login'), name="dispatch")
 class ClientDetail(DetailView):
     model = Client
     template_name = 'client/client_detail.html'
@@ -127,16 +133,19 @@ class ClientDetail(DetailView):
         return context
 
 
+@method_decorator(login_required(login_url='login'), name="dispatch")
 class SupplierList(ListView):
     model = Supplier
     template_name = 'main/supplier_list.html'
 
 
+@method_decorator(login_required(login_url='login'), name="dispatch")
 class SupplierDetail(DetailView):
     model = Supplier
     template_name = 'main/supplier_detail.html'
 
 
+@login_required(login_url='login')
 def create_order(request):
     if request.method == "POST":
         form = OrderForm(request.POST or None)
@@ -164,6 +173,7 @@ def create_order(request):
     return render(request, 'order/create.html', {'form': form})
 
 
+@login_required(login_url='login')
 def create_position(request):
     if request.method == "POST":
         form = PermsForm(request.POST or None)
@@ -176,6 +186,7 @@ def create_position(request):
     return render(request, 'staff/position.html', {'form': form})
 
 
+@login_required(login_url='login')
 def staff_register(request):
     if request.method == "POST":
         form = StaffForm(request.POST or None)
@@ -199,6 +210,7 @@ def staff_register(request):
     return render(request, 'registration/register.html', {'form': form})
 
 
+@method_decorator(login_required(login_url='login'), name="dispatch")
 class StaffDetail(DetailView):
     model = Staff
     template_name = 'staff/detail.html'
@@ -218,6 +230,7 @@ class StaffDetail(DetailView):
         return redirect('staff_detail', self.get_object().pk)
 
 
+@method_decorator(login_required(login_url='login'), name="dispatch")
 class StaffList(ListView):
     paginate_by = 15
     model = Staff
@@ -240,6 +253,7 @@ class StaffList(ListView):
         return context
 
 
+@login_required(login_url='login')
 def staff_edit(request, pk):
     staff = Staff.objects.get(staff_id=pk)
     form = StaffUpdateForm(request.POST or None, instance=staff)
@@ -252,6 +266,7 @@ def staff_edit(request, pk):
     return render(request, 'staff/edit.html', {'form': form, 'id': staff.staff_id})
 
 
+@method_decorator(login_required(login_url='login'), name="dispatch")
 class AddItem(CreateView):
     form_class = AddItemForm
     model = Item
@@ -269,6 +284,7 @@ class AddItem(CreateView):
         return reverse('item_detail', kwargs={'pk': self.object.pk})
 
 
+@method_decorator(login_required(login_url='login'), name="dispatch")
 class ItemDetail(DetailView):
     model = Item
     template_name = 'item/detail.html'
@@ -280,6 +296,7 @@ class ItemDetail(DetailView):
         return context
 
 
+@method_decorator(login_required(login_url='login'), name="dispatch")
 class OrderList(ListView):
     paginate_by = 15
     model = Order
@@ -307,6 +324,7 @@ class OrderList(ListView):
     #         context['current'] = order.status.get(current=True, order=order)
 
 
+@method_decorator(login_required(login_url='login'), name="dispatch")
 class OrderDetail(DetailView):
     model = Order
     template_name = 'order/detail.html'
@@ -363,11 +381,13 @@ class OrderDetail(DetailView):
         return reverse('order_detail', kwargs={'pk': self.object.pk})
 
 
+@login_required(login_url='login')
 def order_download(request, pk):
     file = OrderAttachment.objects.get(id=pk)
     return FileResponse(open(MEDIA_ROOT + '/' + file.document.name, 'rb'), as_attachment=True)
 
 
+@method_decorator(login_required(login_url='login'), name="dispatch")
 class ItemList(ListView):
     paginate_by = 15
     model = Item
@@ -389,12 +409,14 @@ class ItemList(ListView):
         return context
 
 
+@login_required(login_url='login')
 def storage_change(request):
     change = StockChange.objects.create()
     change.save()
     return redirect('storage_change', change.pk)
 
 
+@login_required(login_url='login')
 def update_storage_change(request, pk):
     change = StockChange.objects.get(pk=pk)
     if request.method == 'POST':
@@ -410,6 +432,7 @@ def update_storage_change(request, pk):
     return render(request, 'storage/create_storage_change.html', context=context)
 
 
+@login_required(login_url='login')
 def change_detail(request, pk):
     change = StockChange.objects.get(pk=pk)
     context = {}
@@ -430,6 +453,7 @@ def change_detail(request, pk):
     return render(request, 'storage/change_detail.html', context=context)
 
 
+@login_required(login_url='login')
 def change_complete(request, pk):
     change = StockChange.objects.get(pk=pk)
     if not change.completed:
@@ -449,7 +473,7 @@ def change_complete(request, pk):
     return redirect('change_detail', pk)
 
 
-
+@login_required(login_url='login')
 def get_annual_data(request, *args, **kwargs):
     data = {}
 
@@ -467,6 +491,7 @@ def get_annual_data(request, *args, **kwargs):
     #     data['performances'].append(staff.yearly.get(current=True).performance)
 
 
+@login_required(login_url='login')
 def get_month_data(request):
     year = request.GET.get('year')
     performance = MonthlyPerformance.objects.filter(year=year)
@@ -477,6 +502,7 @@ def get_month_data(request):
     return JsonResponse(data)
 
 
+@login_required(login_url='login')
 def annual_performance(request):
     context = {}
     context['selected_year'] = datetime.now().year
@@ -490,6 +516,7 @@ def annual_performance(request):
     return render(request, 'performance/annual_performance.html', context=context)
 
 
+@login_required(login_url='login')
 def monthly_performance(request):
     context = {}
     context['selected_year'], context['selected_month'] = datetime.now().year, datetime.now().month

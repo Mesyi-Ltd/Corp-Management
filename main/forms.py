@@ -248,14 +248,40 @@ class UpdateStorage(forms.ModelForm):
                                    label='相关员工', )
 
     class Meta:
-        model = StorageChange
+        model = StockChange
 
-        fields = ['change_id', 'source_whereabouts', 'invoice', 'staff', 'remark', 'date']
+        fields = ['change_id', 'source_whereabouts', 'invoice', 'type', 'staff', 'remark', 'date']
 
         widgets = {
-            'change_id': forms.TextInput(attrs={'class': 'text-input'}),
-            'source_whereabouts': forms.TextInput(attrs={'class': 'text-input'}),
-            'invoice': forms.TextInput(attrs={'class': 'text-input'}),
-            'remark': forms.Textarea(attrs={'class': 'form-control'}),
-            'date': forms.DateInput(attrs={'class': 'date', 'type': 'date'})
+            'change_id': forms.TextInput(attrs={'class': 'text-input', 'required': 'true'}),
+            'source_whereabouts': forms.TextInput(attrs={'class': 'text-input', 'required': ''}),
+            'invoice': forms.TextInput(attrs={'class': 'text-input', 'required': ''}),
+            'remark': forms.Textarea(attrs={'class': 'form-control', 'required': ''}),
+            'date': forms.DateInput(attrs={'class': 'date', 'type': 'date'}, format='%Y/%m/%d'),
+            'type': forms.Select()
         }
+        labels = {
+            'change_id': '编号',
+            'source_whereabouts': '来源/去向',
+            'invoice': '单据编号'
+        }
+
+    # def __init__(self, *args, **kwargs):
+    #     super(UpdateStorage, self).__init__(*args, **kwargs)
+    #     for field in self.fields.values():
+    #         field.label = ""
+
+
+class ItemChangeForm(forms.ModelForm):
+    item = forms.ModelChoiceField(queryset=Item.objects.all(),
+                                  widget=forms.Select(attrs={'class': 'form-select', }),
+                                  label='物品')
+
+    class Meta:
+        model = ItemChange
+
+        fields = ['item', 'quantity']
+
+        widgets = {'quantity': forms.NumberInput(attrs={'class': 'text-input'})}
+
+        labels = {'quantity': '数量'}

@@ -51,8 +51,8 @@
         <div style="display: flex; justify-content: space-around">
             <form method="post" action="" id="date" style="width: 160px; justify-content: start">
                     {% csrf_token %}
-                    <div class="select" >
-                        <select name="year" aria-label="Default select example" style="width: 100px; flex: 1" id="year" onchange="this.form.submit()">
+                    <div class="select-div" >
+                        <select name="year" aria-label="Default select example" style="width: 100px; flex: 1" id="year" onchange="this.form.submit()" class="select">
                             <option selected disabled>选择年份</option>
                             {% for year in years %}
                                 <option value="{{ year }}"{% if selected_year == year %} selected {% endif %}>{{ year }}</option>
@@ -60,8 +60,8 @@
                         </select>
                     </div>
 
-                    <div class="select" >
-                        <select name="month" aria-label="Default select example" style="width: 40px; flex: 1" id="month"
+                    <div class="select-div" >
+                        <select name="month" aria-label="Default select example" style="width: 40px; flex: 1" id="month" class="select"
                                 onchange="this.form.submit();">
                             <option selected disabled>月份</option>
                             {% for month in month %}

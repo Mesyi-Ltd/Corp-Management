@@ -1,0 +1,50 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block script %}
+
+{% endblock %}
+
+{% block link %}
+    <link href="{% static 'css/card.css' %}" type="text/css" rel="stylesheet">
+     <link href="{% static 'css/input.css' %}" type="text/css" rel="stylesheet">
+{% endblock %}
+{% block content %}
+
+    <div class="container form-group">
+        <div class="col-6 position-absolute top-0 start-50 translate-middle-x" style="background-color: ghostwhite; width: 1200px; border-radius: 10px">
+            <div>
+                <br/>
+<form style="position: relative; left: 100px;" action="" method="post">
+    {% csrf_token %}
+    {% for field in form %}
+        {% if field != form.staff and field != form.date and field != form.remark and field != form.type%}
+                    <div class="group">
+      {{ field }}
+      <span class="highlight"></span>
+      <span class="bar"></span>
+      <label class="text-label">{{ field.label }}</label>
+    </div>
+        {% endif %}
+    {% endfor %}
+<div style="width: 300px">
+    入库/出库 员工: {{ form.staff }}<br/>
+</div>
+<div style="margin-bottom: 50px">
+   变动类型: {{ form.type }}<br/>
+</div>
+
+        <div style="margin-left: 98px">
+            {{ form.date }}
+    </div>
+
+
+<button type="submit">保存更改</button>
+
+</form>
+
+        </div>
+    </div>
+    </div>
+
+{% endblock %}

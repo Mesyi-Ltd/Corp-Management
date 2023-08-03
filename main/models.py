@@ -289,7 +289,7 @@ class CommunicationAttachment(models.Model):
     document = models.FileField(null=False, blank=False, upload_to='file/')
 
 
-class StorageChange(models.Model):
+class StockChange(models.Model):
     change_id = models.CharField(max_length=20, null=True, blank=True)
     source_whereabouts = models.CharField(max_length=20, null=True, blank=True)
     invoice = models.CharField(max_length=20, null=True, blank=True)
@@ -297,24 +297,24 @@ class StorageChange(models.Model):
     remark = models.TextField(null=True, blank=True)
     date = models.DateField(null=True, blank=True)
     completed = models.BooleanField(default=False)
+    type = models.CharField(max_length=10, choices=[
+        ('increase', '入库'),
+        ('decrease', '出库')
+    ])
 
     def get_absolute_url(self):
         return reverse('item_detail', str(self.pk))
 
 
 class ItemChange(models.Model):
-    storage = models.ForeignKey(StorageChange, related_name='item', on_delete=models.CASCADE)
-    item_name = models.CharField(max_length=20)
-    item_id = models.CharField(max_length=20)
+    stock_change = models.ForeignKey(StockChange, related_name='item', on_delete=models.CASCADE, blank=True)
+    item = models.ForeignKey(Item, related_name='change', null=True, on_delete=models.SET_NULL)
+    item_name = models.CharField(max_length=20, default=item.name, blank=True)
     quantity = models.IntegerField()
-    type = models.CharField(max_length=10, choices=[
-        ('increase', '入库'),
-        ('decrease', '出库')
-    ])
 
 
 class StorageChangeAttachment(models.Model):
-    change = models.ForeignKey(StorageChange, on_delete=models.CASCADE)
+    change = models.ForeignKey(StockChange, on_delete=models.CASCADE)
     file = models.FileField(upload_to='file/')
 
 

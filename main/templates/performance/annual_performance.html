@@ -55,8 +55,8 @@
                                             <form method="post" action=""
                       style="" id="year">
                     {% csrf_token %}
-                    <div class="select" style="flex: 1">
-                        <select name="year" aria-label="Default select example" style="width: 100px; flex: 1" id="year"
+                    <div class="select-div" style="flex: 1">
+                        <select name="year" aria-label="Default select example" style="width: 100px; flex: 1" id="year" class="select"
                                 onchange="this.form.submit();">
                             <option selected disabled>选择年份</option>
                             {% for year in years %}

@@ -24,7 +24,7 @@
 	--omrs-color-bg-high-contrast: #ffffff;
 }
 
-select {
+.select{
   /* Reset Select */
   appearance: none;
   outline: 10px red;
@@ -39,11 +39,11 @@ select {
   cursor: pointer;
 }
 /* Remove IE arrow */
-select::-ms-expand {
+.select::-ms-expand {
   display: none;
 }
 /* Custom Select wrapper */
-.select {
+.select-div {
   position: relative;
   display: flex;
   width: 10em;
@@ -52,7 +52,7 @@ select::-ms-expand {
   overflow: hidden;
 }
 /* Arrow */
-.select::after {
+.select-div::after {
   content: '\25BC';
   position: absolute;
   top: 0;
@@ -63,7 +63,7 @@ select::-ms-expand {
   pointer-events: none;
 }
 /* Transition */
-.select:hover::after {
+.select-div:hover::after {
   color: #f39c12;
 }
 
@@ -115,7 +115,7 @@ select::-ms-expand {
 .text-input:focus 		{ outline:none; }
 
 /* LABEL ======================================= */
-.text-label 				 {
+.text-label				 {
   color:#999;
   font-size:18px;
   font-weight:normal;
@@ -129,7 +129,7 @@ select::-ms-expand {
 }
 
 /* active state */
-.text-input:focus ~ label, .text-input:valid ~ label 		{
+.text-input:focus ~ .text-label, .text-input:valid ~ .text-label 		{
   top:-20px;
   font-size:14px;
   color:#5264AE;
@@ -201,8 +201,6 @@ select::-ms-expand {
 }
 
 .date{
-  position: relative;
-  left: 100px;
   background-color: #0080ff;
   padding: 15px;
   font-family: "Roboto Light", monospace, bold;

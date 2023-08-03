@@ -390,16 +390,64 @@ class ItemList(ListView):
 
 
 def storage_change(request):
-    change = StorageChange.objects.create()
+    change = StockChange.objects.create()
     change.save()
     return redirect('storage_change', change.pk)
 
 
 def update_storage_change(request, pk):
-    change = StorageChange.objects.get(pk=pk)
-    form1 = UpdateStorage()
-    context = {'form1': form1}
-    return render(request, 'item/create_storage_change.html', context=context)
+    change = StockChange.objects.get(pk=pk)
+    if request.method == 'POST':
+        print(request.POST)
+        form = UpdateStorage(request.POST, instance=change)
+        if form.is_valid():
+            form.save()
+            return redirect('change_detail', pk)
+    else:
+        form = UpdateStorage(instance=change)
+
+    context = {'form': form}
+    return render(request, 'storage/create_storage_change.html', context=context)
+
+
+def change_detail(request, pk):
+    change = StockChange.objects.get(pk=pk)
+    context = {}
+    if request.method == 'POST':
+        form = ItemChangeForm(request.POST or None)
+        if form.is_valid():
+            item_change = form.save(commit=False)
+            item_change.stock_change = change
+            item_change.item_name = item_change.item.name
+            item_change.save()
+        else:
+            messages.error(request, '表单无效, 请重新填写')
+    else:
+        form = ItemChangeForm()
+    context['change'] = change
+    context['form'] = form
+    context['item_changes'] = ItemChange.objects.filter(stock_change=change).order_by('-pk')
+    return render(request, 'storage/change_detail.html', context=context)
+
+
+def change_complete(request, pk):
+    change = StockChange.objects.get(pk=pk)
+    if not change.completed:
+        item_changes = ItemChange.objects.filter(stock_change=change)
+        for item_change in item_changes:
+            item = item_change.item
+            if change.type == 'increase':
+                item.amount += item_change.quantity
+            else:
+                item.amount -= item_change.quantity
+            item.save()
+        change.completed = True
+        change.save()
+        messages.success(request, '添加成功')
+    else:
+        messages.warning(request, '数目已成功添加进库存，请勿重复操作')
+    return redirect('change_detail', pk)
+
 
 
 def get_annual_data(request, *args, **kwargs):

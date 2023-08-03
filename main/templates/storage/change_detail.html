@@ -1,0 +1,73 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block link %}
+    <link href="{% static 'css/card.css' %}" type="text/css" rel="stylesheet">
+     <link href="{% static 'css/input.css' %}" type="text/css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+
+    <div class="container form-group">
+        <div class="col-6 position-absolute top-0 start-50 translate-middle-x" style="background-color: ghostwhite; width: 1200px; border-radius: 10px">
+
+            <p>{% if change.type == 'increase' %}入库编号: {% else %}出库编号: {% endif %}{{ change.change_id }}</p>
+            <p>{% if change.type == 'increase' %}来源: {% else %}去向: {% endif %}{{ change.source_whereabouts }}</p>
+            <p>单据: {{ change.invoice }}</p>
+            <p>执行人员: {{ change.staff }}</p>
+            <p>类型: {{ change.get_type_display }}</p>
+            <p>执行日期: {{ change.date }}</p>
+
+                {% if not change.completed %}
+    <div class="card">
+        <form method="post" action="">
+
+            {{ form.item.label }}: {{ form.item }}
+            <span style="color: darkslateblue">物品不在列表? <a href="{% url 'item_add' %}">录入物品</a></span>
+            <br/><br/>
+
+            <div class="group">
+                {% csrf_token %}
+              {{ form.quantity }}
+              <span class="highlight"></span>
+              <span class="bar"></span>
+              <label class="text-label">{{ form.quantity.label }}</label>
+            </div>
+
+
+            <button type="submit">添加</button>
+        </form>
+    </div>
+{% endif %}
+
+    <br/>
+
+    <div style="display: flex; flex-wrap: wrap; justify-content: space-evenly">
+
+        {% for change in item_changes %}
+    <div class="card">
+      {% if change.item %}
+          {{ change.item }}
+      {% else %}
+          {{ change.item_name }}
+      {% endif %}
+
+        {{ change.quantity }}
+    </div>
+        {% endfor %}
+
+
+
+
+    </div>
+
+
+            {% if not change.completed %}
+            <div style="text-align: center;"><a href="{% url 'change_complete' change.pk %}"> <button type="button" class="but">完成</button></a></div>
+        {% endif %}
+
+
+        </div>
+                        </div>
+
+{% endblock %}

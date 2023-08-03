@@ -13,6 +13,7 @@ from django.views.generic import ListView, DetailView, CreateView
 from .models import Client
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
+from .decorators import allowed_users
 
 
 def rand_id(digit):
@@ -22,6 +23,7 @@ def rand_id(digit):
     return random_id
 
 
+@allowed_users(['order_list'])
 def home(request):
     return render(request, 'main/home.html')
 

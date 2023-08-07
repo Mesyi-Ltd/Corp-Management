@@ -3,7 +3,7 @@
 {% block table %}
 
     <table style="background: gainsboro">
-    <tr><th>编号</th><th>名称</th></tr>
+    <tr><th>编号</th><th>名称</th><th>库存</th></tr>
 </table>
     {% for item in object_list %}
 
@@ -13,6 +13,7 @@
                 <ul class="list-group list-group-horizontal" style="margin: 0">
                     <li class="list-group-item">{{ item.item_id }}</li>
                     <li class="list-group-item">{{ item.name }}</li>
+                    <li class="list-group-item">{{ item.amount }}</li>
                 </ul>
             </a>
     {% endfor %}

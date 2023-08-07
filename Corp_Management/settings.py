@@ -124,13 +124,13 @@ TIME_ZONE = 'Asia/Chongqing'
 
 USE_I18N = True
 
-USE_TZ = True
+USE_TZ = False
 
 USE_L10N = False
 
 DATE_FORMAT = 'Y-m-d'
 
-DATETIME_FORMAT = 'T-m-d H:i:s'
+DATETIME_FORMAT = 'Y-m-d H:i:s'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/

@@ -40,9 +40,9 @@
         订金: {{ order.deposit }}<br/>
 
         尾款: {{ order.remaining }}<br />
-
+    {% if order.description %}
         备注: {{ order.description }}
-
+    {% endif %}
 
 
 {% if not order.completed %}

@@ -78,7 +78,7 @@ class RegisterClient(CreateView):
 #    fields = '__all__'
 
 @login_required(login_url='login')
-@method_decorator([allowed_users(["client_create"])], name="dispatch")
+@allowed_users(["client_create"])
 def register_client(request):
     if request.method == "POST":
         form = ClientForm(request.POST or None)
@@ -155,7 +155,7 @@ class SupplierDetail(DetailView):
 
 
 @login_required(login_url='login')
-@allowed_users("order_create")
+@allowed_users(["order_create"])
 def create_order(request):
     if request.method == "POST":
         form = OrderForm(request.POST or None)
@@ -198,7 +198,7 @@ def create_position(request):
 
 
 @login_required(login_url='login')
-@allowed_users("staff_create")
+@allowed_users(["staff_create"])
 def staff_register(request):
     if request.method == "POST":
         form = StaffForm(request.POST or None)

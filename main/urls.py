@@ -26,6 +26,7 @@ urlpatterns = [
     path('storage/create', views.storage_change, name='create_change'),
     path('storage/update/<str:pk>', views.update_storage_change, name='storage_change'),
     path('storage/complete/<str:pk>', views.change_complete, name='change_complete'),
+    path('storage/change/item/delete/<str:pk>', views.delete_item_change, name='delete_item_change'),
     path('storage/<str:pk>', views.change_detail, name='change_detail'),
     path('item/<str:pk>', views.ItemDetail.as_view(), name='item_detail'),
     path('data/annual', views.get_annual_data, name='annual_data'),

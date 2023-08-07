@@ -33,13 +33,15 @@
 <div style="margin-bottom: 50px">
    变动类型: {{ form.type }}<br/>
 </div>
-
-        <div style="margin-left: 98px">
+    <p>日期: </p>
+        <div style="margin-left: 150px;">
             {{ form.date }}
     </div>
 
+    <div style="width: 600px">备注:{{ form.remark }}</div>
 
-<button type="submit">保存更改</button>
+
+<button type="submit" class="btn btn-outline-success" style="margin: 30px 500px">保存更改</button>
 
 </form>
 

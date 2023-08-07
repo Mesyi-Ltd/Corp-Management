@@ -62,7 +62,7 @@ class Staff(models.Model):
     name = models.CharField(max_length=200)
     phone = models.CharField(max_length=20, validators=[RegexValidator('^[0-9 +]*$', message="手机号错误")])
     email = models.EmailField(null=True, blank=True)
-    staff_id = models.CharField(unique=True, max_length=50, primary_key=True, error_messages={'required': '请输入工号'})
+    staff_id = models.CharField(max_length=50, error_messages={'required': '请输入工号'})
     national_id = models.CharField(max_length=18, validators=[
         MinLengthValidator(18, message="身份证格式错误"),
         RegexValidator('^[0-9a-zX]*$', message="身份证格式错误")

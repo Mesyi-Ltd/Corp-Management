@@ -23,7 +23,7 @@ def rand_id(digit):
     return random_id
 
 
-@allowed_users(['order_list'])
+@login_required(login_url='login')
 def home(request):
     return render(request, 'main/home.html')
 
@@ -98,7 +98,7 @@ def register_client(request):
     return render(request, 'client/register_client.html', {'form': form})
 
 
-@method_decorator(login_required(login_url='login'), name="dispatch")
+@method_decorator([login_required(login_url='login'), allowed_users(["client_list"])], name="dispatch")
 class ClientList(ListView):
     paginate_by = 15
     model = Client
@@ -422,7 +422,6 @@ def storage_change(request):
 def update_storage_change(request, pk):
     change = StockChange.objects.get(pk=pk)
     if request.method == 'POST':
-        print(request.POST)
         form = UpdateStorage(request.POST, instance=change)
         if form.is_valid():
             form.save()
@@ -536,3 +535,13 @@ def monthly_performance(request):
             context['performances'] = MonthlyPerformance.objects.filter(year=selected_year, month=selected_month)
             context['selected_month'] = selected_month
     return render(request, 'performance/monthly_performance.html', context=context)
+
+
+@login_required(login_url='login')
+def delete_item_change(request, pk):
+    change = ItemChange.objects.get(pk=pk)
+    stock_pk = change.stock_change.pk
+    change.delete()
+    messages.success(request, '删除成功')
+    return redirect('change_detail', stock_pk)
+

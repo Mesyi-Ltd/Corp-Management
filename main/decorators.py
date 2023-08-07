@@ -1,5 +1,6 @@
 from django.http import HttpResponse
 from django.shortcuts import redirect
+from django.contrib import messages
 
 
 def allowed_users(allowed_roles=None):
@@ -21,8 +22,8 @@ def allowed_users(allowed_roles=None):
                     return view_func(request, *args, **kwargs)
 
                 else:
-
-                    return redirect('login')
+                    messages.error(request, '权限不足')
+                    return redirect('home')
             return HttpResponse("连接出错， 请联系网站管理员")
         return wrapper_func
     return decorator

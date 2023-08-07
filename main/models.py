@@ -45,6 +45,12 @@ class Perm(models.Model):
     staff_delete = models.BooleanField(default=False)
     staff_edit = models.BooleanField(default=False)
     staff_performance = models.BooleanField(default=False)
+    item_list = models.BooleanField(default=False)
+    item_create = models.BooleanField(default=False)
+    item_detail = models.BooleanField(default=False)
+    item_delete = models.BooleanField(default=False)
+    stock_change_create = models.BooleanField(default=False)
+    stock_change_list = models.BooleanField(default=False)
     self_order = models.BooleanField(default=True)
 
 

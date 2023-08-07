@@ -140,17 +140,19 @@ class PermsForm(forms.ModelForm):
             'supplier_create': '创建供应商',
             'supplier_list': '供应商列表',
             'supplier_edit': '编辑供应商',
-            'company_list': '公司列表',
-            'company_delete': '删除公司',
-            'company_detail': '公司信息',
-            'company_create': '创建公司',
-            'company_edit': '编辑公司',
+            'company': '公司权限',
             'staff_edit': '编辑员工',
             'staff_create': '创建员工',
             'staff_detail': '员工信息',
             'staff_delete': '删除员工',
             'staff_list': '员工列表',
             'staff_performance': '员工业绩',
+            'item_detail': '产品详情',
+            'item_list': '产品列表',
+            'item_create': '创建产品',
+            'item_delete': '删除产品',
+            'stock_change_list': '入库/出库列表',
+            'stock_change_create': '登记入库/出库'
         }
 
     def __init__(self, *args, **kwargs):

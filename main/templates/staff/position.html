@@ -6,7 +6,7 @@
         text-align: center;
         background-color: rgba(194,159,250,0.8);
         width: 500px;
-        height: 1370px;
+        height: 1500px;
     }
     </style>
 
@@ -44,22 +44,34 @@
                 }
             }
         </script>
+<br/>
+    <div style="text-align: center;"><strong>选择权限</strong></div>
 
-
-<div class="position-relative" style="margin-top: 20px">
+<div class="position-relative" style="">
 <ul class="list-group position-absolute top-0 start-50 translate-middle-x" >
 
+    {% if request.user.is_superuser %}
+        <li class="list-group-item" style="width: 300px; color: orangered">
+        {{ form.company.label_tag }}
+        {{ form.company }}
+        </li>
+
+    {% endif %}
+
     {% for field in form %}
+        {% if field != form.company%}
 
     <li class="list-group-item" style="width: 300px">
         {{ field.label_tag }}
         {{ field }}
     </li>
+        {% endif %}
     {% endfor %}
+
 
 </ul>
 <br/>
-    <button type="submit" style="position: relative; top: 1150px" class="btn btn-primary">提交</button>
+    <button type="submit" style="position: relative; top: 1250px" class="btn btn-primary">提交</button>
 <br/><br/>
 
 </div>

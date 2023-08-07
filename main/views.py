@@ -49,6 +49,7 @@ def login_page(request):
 
 
 @login_required(login_url='login')
+@allowed_users(["company_create"])
 def register_company(request):
     form = ClientForm
     context = {'form': form}
@@ -56,6 +57,7 @@ def register_company(request):
 
 
 @method_decorator(login_required(login_url='login'), name="dispatch")
+@method_decorator(allowed_users(["client_create"]), name="dispatch")
 class RegisterClient(CreateView):
     model = Client
     template_name = 'client/register_client.html'
@@ -153,6 +155,7 @@ class SupplierDetail(DetailView):
 
 
 @login_required(login_url='login')
+@allowed_users("order_create")
 def create_order(request):
     if request.method == "POST":
         form = OrderForm(request.POST or None)
@@ -181,6 +184,7 @@ def create_order(request):
 
 
 @login_required(login_url='login')
+@allowed_users(["position_all"])
 def create_position(request):
     if request.method == "POST":
         form = PermsForm(request.POST or None)
@@ -194,6 +198,7 @@ def create_position(request):
 
 
 @login_required(login_url='login')
+@allowed_users("staff_create")
 def staff_register(request):
     if request.method == "POST":
         form = StaffForm(request.POST or None)
@@ -277,6 +282,7 @@ def staff_edit(request, pk):
 
 
 @method_decorator(login_required(login_url='login'), name="dispatch")
+@method_decorator(allowed_users(["item_create"]), name="dispatch")
 class AddItem(CreateView):
     form_class = AddItemForm
     model = Item
@@ -295,6 +301,7 @@ class AddItem(CreateView):
 
 
 @method_decorator(login_required(login_url='login'), name="dispatch")
+@method_decorator(allowed_users(["item_detail"]), name="dispatch")
 class ItemDetail(DetailView):
     model = Item
     template_name = 'item/detail.html'
@@ -401,6 +408,7 @@ def order_download(request, pk):
 
 
 @method_decorator(login_required(login_url='login'), name="dispatch")
+@method_decorator([allowed_users(["item_list"])], name="dispatch")
 class ItemList(ListView):
     paginate_by = 15
     model = Item
@@ -423,6 +431,7 @@ class ItemList(ListView):
 
 
 @login_required(login_url='login')
+@allowed_users(["stock_change_create"])
 def storage_change(request):
     change = StockChange.objects.create()
     change.save()
@@ -430,6 +439,7 @@ def storage_change(request):
 
 
 @login_required(login_url='login')
+@allowed_users(["stock_change_create"])
 def update_storage_change(request, pk):
     change = StockChange.objects.get(pk=pk)
     if request.method == 'POST':
@@ -445,6 +455,7 @@ def update_storage_change(request, pk):
 
 
 @login_required(login_url='login')
+@allowed_users(["stock_change_create"])
 def change_detail(request, pk):
     change = StockChange.objects.get(pk=pk)
     context = {}
@@ -466,6 +477,7 @@ def change_detail(request, pk):
 
 
 @login_required(login_url='login')
+@allowed_users(["stock_change_create"])
 def change_complete(request, pk):
     change = StockChange.objects.get(pk=pk)
     if not change.completed:
@@ -483,35 +495,6 @@ def change_complete(request, pk):
     else:
         messages.warning(request, '数目已成功添加进库存，请勿重复操作')
     return redirect('change_detail', pk)
-
-
-@login_required(login_url='login')
-def get_annual_data(request, *args, **kwargs):
-    data = {}
-
-    for year in AnnualPerformance.objects.values_list('year', flat=True).distinct():
-        selected = AnnualPerformance.objects.filter(year=year)
-        data[year] = {'name': [], 'performance': []}
-        for i in selected:
-            data[year]['name'].append(i.owner.name)
-            data[year]['performance'].append(i.performance)
-    return JsonResponse(data)
-
-    # data = {'names': [], 'performances': []}
-    # for staff in Staff.objects.all():
-    #     data['names'].append(staff.name)
-    #     data['performances'].append(staff.yearly.get(current=True).performance)
-
-
-@login_required(login_url='login')
-def get_month_data(request):
-    year = request.GET.get('year')
-    performance = MonthlyPerformance.objects.filter(year=year)
-    month = list(performance.values('month').distinct())
-    data = {
-        "month": month
-    }
-    return JsonResponse(data)
 
 
 @login_required(login_url='login')
@@ -551,6 +534,7 @@ def monthly_performance(request):
 
 
 @login_required(login_url='login')
+@allowed_users(["stock_change_create"])
 def delete_item_change(request, pk):
     change = ItemChange.objects.get(pk=pk)
     stock_pk = change.stock_change.pk

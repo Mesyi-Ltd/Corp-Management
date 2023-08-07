@@ -29,6 +29,4 @@ urlpatterns = [
     path('storage/change/item/delete/<str:pk>', views.delete_item_change, name='delete_item_change'),
     path('storage/<str:pk>', views.change_detail, name='change_detail'),
     path('item/<str:pk>', views.ItemDetail.as_view(), name='item_detail'),
-    path('data/annual', views.get_annual_data, name='annual_data'),
-    path('data/month', views.get_month_data, name='month_data')
 ]

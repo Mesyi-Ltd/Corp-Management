@@ -76,6 +76,7 @@ class RegisterClient(CreateView):
 #    fields = '__all__'
 
 @login_required(login_url='login')
+@method_decorator([allowed_users(["client_create"])], name="dispatch")
 def register_client(request):
     if request.method == "POST":
         form = ClientForm(request.POST or None)
@@ -98,7 +99,8 @@ def register_client(request):
     return render(request, 'client/register_client.html', {'form': form})
 
 
-@method_decorator([login_required(login_url='login'), allowed_users(["client_list"])], name="dispatch")
+@method_decorator([login_required(login_url='login')], name="dispatch")
+@method_decorator([allowed_users(["client_list"])], name="dispatch")
 class ClientList(ListView):
     paginate_by = 15
     model = Client
@@ -122,6 +124,7 @@ class ClientList(ListView):
 
 
 @method_decorator(login_required(login_url='login'), name="dispatch")
+@method_decorator([allowed_users(["client_detail"])], name="dispatch")
 class ClientDetail(DetailView):
     model = Client
     template_name = 'client/client_detail.html'
@@ -136,12 +139,14 @@ class ClientDetail(DetailView):
 
 
 @method_decorator(login_required(login_url='login'), name="dispatch")
+@method_decorator([allowed_users(["supplier_list"])], name="dispatch")
 class SupplierList(ListView):
     model = Supplier
     template_name = 'main/supplier_list.html'
 
 
 @method_decorator(login_required(login_url='login'), name="dispatch")
+@method_decorator([allowed_users(["supplier_detail"])], name="dispatch")
 class SupplierDetail(DetailView):
     model = Supplier
     template_name = 'main/supplier_detail.html'
@@ -213,6 +218,7 @@ def staff_register(request):
 
 
 @method_decorator(login_required(login_url='login'), name="dispatch")
+@method_decorator([allowed_users(["staff_detail"])], name="dispatch")
 class StaffDetail(DetailView):
     model = Staff
     template_name = 'staff/detail.html'
@@ -233,6 +239,7 @@ class StaffDetail(DetailView):
 
 
 @method_decorator(login_required(login_url='login'), name="dispatch")
+@method_decorator([allowed_users(["staff_list"])], name="dispatch")
 class StaffList(ListView):
     paginate_by = 15
     model = Staff
@@ -256,6 +263,7 @@ class StaffList(ListView):
 
 
 @login_required(login_url='login')
+@method_decorator([allowed_users(["staff_edit"])], name="dispatch")
 def staff_edit(request, pk):
     staff = Staff.objects.get(staff_id=pk)
     form = StaffUpdateForm(request.POST or None, instance=staff)
@@ -299,6 +307,7 @@ class ItemDetail(DetailView):
 
 
 @method_decorator(login_required(login_url='login'), name="dispatch")
+@method_decorator([allowed_users(["order_list"])], name="dispatch")
 class OrderList(ListView):
     paginate_by = 15
     model = Order
@@ -327,6 +336,7 @@ class OrderList(ListView):
 
 
 @method_decorator(login_required(login_url='login'), name="dispatch")
+@method_decorator([allowed_users(["order_detail"])], name="dispatch")
 class OrderDetail(DetailView):
     model = Order
     template_name = 'order/detail.html'
@@ -384,6 +394,7 @@ class OrderDetail(DetailView):
 
 
 @login_required(login_url='login')
+@method_decorator([allowed_users(["order_detail"])], name="dispatch")
 def order_download(request, pk):
     file = OrderAttachment.objects.get(id=pk)
     return FileResponse(open(MEDIA_ROOT + '/' + file.document.name, 'rb'), as_attachment=True)
@@ -504,6 +515,7 @@ def get_month_data(request):
 
 
 @login_required(login_url='login')
+@allowed_users(["staff_performance"])
 def annual_performance(request):
     context = {}
     context['selected_year'] = datetime.now().year
@@ -518,6 +530,7 @@ def annual_performance(request):
 
 
 @login_required(login_url='login')
+@allowed_users(["staff_performance"])
 def monthly_performance(request):
     context = {}
     context['selected_year'], context['selected_month'] = datetime.now().year, datetime.now().month

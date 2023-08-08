@@ -287,3 +287,8 @@ class ItemChangeForm(forms.ModelForm):
         widgets = {'quantity': forms.NumberInput(attrs={'class': 'text-input'})}
 
         labels = {'quantity': '数量'}
+
+
+class SupplierForm:
+    class Meta:
+        model = Supplier

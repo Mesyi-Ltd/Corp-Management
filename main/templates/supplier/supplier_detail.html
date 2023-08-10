@@ -1,0 +1,12 @@
+{% extends 'main/base.html' %}
+{% block content %}
+<h1>
+{{ supplier.name }}
+{{ supplier.invoice }}
+    <a href="{% url 'supplier_download' supplier.pk %}">{{ supplier.price }} </a>
+{{ supplier.get_commodity_display }}
+{{ supplier.scale }}
+{{ supplier.established_date }}
+{{ supplier.remark }}
+</h1>
+{% endblock %}

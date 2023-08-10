@@ -167,7 +167,7 @@ class ClientCommunication(models.Model):
 
 
 class Supplier(models.Model):
-    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, null=True, blank=True)
     name = models.CharField(max_length=200, null=True)
     commodity = models.CharField(max_length=20, null=True, choices=[
         ('brush_hair', '刷毛'),
@@ -180,6 +180,9 @@ class Supplier(models.Model):
     price = models.FileField(null=True)
     invoice = models.TextField(max_length=200)
     remark = models.TextField(max_length=200)
+
+    def get_absolute_url(self):
+        return reverse('supplier_detail', kwargs={'pk': self.pk})
 
 
 class SupplierContact(models.Model):

@@ -144,14 +144,14 @@ class ClientDetail(DetailView):
 @method_decorator([allowed_users(["supplier_list"])], name="dispatch")
 class SupplierList(ListView):
     model = Supplier
-    template_name = 'main/supplier_list.html'
+    template_name = 'supplier/supplier_list.html'
 
 
 @method_decorator(login_required(login_url='login'), name="dispatch")
 @method_decorator([allowed_users(["supplier_detail"])], name="dispatch")
 class SupplierDetail(DetailView):
     model = Supplier
-    template_name = 'main/supplier_detail.html'
+    template_name = 'supplier/supplier_detail.html'
 
 
 @login_required(login_url='login')
@@ -541,4 +541,19 @@ def delete_item_change(request, pk):
     change.delete()
     messages.success(request, '删除成功')
     return redirect('change_detail', stock_pk)
+
+
+@login_required(login_url='login')
+@allowed_users(["supplier_create"])
+class CreateSupplier(CreateView):
+    model = Supplier
+    form_class = SupplierForm
+    template_name = "supplier/supplier_create.html"
+
+
+@login_required(login_url='login')
+@allowed_users(["supplier_detail"])
+def price_download(request, pk):
+    filename = Supplier.objects.get(id=pk).price.name.split('/')[-1]
+    return FileResponse(open(MEDIA_ROOT + '/' + filename, 'rb'), as_attachment=True)
 

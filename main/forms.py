@@ -289,6 +289,9 @@ class ItemChangeForm(forms.ModelForm):
         labels = {'quantity': '数量'}
 
 
-class SupplierForm:
+class SupplierForm(forms.ModelForm):
     class Meta:
         model = Supplier
+        exclude = ('company', )
+
+        widgets = {'established_date': forms.DateInput(attrs={'type': 'date'})}

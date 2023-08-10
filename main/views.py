@@ -543,8 +543,8 @@ def delete_item_change(request, pk):
     return redirect('change_detail', stock_pk)
 
 
-@login_required(login_url='login')
-@allowed_users(["supplier_create"])
+@method_decorator(login_required(login_url='login'),name='dispatch')
+@method_decorator([allowed_users(["supplier_create"])], name="dispatch")
 class CreateSupplier(CreateView):
     model = Supplier
     form_class = SupplierForm
@@ -556,4 +556,6 @@ class CreateSupplier(CreateView):
 def price_download(request, pk):
     filename = Supplier.objects.get(id=pk).price.name.split('/')[-1]
     return FileResponse(open(MEDIA_ROOT + '/' + filename, 'rb'), as_attachment=True)
+
+
 

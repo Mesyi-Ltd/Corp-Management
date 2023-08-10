@@ -3,7 +3,7 @@
 
     <style>
     td, th{
-        border: 2px slateblue;
+        border: 1px solid slateblue;
         padding: 0 20px;
     }
     </style>
@@ -70,7 +70,7 @@
         <div>
             历史状态:
         <div>
-        <div style="margin-left: 130px">
+        <div style="margin-left: 150px">
         <table style="text-align: center">
         <tr><th>更新后状态</th><th>更新时间</th><th>执行人</th></tr>
         {% if type == 'normal' %}
@@ -88,6 +88,15 @@
         </div>
     {% endif %}
 
+    <br/>
+    <hr />
+    <br/>
+
+<table style="text-align: center; margin-left: 200px">
+    <tr><th>采购管理</th><th>生产任务</th><th>质检任务</th></tr>
+<tr><td>暂无</td><td>暂无</td><td>暂无</td></tr>
+
+</table>
 {% if attachments %}
     <br/>
     附件: <br/>

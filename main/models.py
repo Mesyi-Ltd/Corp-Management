@@ -336,8 +336,8 @@ class ItemImage(models.Model):
 
 class PurchaseItem(models.Model):
     item = models.ForeignKey(Item, on_delete=models.RESTRICT)
-    purchase = models.ForeignKey(Purchase, on_delete=models.RESTRICT)
-    supplier = models.ForeignKey(Supplier, on_delete=models.RESTRICT)
+    purchase = models.ForeignKey(Purchase, on_delete=models.RESTRICT, related_name="purchases")
+    supplier = models.ForeignKey(Supplier, on_delete=models.RESTRICT, related_name="purchases")
     invoice = models.CharField(max_length=20)
     quantity = models.FloatField()
     unit = models.CharField(max_length=10)
@@ -352,8 +352,8 @@ class Production(models.Model):
     date_created = models.DateField()
     date_completed = models.DateField()
     order = models.ForeignKey(Order, on_delete=models.RESTRICT)
-    staff1 = models.ForeignKey(Staff, on_delete=models.RESTRICT, null=True, blank=True)
-    staff2 = models.ForeignKey(Staff, on_delete=models.RESTRICT, null=True, blank=True)
+    staff1 = models.ForeignKey(Staff, on_delete=models.RESTRICT, null=True, blank=True, related_name="production")
+    staff2 = models.ForeignKey(Staff, on_delete=models.RESTRICT, null=True, blank=True, related_name="production")
     item = models.ForeignKey(Item, on_delete=models.RESTRICT)
     amount = models.IntegerField()
     unit = models.CharField(max_length=10)

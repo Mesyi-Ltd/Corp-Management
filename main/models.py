@@ -198,16 +198,24 @@ class Item(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE, blank=True, null=True)
     item_id = models.CharField(max_length=20)
     name = models.CharField(max_length=20)
-    type = models.CharField(max_length=10, choices=[
+    type = models.CharField(max_length=10, null=True, blank=True, choices=[
         ('product', '产品'),
         ('material', '原料'),
     ])
     amount = models.IntegerField(default=0, validators=[MinValueValidator(0)])
+    unit = models.CharField(max_length=5)
     spec = models.CharField(max_length=200)
-    product_type = models.CharField(max_length=6, choices=[
+    product_type = models.CharField(max_length=6, null=True, blank=True, choices=[
         ('single', '单品'),
         ('bound', '套装')
     ])
+    hair = models.CharField(max_length=30, null=True, blank=True)
+    pipe = models.CharField(max_length=30, null=True, blank=True)
+    handle = models.CharField(max_length=30, null=True, blank=True)
+    min_order = models.IntegerField(null=True, blank=True)
+    package = models.BooleanField(default=False)
+    reference = models.URLField(null=True, blank=True)
+    remark = models.CharField(max_length=200, null=True, blank=True)
 
     def __str__(self):
         return self.name

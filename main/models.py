@@ -204,6 +204,10 @@ class Item(models.Model):
     ])
     amount = models.IntegerField(default=0, validators=[MinValueValidator(0)])
     spec = models.CharField(max_length=200)
+    product_type = models.CharField(max_length=6, choices=[
+        ('single', '单品'),
+        ('bound', '套装')
+    ])
 
     def __str__(self):
         return self.name
@@ -237,7 +241,7 @@ class Order(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     handed = models.DateField(null=True, blank=True)
     completed = models.BooleanField(null=True, blank=True, default=False)
-    item = models.ForeignKey(Item, on_delete=models.SET_NULL, null=True)
+    item = models.ForeignKey(Item, on_delete=models.SET_NULL, null=True, related_name="order")
 
     def __str__(self):
         return self.order_num
@@ -352,13 +356,24 @@ class Production(models.Model):
     date_created = models.DateField()
     date_completed = models.DateField()
     order = models.ForeignKey(Order, on_delete=models.RESTRICT)
-    staff1 = models.ForeignKey(Staff, on_delete=models.RESTRICT, null=True, blank=True, related_name="production")
-    staff2 = models.ForeignKey(Staff, on_delete=models.RESTRICT, null=True, blank=True, related_name="production")
+    staff = models.ManyToManyField(Staff, related_name="production")
     item = models.ForeignKey(Item, on_delete=models.RESTRICT)
     amount = models.IntegerField()
     unit = models.CharField(max_length=10)
-    file = models.FileField(null=False, blank=False, upload_to='file/')
+    file = models.FileField(null=True, blank=True, upload_to='file/')
     remark = models.CharField(max_length=200, null=True, blank=True)
+
+
+class QualityCheck(models.Model):
+    task_id = models.CharField(max_length=20)
+    staff = models.ForeignKey(Staff, on_delete=models.RESTRICT, related_name="checks")
+    order = models.ForeignKey(Order, on_delete=models.RESTRICT, related_name="checks")
+    date = models.DateField()
+    item = models.ForeignKey(Item, on_delete=models.RESTRICT, related_name="checks")
+    quantity = models.FloatField()
+    passed = models.FloatField()
+    rate = models.FloatField(validators=[MaxValueValidator(100.0), MinValueValidator(0.0)])
+    remark = models.CharField(max_length=200)
 
 
 

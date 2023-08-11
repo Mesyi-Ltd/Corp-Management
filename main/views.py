@@ -568,13 +568,30 @@ def add_purchase(request, pk):
 def edit_purchase(request, pk):
     purchase = Order.objects.get(pk=pk).purchase
     if request.method == "POST":
-        form = PurchaseForm(request.POST, instance=purchase)
+        form = PurchaseForm(request.POST or None, instance=purchase)
         if form.is_valid():
             form.save()
+            return redirect('purchase_detail', pk=pk)
         else:
             messages.error(request, "表单无效")
     else:
         form = PurchaseForm(instance=purchase)
-    return render(request, 'purchase/add.html', {'form': form})
+    return render(request, 'purchase/edit.html', {'form': form})
+
+
+def purchase_detail(request, pk):
+    purchase = Order.objects.get(pk=pk).purchase
+    purchase_list = PurchaseItem.objects.filter(purchase=purchase)
+    if request.method == 'POST':
+        form = PurchaseItemForm(request.POST or None)
+        if form.is_valid():
+            item = form.save(commit=False)
+            item.purchase = purchase
+            item.save()
+        else:
+            messages.error(request, '表单无效')
+    else:
+        form = PurchaseItemForm()
+    return render(request, 'purchase/detail.html', {'form': form, 'purchase': purchase, 'purchase_list': purchase_list})
 
 

@@ -181,6 +181,9 @@ class Supplier(models.Model):
     invoice = models.TextField(max_length=200)
     remark = models.TextField(max_length=200)
 
+    def __str__(self):
+        return self.name
+
     def get_absolute_url(self):
         return reverse('supplier_detail', kwargs={'pk': self.pk})
 
@@ -351,14 +354,14 @@ class ItemImage(models.Model):
 
 class PurchaseItem(models.Model):
     item = models.ForeignKey(Item, on_delete=models.RESTRICT)
-    purchase = models.ForeignKey(Purchase, on_delete=models.RESTRICT, related_name="purchases")
+    purchase = models.ForeignKey(Purchase, on_delete=models.RESTRICT, related_name="purchases", blank=True, null=True)
     supplier = models.ForeignKey(Supplier, on_delete=models.RESTRICT, related_name="purchases")
     invoice = models.CharField(max_length=20)
     quantity = models.FloatField()
     unit = models.CharField(max_length=10)
     used = models.FloatField()
     date = models.DateField()
-    contract = models.FileField(upload_to='file/')
+    contract = models.FileField(upload_to='file/', )
     remark = models.CharField(max_length=200, blank=True, null=True)
 
 

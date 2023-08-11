@@ -307,3 +307,5 @@ class PurchaseItemForm(forms.ModelForm):
     class Meta:
         model = PurchaseItem
         exclude = ('purchase', )
+
+        widgets = {'date': forms.DateInput(attrs={'type': 'date'},)}

@@ -583,7 +583,7 @@ def purchase_detail(request, pk):
     purchase = Order.objects.get(pk=pk).purchase
     purchase_list = PurchaseItem.objects.filter(purchase=purchase)
     if request.method == 'POST':
-        form = PurchaseItemForm(request.POST or None)
+        form = PurchaseItemForm(request.POST or None, request.FILES)
         if form.is_valid():
             item = form.save(commit=False)
             item.purchase = purchase

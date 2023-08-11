@@ -325,9 +325,29 @@ class StorageChangeAttachment(models.Model):
 
 class Purchase(models.Model):
     purchase_id = models.CharField(max_length=20)
+    staff = models.ForeignKey(Staff, on_delete=models.RESTRICT)
     related_order = models.OneToOneField(Order, on_delete=models.CASCADE)
 
 
 class ItemImage(models.Model):
     item = models.ForeignKey(Item, on_delete=models.CASCADE, related_name='images')
     image = models.ImageField(upload_to='image/', blank=True, null=True)
+
+
+class PurchaseItem(models.Model):
+    item = models.ForeignKey(Item, on_delete=models.RESTRICT)
+    purchase = models.ForeignKey(Purchase, on_delete=models.RESTRICT)
+    supplier = models.ForeignKey(Supplier, on_delete=models.RESTRICT)
+    invoice = models.CharField(max_length=20)
+    quantity = models.FloatField()
+    unit = models.CharField(max_length=10)
+    used = models.FloatField()
+    date = models.DateField()
+    contract = models.FileField()
+    remark = models.CharField(max_length=200, blank=True, null=True)
+
+
+class Production(models.Model):
+    production_id = models.CharField(max_length=20)
+
+

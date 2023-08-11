@@ -203,7 +203,7 @@ class Item(models.Model):
         ('material', '原料'),
     ])
     amount = models.IntegerField(default=0, validators=[MinValueValidator(0)])
-    unit = models.CharField(max_length=5)
+    # unit = models.CharField(max_length=5)
     spec = models.CharField(max_length=200)
     product_type = models.CharField(max_length=6, null=True, blank=True, choices=[
         ('single', '单品'),
@@ -336,9 +336,9 @@ class StorageChangeAttachment(models.Model):
 
 
 class Purchase(models.Model):
-    purchase_id = models.CharField(max_length=20)
-    staff = models.ForeignKey(Staff, on_delete=models.RESTRICT)
-    related_order = models.OneToOneField(Order, on_delete=models.CASCADE)
+    purchase_id = models.CharField(max_length=20, null=True)
+    staff = models.ForeignKey(Staff, on_delete=models.RESTRICT, null=True)
+    related_order = models.OneToOneField(Order, on_delete=models.CASCADE, related_name='purchase')
 
     def __str__(self):
         return self.purchase_id

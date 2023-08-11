@@ -94,7 +94,9 @@
 
 <table style="text-align: center; margin-left: 200px">
     <tr><th>采购管理</th><th>生产任务</th><th>质检任务</th></tr>
-<tr><td>暂无</td><td>暂无</td><td>暂无</td></tr>
+    <tr><td>{% if order.purchase %}{% else %}<a href="{% url 'purchase_add' order.pk %}"> 添加</a>{% endif %}</td>
+        <td>暂无</td>
+        <td>暂无</td></tr>
 
 </table>
 {% if attachments %}

@@ -560,8 +560,21 @@ def price_download(request, pk):
 
 def add_purchase(request, pk):
     order = Order.objects.get(pk=pk)
-    purchase = Purchase.objects.create(order=order)
+    purchase = Purchase.objects.create(related_order=order)
     purchase.save()
-    return
+    return redirect('purchase_edit', pk=pk)
+
+
+def edit_purchase(request, pk):
+    purchase = Order.objects.get(pk=pk).purchase
+    if request.method == "POST":
+        form = PurchaseForm(request.POST, instance=purchase)
+        if form.is_valid():
+            form.save()
+        else:
+            messages.error(request, "表单无效")
+    else:
+        form = PurchaseForm(instance=purchase)
+    return render(request, 'purchase/add.html', {'form': form})
 
 

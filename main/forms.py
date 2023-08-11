@@ -295,3 +295,15 @@ class SupplierForm(forms.ModelForm):
         exclude = ('company', )
 
         widgets = {'established_date': forms.DateInput(attrs={'type': 'date'})}
+
+
+class PurchaseForm(forms.ModelForm):
+    class Meta:
+        model = Purchase
+        exclude = ('related_order', )
+
+
+class PurchaseItemForm(forms.ModelForm):
+    class Meta:
+        model = PurchaseItem
+        exclude = ('purchase', )

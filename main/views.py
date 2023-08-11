@@ -388,8 +388,8 @@ class OrderDetail(DetailView):
                 order.save()
                 order.client.order_in_progress = Order.objects.filter(client=order.client, completed=False).count()
                 order.client.save()
-                yearly, monthly = AnnualPerformance.objects.get(owner=order.creator, current=True), \
-                    MonthlyPerformance.objects.get(owner=order.creator, current=True)
+                yearly, monthly = AnnualPerformance.objects.get(owner=order.creator, year=datetime.now().year), \
+                    MonthlyPerformance.objects.get(owner=order.creator, month=datetime.now().month, year=datetime.now().year)
                 yearly.performance += order.price
                 monthly.performance += order.price
                 yearly.save()

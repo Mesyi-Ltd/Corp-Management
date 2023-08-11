@@ -84,14 +84,12 @@ class MonthlyPerformance(models.Model):
     performance = models.FloatField(default=0)
     year = models.IntegerField(default=datetime.now().year, blank=True)
     month = models.IntegerField(default=datetime.now().month, blank=True)
-    current = models.BooleanField(default=True)
 
 
 class AnnualPerformance(models.Model):
     owner = models.ForeignKey(Staff, on_delete=models.CASCADE, related_name='yearly')
     performance = models.FloatField(default=0)
     year = models.IntegerField(default=datetime.now().year, blank=True)
-    current = models.BooleanField(default=True)
 
 
 class Client(models.Model):

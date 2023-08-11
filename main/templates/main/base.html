@@ -8,8 +8,8 @@
           rel="stylesheet"
           integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
     <link href="{% static 'css/base.css' %}" rel="stylesheet" type="text/css">
-     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"/>
-<link rel="icon" href="{% static 'favicon.ico' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"/>
+    <link rel="icon" href="{% static 'favicon.ico' %}">
     <title>Mesyi Management System</title>
 </head>
 <body>
@@ -20,142 +20,186 @@
         crossorigin="anonymous">
 </script>
 
+{% with perm=user.staff.position.perms %}
 
-<nav class="navbar navbar-dark bg-dark fixed-top">
-  <div class="container-fluid">
-    <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDarkNavbar" aria-controls="offcanvasDarkNavbar" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
+    <nav class="navbar navbar-dark bg-dark fixed-top">
+    <div class="container-fluid">
+    <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDarkNavbar"
+            aria-controls="offcanvasDarkNavbar" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
     </button>
-          <div class="offcanvas offcanvas-start text-bg-dark" tabindex="-1" id="offcanvasDarkNavbar" aria-labelledby="offcanvasDarkNavbarLabel">
-      <div class="offcanvas-header">
+    <div class="offcanvas offcanvas-start text-bg-dark" tabindex="-1" id="offcanvasDarkNavbar"
+         aria-labelledby="offcanvasDarkNavbarLabel">
+    <div class="offcanvas-header">
         <h5 class="offcanvas-title" id="offcanvasDarkNavbarLabel">欢迎，{{ user.staff.name }}</h5>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-      </div>
-      <div class="offcanvas-body">
+    </div>
+    <div class="offcanvas-body">
         <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+            {% if user.staff.position.perms.order_list %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'order_list' %}">订单</a>
+                </li>
+            {% endif %}
+            {% if user.staff.position.perms.order_create %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'create_order' %}">创建订单</a>
+                </li>
+            {% endif %}
 
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'order_list' %}">订单</a>
-          </li>
+            {% if user.staff.position.perms.supplier_list %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'supplier_list' %}">供应商</a>
+                </li>
+            {% endif %}
 
-            <li class="nav-item">
-            <a class="nav-link" href="{% url 'create_order' %}">创建订单</a>
-          </li>
+            {% if user.staff.position.perms.supplier_create %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'supplier_create' %}">添加供应商</a>
+                </li>
+            {% endif %}
 
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'supplier_list' %}">供应商</a>
-          </li>
+            {% if perm.staff_performance or perm.staff_list or perm.staff_create or perm.position_all %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                       aria-expanded="false">
+                        员工
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-dark">
+                        {% if user.staff.position.perms.staff_performance %}
+                            <li><a class="dropdown-item" href="{% url 'monthly_performance' %}">业绩</a></li>
+                        {% endif %}
+                        {% if user.staff.position.perms.staff_list %}
+                            {% url 'staff_list' as staff_list %}
+                            <li><a class="dropdown-item {% if request.path == staff_list %}active{% endif %} }"
+                                   href="{% url 'staff_list' %}">列表</a></li>
+                        {% endif %}
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        {% if user.staff.position.perms.staff_create %}
+                            <li><a class="dropdown-item" href="{% url 'register' %}">注册员工</a></li>
+                        {% endif %}
+                        {% if user.staff.position.perms.position_all %}
+                            <li><a class="dropdown-item" href="{% url 'create_position' %}">添加职位</a></li>
+                        {% endif %}
+                    </ul>
+                </li>
+            {% endif %}
+            {% if perm.client_create or perm.client_list %}
 
-            <li class="nav-item">
-            <a class="nav-link" href="{% url 'supplier_create' %}">添加供应商</a>
-          </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                       aria-expanded="false">
+                        客户
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-dark">
+                        {% if perm.client_create %}
+                            <li><a class="dropdown-item" href="{% url 'register_client' %}">登记</a></li>
+                        {% endif %}
+                        {% if perm.client_list %}
+                            <li><a class="dropdown-item" href="{% url 'client_list' %}">列表</a></li>
+                        {% endif %}
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                    </ul>
+                </li>
+            {% endif %}
+            {% if perm.item_add or perm.item_create %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                       aria-expanded="false">
+                        产品
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-dark">
+                        {% if perm.item_add %}
+                            <li><a class="dropdown-item" href="{% url 'item_add' %}">添加</a></li>
+                        {% endif %}
+                        {% if perm.item_list %}
 
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              员工
-            </a>
-            <ul class="dropdown-menu dropdown-menu-dark">
-              <li><a class="dropdown-item" href="{% url 'monthly_performance' %}">业绩</a></li>
-                {% url 'staff_list' as staff_list%}
-              <li><a class="dropdown-item {% if request.path == staff_list%}active{% endif %} }" href="{% url 'staff_list' %}">列表</a></li>
-              <li>
-                <hr class="dropdown-divider">
-              </li>
-              <li><a class="dropdown-item" href="{% url 'register' %}">注册员工</a></li>
-            <li><a class="dropdown-item" href="{% url 'create_position' %}">添加职位</a></li>
-            </ul>
-          </li>
 
-            <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              客户
-            </a>
-            <ul class="dropdown-menu dropdown-menu-dark">
-              <li><a class="dropdown-item" href="{% url 'register_client' %}">登记</a></li>
-              <li><a class="dropdown-item" href="{% url 'client_list' %}">列表</a></li>
-              <li>
-                <hr class="dropdown-divider">
-              </li>
-            </ul>
-          </li>
+                            <li><a class="dropdown-item" href="{% url 'item_list' %}">列表</a></li>
+                            {#                <li><a class="dropdown-item" href="#">入库</a></li>#}
+                            {#                <li><a class="dropdown-item" href="#">出库</a></li>#}
+                        {% endif %}
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                    </ul>
+                </li>
+            {% endif %}
 
-            <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              产品
-            </a>
-            <ul class="dropdown-menu dropdown-menu-dark">
-              <li><a class="dropdown-item" href="{% url 'item_add' %}">添加</a></li>
-              <li><a class="dropdown-item" href="{% url 'item_list' %}">列表</a></li>
-{#                <li><a class="dropdown-item" href="#">入库</a></li>#}
-{#                <li><a class="dropdown-item" href="#">出库</a></li>#}
-              <li>
-                <hr class="dropdown-divider">
-              </li>
-            </ul>
-          </li>
-
-                    <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              库存
-            </a>
-            <ul class="dropdown-menu dropdown-menu-dark">
-              <li><a class="dropdown-item" href="{% url 'create_change' %}">库存变动</a></li>
-              <li><a class="dropdown-item" href="{% url 'client_list' %}">列表</a></li>
-              <li>
-                <hr class="dropdown-divider">
-              </li>
-            </ul>
-          </li>
+            {% if perm.stock_change_create or perm.stock_change_list %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                       aria-expanded="false">
+                        库存
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-dark">
+                        {% if perm.stock_change_create %}
+                            <li><a class="dropdown-item" href="{% url 'create_change' %}">库存变动</a></li>
+                        {% endif %}
+                        {% if perm.stock_change_list %}
+                            <li><a class="dropdown-item" href="{% url 'client_list' %}">列表</a></li>
+                        {% endif %}
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                    </ul>
+                </li>
+            {% endif %}
 
 
         </ul>
-      </div>
-
-                    <div class="position-relative" style="bottom: 100px">
-        <div class="position-absolute bottom-0 start-50 translate-middle-x">
-                              {% if user.is_authenticated %}
-        <a class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
-           href="{% url 'logout' %}" style="text-align: center">
-            <h3>登出</h3>
-        </a><br/>
-
-
-    {% else %}
-        <a href="{% url 'login' %}" class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">
-            <h3>登录</h3>
-        </a>
-
-    {% endif %}
-        </div>
-      </div>
-
-
     </div>
-      <a class="navbar-brand" href="{% url 'home' %}"><img src="{% static 'image/logo.png' %}" alt="Mesyi" id="logo"/></a>
-  </div>
+
+    <div class="position-relative" style="bottom: 100px">
+        <div class="position-absolute bottom-0 start-50 translate-middle-x">
+            {% if user.is_authenticated %}
+                <a class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
+                   href="{% url 'logout' %}" style="text-align: center">
+                    <h3>登出</h3>
+                </a><br/>
+
+
+            {% else %}
+                <a href="{% url 'login' %}"
+                   class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">
+                    <h3>登录</h3>
+                </a>
+
+            {% endif %}
+        </div>
+    </div>
+{% endwith %}
+
+</div>
+<a class="navbar-brand" href="{% url 'home' %}"><img src="{% static 'image/logo.png' %}" alt="Mesyi" id="logo"/></a>
+</div>
 </nav>
 
 {% for message in messages %}
-<div class="container-fluid p-0" style="position: absolute; top: 60px">
-  <div class="alert {{ message.tags }} alert-dismissible fade show" role="alert" style="">
+    <div class="container-fluid p-0" style="position: absolute; top: 60px">
+        <div class="alert {{ message.tags }} alert-dismissible fade show" role="alert" style="">
 
-    {{ message }}
-      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-  </div>
-</div>
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    </div>
 {% endfor %}
 
 <div class="container-fluid" id="content" style="margin-top: 60px">
 
-<script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"
+            integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
 
     {% block script %}
     {% endblock %}
 
-{% block content %}
-{% endblock %}
+    {% block content %}
+    {% endblock %}
 </div>
-
 
 
 </body>

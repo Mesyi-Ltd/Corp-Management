@@ -595,3 +595,7 @@ def purchase_detail(request, pk):
     return render(request, 'purchase/detail.html', {'form': form, 'purchase': purchase, 'purchase_list': purchase_list})
 
 
+def production_create(request, pk):
+    return
+
+

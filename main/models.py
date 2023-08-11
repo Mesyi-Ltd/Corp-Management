@@ -340,6 +340,9 @@ class Purchase(models.Model):
     staff = models.ForeignKey(Staff, on_delete=models.RESTRICT)
     related_order = models.OneToOneField(Order, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return self.purchase_id
+
 
 class ItemImage(models.Model):
     item = models.ForeignKey(Item, on_delete=models.CASCADE, related_name='images')

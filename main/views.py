@@ -558,4 +558,10 @@ def price_download(request, pk):
     return FileResponse(open(MEDIA_ROOT + '/' + filename, 'rb'), as_attachment=True)
 
 
+def add_purchase(request, pk):
+    order = Order.objects.get(pk=pk)
+    purchase = Purchase.objects.create(order=order)
+    purchase.save()
+    return
+
 

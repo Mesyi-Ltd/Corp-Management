@@ -343,11 +343,22 @@ class PurchaseItem(models.Model):
     unit = models.CharField(max_length=10)
     used = models.FloatField()
     date = models.DateField()
-    contract = models.FileField()
+    contract = models.FileField(upload_to='file/')
     remark = models.CharField(max_length=200, blank=True, null=True)
 
 
 class Production(models.Model):
     production_id = models.CharField(max_length=20)
+    date_created = models.DateField()
+    date_completed = models.DateField()
+    order = models.ForeignKey(Order, on_delete=models.RESTRICT)
+    staff1 = models.ForeignKey(Staff, on_delete=models.RESTRICT, null=True, blank=True)
+    staff2 = models.ForeignKey(Staff, on_delete=models.RESTRICT, null=True, blank=True)
+    item = models.ForeignKey(Item, on_delete=models.RESTRICT)
+    amount = models.IntegerField()
+    unit = models.CharField(max_length=10)
+    file = models.FileField(null=False, blank=False, upload_to='file/')
+    remark = models.CharField(max_length=200, null=True, blank=True)
+
 
 

@@ -389,7 +389,8 @@ class OrderDetail(DetailView):
                 order.client.order_in_progress = Order.objects.filter(client=order.client, completed=False).count()
                 order.client.save()
                 yearly, monthly = AnnualPerformance.objects.get(owner=order.creator, year=datetime.now().year), \
-                    MonthlyPerformance.objects.get(owner=order.creator, month=datetime.now().month, year=datetime.now().year)
+                    MonthlyPerformance.objects.get(owner=order.creator, month=datetime.now().month,
+                                                   year=datetime.now().year)
                 yearly.performance += order.price
                 monthly.performance += order.price
                 yearly.save()
@@ -543,7 +544,7 @@ def delete_item_change(request, pk):
     return redirect('change_detail', stock_pk)
 
 
-@method_decorator(login_required(login_url='login'),name='dispatch')
+@method_decorator(login_required(login_url='login'), name='dispatch')
 @method_decorator([allowed_users(["supplier_create"])], name="dispatch")
 class CreateSupplier(CreateView):
     model = Supplier
@@ -558,6 +559,8 @@ def price_download(request, pk):
     return FileResponse(open(MEDIA_ROOT + '/' + filename, 'rb'), as_attachment=True)
 
 
+@login_required(login_url='login')
+@allowed_users(["order_edit"])
 def add_purchase(request, pk):
     order = Order.objects.get(pk=pk)
     purchase = Purchase.objects.create(related_order=order)
@@ -565,6 +568,8 @@ def add_purchase(request, pk):
     return redirect('purchase_edit', pk=pk)
 
 
+@login_required(login_url='login')
+@allowed_users(["order_edit"])
 def edit_purchase(request, pk):
     purchase = Order.objects.get(pk=pk).purchase
     if request.method == "POST":
@@ -579,6 +584,8 @@ def edit_purchase(request, pk):
     return render(request, 'purchase/edit.html', {'form': form})
 
 
+@login_required(login_url='login')
+@allowed_users(["order_edit"])
 def purchase_detail(request, pk):
     purchase = Order.objects.get(pk=pk).purchase
     purchase_list = PurchaseItem.objects.filter(purchase=purchase)
@@ -595,6 +602,8 @@ def purchase_detail(request, pk):
     return render(request, 'purchase/detail.html', {'form': form, 'purchase': purchase, 'purchase_list': purchase_list})
 
 
+@login_required(login_url='login')
+@allowed_users(["order_edit"])
 def production_create(request, pk):
     order = Order.objects.get(pk=pk)
     if request.method == 'POST':
@@ -611,6 +620,8 @@ def production_create(request, pk):
     return render(request, 'order/production_create.html', {'form': form, })
 
 
+@login_required(login_url='login')
+@allowed_users(["order_edit"])
 class ProductionList(ListView):
     paginate_by = 15
     model = Production
@@ -627,11 +638,15 @@ class ProductionList(ListView):
         return context
 
 
+@login_required(login_url='login')
+@allowed_users(["order_edit"])
 def production_detail(request, pk):
     production = Production.objects.get(pk=pk)
     return render(request, 'order/production_detail.html', {'production': production})
 
 
+@login_required(login_url='login')
+@allowed_users(["order_edit"])
 def quality_create(request, pk):
     order = Order.objects.get(pk=pk)
     if request.method == 'POST':
@@ -648,6 +663,8 @@ def quality_create(request, pk):
     return render(request, 'quality/create.html', {'form': form, })
 
 
+@method_decorator(login_required(login_url='login'), name='dispatch')
+@method_decorator(allowed_users(["order_edit"]), name='dispatch')
 class QualityList(ListView):
     paginate_by = 15
     model = QualityCheck
@@ -664,6 +681,8 @@ class QualityList(ListView):
         return context
 
 
+@login_required(login_url='login')
+@allowed_users(["order_edit"])
 def quality_detail(request, pk):
     quality = QualityCheck.objects.get(pk=pk)
     return render(request, 'quality/detail.html', {'quality': quality})

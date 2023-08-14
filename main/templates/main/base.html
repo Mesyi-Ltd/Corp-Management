@@ -113,7 +113,7 @@
                         产品
                     </a>
                     <ul class="dropdown-menu dropdown-menu-dark">
-                        {% if perm.item_add %}
+                        {% if perm.item_create %}
                             <li><a class="dropdown-item" href="{% url 'item_add' %}">添加</a></li>
                         {% endif %}
                         {% if perm.item_list %}

@@ -27,8 +27,8 @@ urlpatterns = [
     path('order/download/<str:pk>', views.order_download, name='order_download'),
     path('order/<str:pk>', views.OrderDetail.as_view(), name='order_detail'),
     path('order/<str:pk>/purchase/create', views.add_purchase, name='purchase_add'),
-    path('order.<str:pk>/purchase/edit', views.edit_purchase, name='purchase_edit'),
-    path('order.<str:pk>/purchase/detail', views.purchase_detail, name='purchase_detail'),
+    path('order/<str:pk>/purchase/edit', views.edit_purchase, name='purchase_edit'),
+    path('order/<str:pk>/purchase/detail', views.purchase_detail, name='purchase_detail'),
     path('order/<str:pk>/production/create', views.production_create, name='production_add'),
     path('order/<str:pk>/production/list', views.ProductionList.as_view(), name='production_list'),
 
@@ -53,4 +53,8 @@ urlpatterns = [
 
 
     path('production/<str:pk>', views.production_detail, name='production_detail'),
+
+    path('order/<str:pk>/quality/list', views.QualityList.as_view(), name='quality_list'),
+    path('order/<str:pk>/quality/create', views.quality_create, name='quality_create'),
+    path('quality/<str:pk>', views.quality_detail, name='quality_detail'),
 ]

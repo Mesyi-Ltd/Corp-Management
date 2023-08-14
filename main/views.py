@@ -630,3 +630,40 @@ class ProductionList(ListView):
 def production_detail(request, pk):
     production = Production.objects.get(pk=pk)
     return render(request, 'order/production_detail.html', {'production': production})
+
+
+def quality_create(request, pk):
+    order = Order.objects.get(pk=pk)
+    if request.method == 'POST':
+        form = QualityCheckForm(request.POST or None)
+        if form.is_valid():
+            production = form.save(commit=False)
+            production.order = order
+            production.save()
+            return redirect('quality_list', pk)
+        else:
+            messages.error(request, '表单无效')
+    else:
+        form = QualityCheckForm()
+    return render(request, 'quality/create.html', {'form': form, })
+
+
+class QualityList(ListView):
+    paginate_by = 15
+    model = QualityCheck
+    template_name = 'quality/list.html'
+
+    def get_queryset(self, **kwargs):
+        order = Order.objects.get(pk=self.kwargs['pk'])
+        qs = order.checks.all().order_by('date')
+        return qs
+
+    def get_context_data(self, **kwargs):
+        context = super(QualityList, self).get_context_data(**kwargs)
+        context['pk'] = self.kwargs['pk']
+        return context
+
+
+def quality_detail(request, pk):
+    quality = QualityCheck.objects.get(pk=pk)
+    return render(request, 'quality/detail.html', {'quality': quality})

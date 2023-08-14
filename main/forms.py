@@ -318,3 +318,11 @@ class ProductionForm(forms.ModelForm):
 
         widgets = {'date_created': forms.DateInput(attrs={'type': 'date'}),
                    'date_completed': forms.DateInput(attrs={'type': 'date'})}
+
+
+class QualityCheckForm(forms.ModelForm):
+    class Meta:
+        model = QualityCheck
+        exclude = ('order', 'rate', )
+
+        widgets = {'date': forms.DateInput(attrs={'type': 'date'})}

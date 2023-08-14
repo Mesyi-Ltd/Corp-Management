@@ -1,0 +1,29 @@
+{% extends 'main/list.html' %}
+
+{% block placeholder %}{% endblock %}
+
+{% block add %}
+    <a href="{% url 'quality_create' pk %}"><button class="btn btn-outline-primary">添加</button></a>
+{% endblock %}
+
+
+{% block table %}
+
+
+<table style="background: gainsboro">
+    <tr><th>日期</th><th>物品</th><th>合格率</th></tr>
+</table>
+    {% for quality in object_list %}
+
+            <a href="{% url 'production_detail' quality.pk %}"
+               class="list-group-item list-group-item-action list-group-item-dark
+               d-flex justify-content-between align-items-center" style="padding: 0">
+                <ul class="list-group list-group-horizontal" style="margin: 0">
+                    <li class="list-group-item">{{ quality.date }}</li>
+                    <li class="list-group-item">{{ quality.item.name }}</li>
+                    <li class="list-group-item">{{ quality.rate }}</li>
+                </ul>
+            </a>
+
+    {% endfor %}
+{% endblock %}

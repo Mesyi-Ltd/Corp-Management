@@ -397,10 +397,14 @@ class QualityCheck(models.Model):
     order = models.ForeignKey(Order, on_delete=models.RESTRICT, related_name="checks")
     date = models.DateField()
     item = models.ForeignKey(Item, on_delete=models.RESTRICT, related_name="checks")
-    quantity = models.FloatField()
-    passed = models.FloatField()
+    quantity = models.IntegerField()
+    passed = models.IntegerField()
     rate = models.FloatField(validators=[MaxValueValidator(100.0), MinValueValidator(0.0)])
     remark = models.CharField(max_length=200)
+
+    def save(self, *args, **kwargs):
+        self.rate = round(self.passed/self.quantity, 2)
+        super(QualityCheck, self).save(*args, **kwargs)
 
 
 

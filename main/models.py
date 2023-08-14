@@ -3,6 +3,7 @@ from django.core.validators import *
 from django.db import models
 from django.urls import reverse
 from datetime import datetime
+from django.utils.text import slugify
 
 SCALES = [
     ("0~10", "0~10"),
@@ -15,6 +16,11 @@ SCALES = [
 
 class Company(models.Model):
     name = models.CharField(max_length=20)
+    name_slug = models.SlugField()
+
+    def save(self, *args, **kwargs):
+        self.name_slug = slugify(self.name)
+        super(Company, self).save(*args, **kwargs)
 
 
 class Perm(models.Model):
@@ -124,7 +130,7 @@ class Client(models.Model):
     order_in_progress = models.IntegerField(null=True, default=0)
     order_completed = models.IntegerField(null=True, default=0)
     registrant = models.CharField(max_length=10)
-    related_staff = models.CharField(max_length=10, choices=Staff.objects.values_list('staff_id', 'name'))
+    related_staff = models.ForeignKey(Staff, on_delete=models.RESTRICT)
 
     def __str__(self):
         return self.name
@@ -367,13 +373,21 @@ class Production(models.Model):
     production_id = models.CharField(max_length=20)
     date_created = models.DateField()
     date_completed = models.DateField()
-    order = models.ForeignKey(Order, on_delete=models.RESTRICT)
+    order = models.ForeignKey(Order, on_delete=models.RESTRICT, related_name='production')
     staff1 = models.ForeignKey(Staff, related_name="production1", on_delete=models.RESTRICT, null=True, blank=True)
     staff2 = models.ForeignKey(Staff, related_name="production2", on_delete=models.RESTRICT, null=True, blank=True)
     item = models.ForeignKey(Item, on_delete=models.RESTRICT)
     amount = models.IntegerField()
     unit = models.CharField(max_length=10)
     file = models.FileField(null=True, blank=True, upload_to='file/')
+    status = models.CharField(null=True, blank=True, max_length=10, choices=(
+        ('created', '建立'),
+        ('purchasing', '原料采购'),
+        ('producing', '生产'),
+        ('checking', '质检'),
+        ('shipping', '交货'),
+        ('closed', '关闭'),
+    ))
     remark = models.CharField(max_length=200, null=True, blank=True)
 
 

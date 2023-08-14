@@ -314,4 +314,7 @@ class PurchaseItemForm(forms.ModelForm):
 class ProductionForm(forms.ModelForm):
     class Meta:
         model = Production
-        fields = '__all__'
+        exclude = ('order', )
+
+        widgets = {'date_created': forms.DateInput(attrs={'type': 'date'}),
+                   'date_completed': forms.DateInput(attrs={'type': 'date'})}

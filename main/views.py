@@ -596,6 +596,32 @@ def purchase_detail(request, pk):
 
 
 def production_create(request, pk):
-    return
+    order = Order.objects.get(pk=pk)
+    if request.method == 'POST':
+        form = ProductionForm(request.POST or None, request.FILES)
+        if form.is_valid():
+            production = form.save(commit=False)
+            production.order = order
+            production.save()
+            return redirect('production_list', pk)
+        else:
+            messages.error(request, '表单无效')
+    else:
+        form = ProductionForm()
+    return render(request, 'order/production_create.html', {'form': form, })
 
 
+class ProductionList(ListView):
+    paginate_by = 15
+    model = Production
+    template_name = 'order/production_list.html'
+
+    def get_queryset(self, **kwargs):
+        order = Order.objects.get(pk=self.kwargs['pk'])
+        qs = order.production.all()
+        return qs
+
+    def get_context_data(self, **kwargs):
+        context = super(ProductionList, self).get_context_data(**kwargs)
+        context['pk'] = self.kwargs['pk']
+        return context

@@ -29,6 +29,8 @@ urlpatterns = [
     path('order/<str:pk>/purchase/create', views.add_purchase, name='purchase_add'),
     path('order.<str:pk>/purchase/edit', views.edit_purchase, name='purchase_edit'),
     path('order.<str:pk>/purchase/detail', views.purchase_detail, name='purchase_detail'),
+    path('order/<str:pk>/production/create', views.production_create, name='production_add'),
+    path('order/<str:pk>/production/list', views.ProductionList.as_view(), name='production_list'),
 
 
     path('staff/position/create', views.create_position, name='create_position'),

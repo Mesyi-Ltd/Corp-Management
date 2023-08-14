@@ -95,7 +95,7 @@
 <table style="text-align: center; margin-left: 200px">
     <tr><th>采购管理</th><th>生产任务</th><th>质检任务</th></tr>
     <tr><td>{% if order.purchase %}<a href="{% url 'purchase_detail' order.pk %}">{{ order.purchase }}</a> {% else %}<a href="{% url 'purchase_add' order.pk %}"> 添加</a>{% endif %}</td>
-        <td>暂无</td>
+        <td>{% if order.production %}<a href="{% url 'production_list' order.pk%}">列表</a>{% else %}<a href="{% url 'production_add' order.pk %}">添加</a> {% endif %}</td>
         <td>暂无</td></tr>
 
 </table>

@@ -18,5 +18,6 @@ admin.site.register(OrderAttachment)
 admin.site.register(Item)
 admin.site.register(StockChange)
 admin.site.register(ItemChange)
+admin.site.register(Production)
 
 # Register your models here.

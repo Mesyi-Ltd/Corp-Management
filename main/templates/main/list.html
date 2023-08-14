@@ -9,7 +9,8 @@
     </style>
 
 <div class="list-group position-absolute top-0 start-50 translate-middle-x" style="background-color: white">
-<nav class="navbar navbar-light bg-light" style="justify-content: right; border-radius: 25px">
+<nav class="navbar navbar-light bg-light" style="justify-content: space-between; border-radius: 25px">
+{% block add %}{% endblock %}
   <form class="form-inline form-floating" method="get" action="">
     <input class="mr-sm-2" type="search" placeholder="{% block placeholder %}{% endblock %}" aria-label="Search" name="search">
     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">搜索</button>

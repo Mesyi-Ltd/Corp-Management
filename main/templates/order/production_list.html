@@ -1,0 +1,32 @@
+{% extends 'main/list.html' %}
+
+{% block placeholder %}{% endblock %}
+
+{% block add %}
+    <a href="{% url 'production_add' pk %}">添加</a>
+{% endblock %}
+
+
+{% block table %}
+
+
+<table style="background: gainsboro">
+    <tr><th>编号</th><th>物品</th><th>状态</th></tr>
+</table>
+    {% for production in object_list %}
+
+            <a href="#"
+               class="list-group-item list-group-item-action list-group-item-dark
+               d-flex justify-content-between align-items-center" style="padding: 0">
+                <ul class="list-group list-group-horizontal" style="margin: 0">
+                    <li class="list-group-item">{{ production.production_id }}</li>
+                    <li class="list-group-item">{{ production.item.name }}</li>
+                    <li class="list-group-item">{{ production.status }}</li>
+                </ul>
+            </a>
+
+    {% endfor %}
+
+
+
+{% endblock %}

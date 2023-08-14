@@ -13,11 +13,11 @@ def allowed_users(allowed_roles=None):
             perms = None
             if request.user.staff.position.perms:
                 perms = request.user.staff.position.perms
-                all_pass = True
+                perm_pass = False
                 for role in allowed_roles:
-                    if not perms.__dict__[role]:
-                        all_pass = False
-                if all_pass:
+                    if perms.__dict__[role]:
+                        perm_pass = True
+                if perm_pass:
 
                     return view_func(request, *args, **kwargs)
 

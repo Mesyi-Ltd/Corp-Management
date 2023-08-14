@@ -620,8 +620,8 @@ def production_create(request, pk):
     return render(request, 'order/production_create.html', {'form': form, })
 
 
-@login_required(login_url='login')
-@allowed_users(["order_edit"])
+@method_decorator(login_required(login_url='login'), name='dispatch')
+@method_decorator(allowed_users(["order_edit"]), name='dispatch')
 class ProductionList(ListView):
     paginate_by = 15
     model = Production

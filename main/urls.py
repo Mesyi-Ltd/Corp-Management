@@ -50,4 +50,7 @@ urlpatterns = [
     path('storage/complete/<str:pk>', views.change_complete, name='change_complete'),
     path('storage/change/item/delete/<str:pk>', views.delete_item_change, name='delete_item_change'),
     path('storage/<str:pk>', views.change_detail, name='change_detail'),
+
+
+    path('production/<str:pk>', views.production_detail, name='production_detail'),
 ]

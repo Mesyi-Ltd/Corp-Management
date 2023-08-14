@@ -3,7 +3,7 @@
 {% block placeholder %}{% endblock %}
 
 {% block add %}
-    <a href="{% url 'production_add' pk %}">添加</a>
+    <a href="{% url 'production_add' pk %}"><button class="btn btn-outline-primary">添加</button></a>
 {% endblock %}
 
 
@@ -15,13 +15,13 @@
 </table>
     {% for production in object_list %}
 
-            <a href="#"
+            <a href="{% url 'production_detail' production.pk %}"
                class="list-group-item list-group-item-action list-group-item-dark
                d-flex justify-content-between align-items-center" style="padding: 0">
                 <ul class="list-group list-group-horizontal" style="margin: 0">
                     <li class="list-group-item">{{ production.production_id }}</li>
                     <li class="list-group-item">{{ production.item.name }}</li>
-                    <li class="list-group-item">{{ production.status }}</li>
+                    <li class="list-group-item">{{ production.get_status_display }}</li>
                 </ul>
             </a>
 

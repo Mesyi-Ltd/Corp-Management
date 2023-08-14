@@ -618,10 +618,15 @@ class ProductionList(ListView):
 
     def get_queryset(self, **kwargs):
         order = Order.objects.get(pk=self.kwargs['pk'])
-        qs = order.production.all()
+        qs = order.production.all().order_by('date_created')
         return qs
 
     def get_context_data(self, **kwargs):
         context = super(ProductionList, self).get_context_data(**kwargs)
         context['pk'] = self.kwargs['pk']
         return context
+
+
+def production_detail(request, pk):
+    production = Production.objects.get(pk=pk)
+    return render(request, 'order/production_detail.html', {'production': production})

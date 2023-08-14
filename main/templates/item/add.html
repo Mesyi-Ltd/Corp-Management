@@ -1,6 +1,46 @@
 {% extends 'main/form.html' %}
+
+{% block script %}
+
+    <script>
+
+    $(function () {
+        $('.hide').hide();
+        $('.hi').hide();
+        $('#id_type').change(function (){
+            if($('#id_type').val() === 'product') {
+                $('.hi').show();
+            } else {
+                $('.hi').hide();
+        }
+        });
+        $('#id_product_type').change(function(){
+            if($('#id_product_type').val() === 'bound') {
+                $('.hide').show();
+            } else {
+                $('.hide').hide();
+            }
+    });
+    });
+
+    </script>
+
+{% endblock %}
+
+
 {% block form %}
-    {{ form.as_p }}
+
+
+    {% for field in form %}
+
+        <p {% if field == form.hair or field == form.pipe or field == form.handle or field == form.min_order or field == form.package or field == form.reference %}
+            class="hide" {% elif field == form.product_type %}class="hi"{% endif %}>
+            {{ field.label }}: {{ field }}
+        </p>
+
+    {% endfor %}
+
+
         <div class="mb-3">
   <label for="formFileMultiple" class="form-label">上传样本图</label>
   <input class="form-control" type="file" id="formFileMultiple" name="images" multiple>

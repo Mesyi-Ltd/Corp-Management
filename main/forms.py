@@ -203,7 +203,7 @@ class StaffUpdateForm(forms.ModelForm):
 class AddItemForm(forms.ModelForm):
     class Meta:
         model = Item
-        fields = ['item_id', 'name', 'type', 'amount', 'spec']
+        exclude = ('company', )
 
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control'}),
@@ -211,6 +211,9 @@ class AddItemForm(forms.ModelForm):
             'type': forms.Select(attrs={'class': 'form-control'}),
             'amount': forms.NumberInput(attrs={'class': 'form-control'}),
             'spec': forms.Textarea(attrs={'class': 'form-control'}),
+            'hair': forms.TextInput(attrs={'class': 'form-control'}),
+            'pipe': forms.TextInput(attrs={'class': 'form-control'}),
+            'handle': forms.TextInput(attrs={'class': 'form-control'}),
         }
 
         labels = {
@@ -218,7 +221,15 @@ class AddItemForm(forms.ModelForm):
             'item_id': '编号',
             'type': '类型',
             'amount': '库存',
-            'spec': '规格'
+            'spec': '规格',
+            'hair': '刷毛',
+            'pipe': '口管',
+            'handle': '刷柄',
+            'min_order': '起定量',
+            'reference': '参考链接',
+            'remark': '备注',
+            'product_type': '产品类型',
+            'package': '收纳'
         }
 
 

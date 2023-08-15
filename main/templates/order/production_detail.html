@@ -3,9 +3,21 @@
 
     <div class="position-absolute top-0 start-50 translate-middle-x" style="margin-top: 50px;background: rgba(255, 255, 255, 0.8); padding: 30px; border-radius: 30px;">
 
-    {{ production.order }}
-    {{ production.item }}
-    {{ production.amount }}
+    <p>订单: {{ production.order }}</p>
+        <p>生产编号: {{ production.production_id }}</p>
+        <p>产品: <a href="{% url 'item_detail' production.item.pk %}"> {{ production.item }}</a></p>
+    <p>生产数量: {{ production.amount }} {{ production.unit }}</p>
+        <p>状态: {{ production.status}}</p>
+    <p>创建日期: {{ production.date_created }}</p>
+    <p>完成日期: {{ production.date_completed }}</p>
+    <p>跟单员: {{ production.staff1 }}</p>
+    <p>业务员: {{ production.staff2 }}</p>
+    {% if production.file %}
+    <p>附件: {{ production.file }}</p>
+    {% endif %}
+        {% if production.remark %}
+    <p>备注: {{ production.remark }}</p>
+    {% endif %}
 
     </div>
 

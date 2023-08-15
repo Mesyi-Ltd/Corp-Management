@@ -221,6 +221,8 @@ class Item(models.Model):
     handle = models.CharField(max_length=30, null=True, blank=True)
     min_order = models.IntegerField(null=True, blank=True)
     package = models.BooleanField(default=False)
+    package_price = models.FloatField(default=0.0, blank=True)
+    pattern = models.BooleanField(default=False)
     reference = models.URLField(null=True, blank=True)
     remark = models.CharField(max_length=200, null=True, blank=True)
 
@@ -400,7 +402,7 @@ class QualityCheck(models.Model):
     quantity = models.IntegerField()
     passed = models.IntegerField()
     rate = models.FloatField(validators=[MaxValueValidator(100.0), MinValueValidator(0.0)])
-    remark = models.CharField(max_length=200)
+    remark = models.CharField(max_length=200, blank=True, null=True)
 
     def save(self, *args, **kwargs):
         self.rate = round(self.passed/self.quantity, 2)

@@ -2,9 +2,19 @@
 {% block content %}
 
     <div class="position-absolute top-0 start-50 translate-middle-x" style="margin-top: 50px;background: rgba(255, 255, 255, 0.8); padding: 30px; border-radius: 30px;">
+    <div style="text-align: center; color: lawngreen"><h2><strong>{{ quality.task_id }}</strong></h2></div>
 
-    {{ quality.order }}
-    {{ quality.item }}
+        <p>订单: {{ quality.order }}</p>
+        <p>物品: <a href="{% url 'item_detail' quality.item.pk %}"> {{ quality.item }}</a></p>
+        <p>质检员: {{ quality.staff }}</p>
+        <p>质检日期: {{ quality.date }}</p>
+    <p>质检数量: {{ quality.quantity }}</p>
+    <p>合格数: {{ quality.passed }}</p>
+    <p>合格率: {{ quality.rate }}</p>
+        {% if quality.remark %}
+    <p>备注: {{ quality.remark }}</p>
+    {% endif %}
+
 
 
     </div>

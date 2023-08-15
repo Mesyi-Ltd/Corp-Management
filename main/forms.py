@@ -229,7 +229,9 @@ class AddItemForm(forms.ModelForm):
             'reference': '参考链接',
             'remark': '备注',
             'product_type': '产品类型',
-            'package': '收纳'
+            'package': '收纳',
+            'package_price': '收纳价格',
+            'pattern': '丝印'
         }
 
 

@@ -313,6 +313,11 @@ class PurchaseForm(forms.ModelForm):
         model = Purchase
         exclude = ('related_order', )
 
+        labels = {
+            'purchase_id': '采购编号',
+            'staff': '采购员工'
+        }
+
 
 class PurchaseItemForm(forms.ModelForm):
     class Meta:
@@ -320,6 +325,18 @@ class PurchaseItemForm(forms.ModelForm):
         exclude = ('purchase', )
 
         widgets = {'date': forms.DateInput(attrs={'type': 'date'},)}
+        labels = {
+            'item': '物品',
+            'supplier': '供应商',
+            'invoice': '单据编号',
+            'quantity': '数量',
+            'unit': '单位',
+            'used': '预计用量',
+            'date': '需求日期',
+            'contract': '合同附件',
+            'remark': '备注'
+
+        }
 
 
 class ProductionForm(forms.ModelForm):
@@ -329,6 +346,20 @@ class ProductionForm(forms.ModelForm):
 
         widgets = {'date_created': forms.DateInput(attrs={'type': 'date'}),
                    'date_completed': forms.DateInput(attrs={'type': 'date'})}
+
+        labels = {
+            'production_id': '编号',
+            'date_created': '下单日期',
+            'date_completed': '交货日期',
+            'staff1': '跟单员',
+            'staff2': '业务员',
+            'item': '产品',
+            'amount': '数量',
+            'unit': '单位',
+            'status': '生产状态',
+            'file': '附件',
+            'remark': '备注'
+        }
 
 
 class QualityCheckForm(forms.ModelForm):

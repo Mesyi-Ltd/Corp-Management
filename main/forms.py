@@ -368,3 +368,13 @@ class QualityCheckForm(forms.ModelForm):
         exclude = ('order', 'rate', )
 
         widgets = {'date': forms.DateInput(attrs={'type': 'date'})}
+
+        labels = {
+            'task_id': '任务编号',
+            'staff': '质检员',
+            'date': '质检日期',
+            'item': '产品',
+            'quantity': '质检数量',
+            'passed': '合格数',
+            'remark': '备注',
+        }
